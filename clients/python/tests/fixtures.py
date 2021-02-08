@@ -573,3 +573,13 @@ def org_summary_output():
             },
         }
     }
+
+
+@pytest.fixture
+def request_scan_input():
+    return {"requestScan": {"status": "Successfully dispatched one time scan."}}
+
+
+@pytest.fixture
+def request_scan_output():
+    return {"status": "Successfully dispatched one time scan."}

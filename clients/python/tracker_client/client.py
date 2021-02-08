@@ -13,7 +13,7 @@ from queries import (
     SIGNIN_MUTATION,
     ALL_ORG_SUMMARIES,
     SUMMARY_BY_SLUG,
-    REQUEST_SCAN
+    REQUEST_SCAN,
 )
 
 
@@ -243,6 +243,7 @@ def format_name_summary(result):
     }
     return result
 
+
 def request_scan(domain, client):
     """Requests a scan on given domain and returns status of request
 
@@ -306,7 +307,7 @@ def main():
     summaries = get_summary_by_name(name, client)
     print(summaries)
 
-    print("Requesting a scan on " + domain +"...")
+    print("Requesting a scan on " + domain + "...")
     result = request_scan(domain, client)
     print(result)
 

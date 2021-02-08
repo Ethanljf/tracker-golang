@@ -7,6 +7,7 @@ from tracker_client.client import (
     format_all_summaries,
     format_acronym_summary,
     format_name_summary,
+    format_request_scan,
 )
 
 from .fixtures import (
@@ -22,6 +23,8 @@ from .fixtures import (
     all_summaries_output,
     name_summary_input,
     org_summary_output,
+    request_scan_input,
+    request_scan_output,
 )
 
 
@@ -55,3 +58,7 @@ def test_format_acronym_summary(all_summaries_input, org_summary_output):
 
 def test_format_name_summary(name_summary_input, org_summary_output):
     assert format_name_summary(name_summary_input) == org_summary_output
+
+
+def test_format_request_scan(request_scan_input, request_scan_output):
+    assert format_request_scan(request_scan_input) == request_scan_output
