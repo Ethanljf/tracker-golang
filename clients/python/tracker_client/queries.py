@@ -162,3 +162,13 @@ SUMMARY_BY_SLUG = gql(
     }
     """
 )
+
+REQUEST_SCAN = gql(
+    """
+    mutation RequestScan($domain: DomainScalar) {
+        requestScan(input: { domain: $domain }) {
+            status
+        }
+    }
+    """
+)

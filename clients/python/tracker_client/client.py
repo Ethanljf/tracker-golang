@@ -2,7 +2,7 @@ import os
 import json
 
 from slugify import slugify
-from gql import gql, Client
+from gql import Client
 from gql.transport.aiohttp import AIOHTTPTransport
 
 from queries import (
@@ -13,6 +13,7 @@ from queries import (
     SIGNIN_MUTATION,
     ALL_ORG_SUMMARIES,
     SUMMARY_BY_SLUG,
+    REQUEST_SCAN
 )
 
 
@@ -242,11 +243,34 @@ def format_name_summary(result):
     }
     return result
 
+def request_scan(domain, client):
+    """Requests a scan on given domain and returns status of request
+
+    Arguments:
+    domain -- domain name string
+    client -- a GQL Client object
+    """
+    params = {"domain": domain}
+
+    result = client.execute(REQUEST_SCAN, variable_values=params)
+    formatted_result = format_request_scan(result)
+    return json.dumps(formatted_result, indent=4)
+
+
+def format_request_scan(result):
+    """Formats the dict obtained by REQUEST_SCAN"""
+    result = result["requestScan"]
+    return result
+
 
 def main():
     """main() currently tries all implemented functions and prints results
     for diagnostic purposes and to demo available features.
     """
+    acronym = "cse"
+    name = "Communications Security Establishment Canada"
+    domain = "cse-cst.gc.ca"
+
     print("Tracker account: " + os.environ.get("TRACKER_UNAME"))
     client = create_client("https://tracker.alpha.canada.ca/graphql", get_auth_token())
 
@@ -254,23 +278,20 @@ def main():
     domains = get_all_domains(client)
     print(domains)
 
-    acronym = "cse"
     print("Getting domains by acronym " + acronym + "...")
     domains = get_domains_by_acronym("cse", client)
     print(domains)
 
-    name = "Communications Security Establishment Canada"
     print("Getting domains by name " + name + "...")
     domains = get_domains_by_name(name, client)
     print(domains)
 
-    domain = "cse-cst.gc.ca"
     print("Getting a dmarc summary for " + domain + "...")
     result = get_dmarc_summary(domain, "november", 2020, client)
     print(result)
 
     print("Getting yearly dmarc summary for " + domain + "...")
-    result = get_yearly_dmarc_summaries("cse-cst.gc.ca", client)
+    result = get_yearly_dmarc_summaries(domain, client)
     print(result)
 
     print("Getting summaries for all your organizations...")
@@ -278,12 +299,16 @@ def main():
     print(summaries)
 
     print("Getting summary by acronym " + acronym + "...")
-    summaries = get_summary_by_acronym("cse", client)
+    summaries = get_summary_by_acronym(acronym, client)
     print(summaries)
 
     print("Getting summary by name " + name + "...")
     summaries = get_summary_by_name(name, client)
     print(summaries)
+
+    print("Requesting a scan on " + domain +"...")
+    result = request_scan(domain, client)
+    print(result)
 
 
 if __name__ == "__main__":
