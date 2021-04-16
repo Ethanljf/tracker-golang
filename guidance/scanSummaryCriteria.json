@@ -1,6 +1,8 @@
 {
     "httpsScanSummaryCriteria": {
-        "pass": [""],
+        "pass": [
+            ""
+        ],
         "fail": [
             "https2",
             "https3",
@@ -16,10 +18,14 @@
             "https13",
             "https14"
         ],
-        "info": ["https1"]
+        "info": [
+            "https1"
+        ]
     },
     "sslScanSummaryCriteria": {
-        "pass": ["ssl5"],
+        "pass": [
+            "ssl5"
+        ],
         "fail": [
             "ssl2",
             "ssl3",
@@ -28,11 +34,15 @@
             "ssl7",
             "ssl8"
         ],
-        "info": ["ssl1"]
+        "info": [
+            "ssl1"
+        ]
     },
     "dkimScanSummaryCriteria": {
-        "pass": ["dkim7",
-                 "dkim8"],
+        "pass": [
+            "dkim7",
+            "dkim8"
+        ],
         "fail": [
             "dkim2",
             "dkim3",
@@ -43,9 +53,13 @@
             "dkim11",
             "dkim12"
         ],
-        "warning": ["dkim10",
-                    "dkim13"],
-        "info": ["dkim1"]
+        "warning": [
+            "dkim10",
+            "dkim13"
+        ],
+        "info": [
+            "dkim1"
+        ]
     },
     "spfScanSummaryCriteria": {
         "pass": "spf12"
