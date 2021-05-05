@@ -7,6 +7,7 @@ export const loadDkimGuidanceTagConnectionsByTagId = ({
   userKey,
   cleanseInput,
   i18n,
+  language,
 }) => async ({ dkimGuidanceTags, after, before, first, last, orderBy }) => {
   let afterTemplate = aql``
   if (typeof after !== 'undefined') {
@@ -28,10 +29,10 @@ export const loadDkimGuidanceTagConnectionsByTagId = ({
         documentField = aql`DOCUMENT(dkimGuidanceTags, ${afterId})._key`
       } else if (orderBy.field === 'tag-name') {
         tagField = aql`tag.tagName`
-        documentField = aql`DOCUMENT(dkimGuidanceTags, ${afterId}).tagName`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(dkimGuidanceTags, ${afterId})).tagName`
       } else if (orderBy.field === 'guidance') {
         tagField = aql`tag.guidance`
-        documentField = aql`DOCUMENT(dkimGuidanceTags, ${afterId}).guidance`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(dkimGuidanceTags, ${afterId})).guidance`
       }
 
       afterTemplate = aql`
@@ -62,10 +63,10 @@ export const loadDkimGuidanceTagConnectionsByTagId = ({
         documentField = aql`DOCUMENT(dkimGuidanceTags, ${beforeId})._key`
       } else if (orderBy.field === 'tag-name') {
         tagField = aql`tag.tagName`
-        documentField = aql`DOCUMENT(dkimGuidanceTags, ${beforeId}).tagName`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(dkimGuidanceTags, ${beforeId})).tagName`
       } else if (orderBy.field === 'guidance') {
         tagField = aql`tag.guidance`
-        documentField = aql`DOCUMENT(dkimGuidanceTags, ${beforeId}).guidance`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(dkimGuidanceTags, ${beforeId})).guidance`
       }
 
       beforeTemplate = aql`
@@ -155,12 +156,12 @@ export const loadDkimGuidanceTagConnectionsByTagId = ({
       hasPreviousPageDocument = aql`FIRST(retrievedDkimGuidanceTags)._key`
     } else if (orderBy.field === 'tag-name') {
       tagField = aql`tag.tagName`
-      hasNextPageDocument = aql`LAST(retrievedDkimGuidanceTags).tagName`
-      hasPreviousPageDocument = aql`FIRST(retrievedDkimGuidanceTags).tagName`
+      hasNextPageDocument = aql`TRANSLATE(${language}, LAST(retrievedDkimGuidanceTags)).tagName`
+      hasPreviousPageDocument = aql`TRANSLATE(${language}, FIRST(retrievedDkimGuidanceTags)).tagName`
     } else if (orderBy.field === 'guidance') {
       tagField = aql`tag.guidance`
-      hasNextPageDocument = aql`LAST(retrievedDkimGuidanceTags).guidance`
-      hasPreviousPageDocument = aql`FIRST(retrievedDkimGuidanceTags).guidance`
+      hasNextPageDocument = aql`TRANSLATE(${language}, LAST(retrievedDkimGuidanceTags)).guidance`
+      hasPreviousPageDocument = aql`TRANSLATE(${language}, FIRST(retrievedDkimGuidanceTags)).guidance`
     }
 
     hasNextPageFilter = aql`
@@ -182,9 +183,9 @@ export const loadDkimGuidanceTagConnectionsByTagId = ({
     if (orderBy.field === 'tag-id') {
       sortByField = aql`tag._key ${orderBy.direction},`
     } else if (orderBy.field === 'tag-name') {
-      sortByField = aql`tag.tagName ${orderBy.direction},`
+      sortByField = aql`TRANSLATE(${language}, tag).tagName ${orderBy.direction},`
     } else if (orderBy.field === 'guidance') {
-      sortByField = aql`tag.guidance ${orderBy.direction},`
+      sortByField = aql`TRANSLATE(${language}, tag).guidance ${orderBy.direction},`
     }
   }
 
@@ -207,7 +208,17 @@ export const loadDkimGuidanceTagConnectionsByTagId = ({
           SORT
           ${sortByField}
           ${limitTemplate}
-          RETURN MERGE(tag, { tagId: tag._key, id: tag._key, _type: "guidanceTag" })
+          RETURN MERGE(
+            {
+              _id: tag._id,
+              _key: tag._key,
+              _rev: tag._rev,
+              _type: "guidanceTag",
+              id: tag._key,
+              tagId: tag._key
+            },
+            TRANSLATE(${language}, tag)
+          )
       )
 
       LET hasNextPage = (LENGTH(

@@ -23,67 +23,64 @@ describe('given the loadDkimGuidanceTagById function', () => {
       options: databaseOptions({ rootPass }),
     }))
     console.error = mockedError
-    i18n = setupI18n({
-      locale: 'en',
-      localeData: {
-        en: { plurals: {} },
-        fr: { plurals: {} },
-      },
-      locales: ['en', 'fr'],
-      messages: {
-        en: englishMessages.messages,
-        fr: frenchMessages.messages,
-      },
-    })
   })
 
   beforeEach(async () => {
     consoleErrorOutput.length = 0
+    await collections.dkimGuidanceTags.save({
+      _key: 'dkim1',
+      en: {
+        tagName: 'Some Cool Tag Name A',
+        guidance: 'Some Cool Guidance A',
+        refLinksGuide: [
+          {
+            description: 'IT PIN A',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+      fr: {
+        tagName: 'todo a',
+        guidance: 'todo a',
+        refLinksGuide: [
+          {
+            description: 'todo a',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+    })
+    await collections.dkimGuidanceTags.save({
+      _key: 'dkim2',
+      en: {
+        tagName: 'Some Cool Tag Name B',
+        guidance: 'Some Cool Guidance B',
+        refLinksGuide: [
+          {
+            description: 'IT PIN B',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+      fr: {
+        tagName: 'todo b',
+        guidance: 'todo b',
+        refLinksGuide: [
+          {
+            description: 'todo b',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+    })
+  })
 
+  afterEach(async () => {
     await truncate()
-    await collections.dkimGuidanceTags.save({})
-    await collections.dkimGuidanceTags.save({})
   })
 
   afterAll(async () => {
     await drop()
-  })
-
-  describe('given a single id', () => {
-    it('returns a single dkim guidance tag', async () => {
-      // Get dkim tag from db
-      const expectedCursor = await query`
-        FOR tag IN dkimGuidanceTags
-          SORT tag._key ASC LIMIT 1
-          RETURN MERGE(tag, { tagId: tag._key, id: tag._key, _type: "guidanceTag" })
-      `
-      const expectedDkimTag = await expectedCursor.next()
-
-      const loader = loadDkimGuidanceTagById({ query, i18n })
-      const dkim = await loader.load(expectedDkimTag._key)
-
-      expect(dkim).toEqual(expectedDkimTag)
-    })
-  })
-  describe('given multiple ids', () => {
-    it('returns multiple dkim guidance tags', async () => {
-      const dkimTagKeys = []
-      const expectedDkimTags = []
-      const expectedCursor = await query`
-        FOR tag IN dkimGuidanceTags
-          RETURN MERGE(tag, { tagId: tag._key, id: tag._key, _type: "guidanceTag" })
-      `
-
-      while (expectedCursor.hasMore) {
-        const tempDkim = await expectedCursor.next()
-        dkimTagKeys.push(tempDkim._key)
-        expectedDkimTags.push(tempDkim)
-      }
-
-      const loader = loadDkimGuidanceTagById({ query, i18n })
-      const dkimTags = await loader.loadMany(dkimTagKeys)
-      expect(dkimTags).toEqual(expectedDkimTags)
-    })
   })
   describe('users language is set to english', () => {
     beforeAll(() => {
@@ -100,12 +97,72 @@ describe('given the loadDkimGuidanceTagById function', () => {
         },
       })
     })
+    describe('given a single id', () => {
+      it('returns a single dkim guidance tag', async () => {
+        // Get dkim tag from db
+        const expectedCursor = await query`
+          FOR tag IN dkimGuidanceTags
+            SORT tag._key ASC LIMIT 1
+            RETURN MERGE(
+              { 
+                _id: tag._id,
+                _key: tag._key,
+                _rev: tag._rev,
+                _type: "guidanceTag",
+                tagId: tag._key,
+                id: tag._key
+              },
+              TRANSLATE("en", tag)
+            )
+        `
+        const expectedDkimTag = await expectedCursor.next()
+
+        const loader = loadDkimGuidanceTagById({ query, i18n, language: 'en' })
+        const dkim = await loader.load(expectedDkimTag._key)
+
+        expect(dkim).toEqual(expectedDkimTag)
+      })
+    })
+    describe('given multiple ids', () => {
+      it('returns multiple dkim guidance tags', async () => {
+        const dkimTagKeys = []
+        const expectedDkimTags = []
+        const expectedCursor = await query`
+          FOR tag IN dkimGuidanceTags
+            RETURN MERGE(
+              { 
+                _id: tag._id,
+                _key: tag._key,
+                _rev: tag._rev,
+                _type: "guidanceTag",
+                tagId: tag._key,
+                id: tag._key
+              },
+              TRANSLATE("en", tag)
+            )
+        `
+
+        while (expectedCursor.hasMore) {
+          const tempDkim = await expectedCursor.next()
+          dkimTagKeys.push(tempDkim._key)
+          expectedDkimTags.push(tempDkim)
+        }
+
+        const loader = loadDkimGuidanceTagById({ query, i18n, language: 'en' })
+        const dkimTags = await loader.loadMany(dkimTagKeys)
+        expect(dkimTags).toEqual(expectedDkimTags)
+      })
+    })
     describe('given a database error', () => {
       it('raises an error', async () => {
-        query = jest
+        const mockedQuery = jest
           .fn()
           .mockRejectedValue(new Error('Database error occurred.'))
-        const loader = loadDkimGuidanceTagById({ query, userKey: '1234', i18n })
+        const loader = loadDkimGuidanceTagById({
+          query: mockedQuery,
+          userKey: '1234',
+          i18n,
+        })
 
         try {
           await loader.load('1')
@@ -127,8 +184,12 @@ describe('given the loadDkimGuidanceTagById function', () => {
             throw new Error('Cursor error occurred.')
           },
         }
-        query = jest.fn().mockReturnValue(cursor)
-        const loader = loadDkimGuidanceTagById({ query, userKey: '1234', i18n })
+        const mockedQuery = jest.fn().mockReturnValue(cursor)
+        const loader = loadDkimGuidanceTagById({
+          query: mockedQuery,
+          userKey: '1234',
+          i18n,
+        })
 
         try {
           await loader.load('1')
@@ -159,12 +220,72 @@ describe('given the loadDkimGuidanceTagById function', () => {
         },
       })
     })
+    describe('given a single id', () => {
+      it('returns a single dkim guidance tag', async () => {
+        // Get dkim tag from db
+        const expectedCursor = await query`
+          FOR tag IN dkimGuidanceTags
+            SORT tag._key ASC LIMIT 1
+            RETURN MERGE(
+              { 
+                _id: tag._id,
+                _key: tag._key,
+                _rev: tag._rev,
+                _type: "guidanceTag",
+                tagId: tag._key,
+                id: tag._key
+              },
+              TRANSLATE("fr", tag)
+            )
+        `
+        const expectedDkimTag = await expectedCursor.next()
+
+        const loader = loadDkimGuidanceTagById({ query, i18n, language: 'fr' })
+        const dkim = await loader.load(expectedDkimTag._key)
+
+        expect(dkim).toEqual(expectedDkimTag)
+      })
+    })
+    describe('given multiple ids', () => {
+      it('returns multiple dkim guidance tags', async () => {
+        const dkimTagKeys = []
+        const expectedDkimTags = []
+        const expectedCursor = await query`
+          FOR tag IN dkimGuidanceTags
+            RETURN MERGE(
+              { 
+                _id: tag._id,
+                _key: tag._key,
+                _rev: tag._rev,
+                _type: "guidanceTag",
+                tagId: tag._key,
+                id: tag._key
+              },
+              TRANSLATE("fr", tag)
+            )
+        `
+
+        while (expectedCursor.hasMore) {
+          const tempDkim = await expectedCursor.next()
+          dkimTagKeys.push(tempDkim._key)
+          expectedDkimTags.push(tempDkim)
+        }
+
+        const loader = loadDkimGuidanceTagById({ query, i18n, language: 'fr' })
+        const dkimTags = await loader.loadMany(dkimTagKeys)
+        expect(dkimTags).toEqual(expectedDkimTags)
+      })
+    })
     describe('given a database error', () => {
       it('raises an error', async () => {
-        query = jest
+        const mockedQuery = jest
           .fn()
           .mockRejectedValue(new Error('Database error occurred.'))
-        const loader = loadDkimGuidanceTagById({ query, userKey: '1234', i18n })
+        const loader = loadDkimGuidanceTagById({
+          query: mockedQuery,
+          userKey: '1234',
+          i18n,
+        })
 
         try {
           await loader.load('1')
@@ -184,8 +305,12 @@ describe('given the loadDkimGuidanceTagById function', () => {
             throw new Error('Cursor error occurred.')
           },
         }
-        query = jest.fn().mockReturnValue(cursor)
-        const loader = loadDkimGuidanceTagById({ query, userKey: '1234', i18n })
+        const mockedQuery = jest.fn().mockReturnValue(cursor)
+        const loader = loadDkimGuidanceTagById({
+          query: mockedQuery,
+          userKey: '1234',
+          i18n,
+        })
 
         try {
           await loader.load('1')
