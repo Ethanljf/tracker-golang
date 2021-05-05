@@ -99,549 +99,6 @@ describe('when given the load dkim guidance tag connection function', () => {
     await drop()
   })
 
-  describe('given a successful load', () => {
-    describe('language is set to english', () => {
-      describe('using after cursor', () => {
-        it('returns dkim result(s) after a given node id', async () => {
-          const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
-            query,
-            userKey: user._key,
-            cleanseInput,
-            i18n,
-            language: 'en',
-          })
-
-          const dkimGuidanceTags = ['dkim1', 'dkim2']
-
-          const dkimTagLoader = loadDkimGuidanceTagById({
-            query,
-            language: 'en',
-          })
-          const expectedDkimTags = await dkimTagLoader.loadMany(
-            dkimGuidanceTags,
-          )
-
-          const connectionArgs = {
-            first: 5,
-            after: toGlobalId('guidanceTag', expectedDkimTags[0]._key),
-          }
-
-          const dkimTags = await connectionLoader({
-            dkimGuidanceTags,
-            ...connectionArgs,
-          })
-
-          const expectedStructure = {
-            edges: [
-              {
-                cursor: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
-                node: {
-                  ...expectedDkimTags[1],
-                },
-              },
-            ],
-            totalCount: 2,
-            pageInfo: {
-              hasNextPage: false,
-              hasPreviousPage: true,
-              startCursor: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
-              endCursor: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
-            },
-          }
-
-          expect(dkimTags).toEqual(expectedStructure)
-        })
-      })
-      describe('using before cursor', () => {
-        it('returns dkim result(s) before a given node id', async () => {
-          const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
-            query,
-            userKey: user._key,
-            cleanseInput,
-            i18n,
-            language: 'en',
-          })
-
-          const dkimGuidanceTags = ['dkim1', 'dkim2']
-
-          const dkimTagLoader = loadDkimGuidanceTagById({
-            query,
-            language: 'en',
-          })
-          const expectedDkimTags = await dkimTagLoader.loadMany(
-            dkimGuidanceTags,
-          )
-
-          const connectionArgs = {
-            first: 5,
-            before: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
-          }
-
-          const dkimTags = await connectionLoader({
-            dkimGuidanceTags,
-            ...connectionArgs,
-          })
-
-          const expectedStructure = {
-            edges: [
-              {
-                cursor: toGlobalId('guidanceTags', expectedDkimTags[0]._key),
-                node: {
-                  ...expectedDkimTags[0],
-                },
-              },
-            ],
-            totalCount: 2,
-            pageInfo: {
-              hasNextPage: true,
-              hasPreviousPage: false,
-              startCursor: toGlobalId('guidanceTags', expectedDkimTags[0]._key),
-              endCursor: toGlobalId('guidanceTags', expectedDkimTags[0]._key),
-            },
-          }
-
-          expect(dkimTags).toEqual(expectedStructure)
-        })
-      })
-      describe('using first limit', () => {
-        it('returns the first n amount of item(s)', async () => {
-          const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
-            query,
-            userKey: user._key,
-            cleanseInput,
-            i18n,
-            language: 'en',
-          })
-
-          const dkimGuidanceTags = ['dkim1', 'dkim2']
-
-          const dkimTagLoader = loadDkimGuidanceTagById({
-            query,
-            language: 'en',
-          })
-          const expectedDkimTags = await dkimTagLoader.loadMany(
-            dkimGuidanceTags,
-          )
-
-          const connectionArgs = {
-            first: 1,
-          }
-
-          const dkimTags = await connectionLoader({
-            dkimGuidanceTags,
-            ...connectionArgs,
-          })
-
-          const expectedStructure = {
-            edges: [
-              {
-                cursor: toGlobalId('guidanceTags', expectedDkimTags[0]._key),
-                node: {
-                  ...expectedDkimTags[0],
-                },
-              },
-            ],
-            totalCount: 2,
-            pageInfo: {
-              hasNextPage: true,
-              hasPreviousPage: false,
-              startCursor: toGlobalId('guidanceTags', expectedDkimTags[0]._key),
-              endCursor: toGlobalId('guidanceTags', expectedDkimTags[0]._key),
-            },
-          }
-
-          expect(dkimTags).toEqual(expectedStructure)
-        })
-      })
-      describe('using last limit', () => {
-        it('returns the last n amount of item(s)', async () => {
-          const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
-            query,
-            userKey: user._key,
-            cleanseInput,
-            i18n,
-            language: 'en',
-          })
-
-          const dkimGuidanceTags = ['dkim1', 'dkim2']
-
-          const dkimTagLoader = loadDkimGuidanceTagById({
-            query,
-            language: 'en',
-          })
-          const expectedDkimTags = await dkimTagLoader.loadMany(
-            dkimGuidanceTags,
-          )
-
-          const connectionArgs = {
-            last: 1,
-          }
-
-          const dkimTags = await connectionLoader({
-            dkimGuidanceTags,
-            ...connectionArgs,
-          })
-
-          const expectedStructure = {
-            edges: [
-              {
-                cursor: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
-                node: {
-                  ...expectedDkimTags[1],
-                },
-              },
-            ],
-            totalCount: 2,
-            pageInfo: {
-              hasNextPage: false,
-              hasPreviousPage: true,
-              startCursor: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
-              endCursor: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
-            },
-          }
-
-          expect(dkimTags).toEqual(expectedStructure)
-        })
-      })
-      describe('using orderBy field', () => {
-        beforeEach(async () => {
-          await collections.dkimGuidanceTags.save({
-            _key: 'dkim3',
-            en: {
-              tagName: 'Some Cool Tag Name C',
-              guidance: 'Some Cool Guidance C',
-              refLinksGuide: [''],
-              refLinksTechnical: [''],
-            },
-            fr: {
-              tagName: 'todo c',
-              guidance: 'todo c',
-              refLinksGuide: [''],
-              refLinksTechnical: [''],
-            },
-          })
-        })
-        describe('ordering on TAG_ID', () => {
-          describe('order is set to ASC', () => {
-            it('returns guidance tag', async () => {
-              const loader = loadDkimGuidanceTagById({ query, language: 'en' })
-              const expectedDkimTag = await loader.load('dkim2')
-
-              const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-                language: 'en',
-              })
-
-              const connectionArgs = {
-                dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
-                first: 5,
-                after: toGlobalId('guidanceTags', 'dkim1'),
-                before: toGlobalId('guidanceTags', 'dkim3'),
-                orderBy: {
-                  field: 'tag-id',
-                  direction: 'ASC',
-                },
-              }
-              const dkimTags = await connectionLoader(connectionArgs)
-
-              const expectedStructure = {
-                edges: [
-                  {
-                    cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                    node: {
-                      ...expectedDkimTag,
-                    },
-                  },
-                ],
-                totalCount: 3,
-                pageInfo: {
-                  hasNextPage: true,
-                  hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                  endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                },
-              }
-
-              expect(dkimTags).toEqual(expectedStructure)
-            })
-          })
-          describe('ordering is set to DESC', () => {
-            it('returns guidance tag', async () => {
-              const loader = loadDkimGuidanceTagById({ query, language: 'en' })
-              const expectedDkimTag = await loader.load('dkim2')
-
-              const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-                language: 'en',
-              })
-
-              const connectionArgs = {
-                dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
-                first: 5,
-                after: toGlobalId('guidanceTags', 'dkim3'),
-                before: toGlobalId('guidanceTags', 'dkim1'),
-                orderBy: {
-                  field: 'tag-id',
-                  direction: 'DESC',
-                },
-              }
-              const dkimTags = await connectionLoader(connectionArgs)
-
-              const expectedStructure = {
-                edges: [
-                  {
-                    cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                    node: {
-                      ...expectedDkimTag,
-                    },
-                  },
-                ],
-                totalCount: 3,
-                pageInfo: {
-                  hasNextPage: true,
-                  hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                  endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                },
-              }
-
-              expect(dkimTags).toEqual(expectedStructure)
-            })
-          })
-        })
-        describe('ordering on TAG_NAME', () => {
-          describe('order is set to ASC', () => {
-            it('returns guidance tag', async () => {
-              const loader = loadDkimGuidanceTagById({ query, language: 'en' })
-              const expectedDkimTag = await loader.load('dkim2')
-
-              const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-                language: 'en',
-              })
-
-              const connectionArgs = {
-                dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
-                first: 5,
-                after: toGlobalId('guidanceTags', 'dkim1'),
-                before: toGlobalId('guidanceTags', 'dkim3'),
-                orderBy: {
-                  field: 'tag-name',
-                  direction: 'ASC',
-                },
-              }
-              const dkimTags = await connectionLoader(connectionArgs)
-
-              const expectedStructure = {
-                edges: [
-                  {
-                    cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                    node: {
-                      ...expectedDkimTag,
-                    },
-                  },
-                ],
-                totalCount: 3,
-                pageInfo: {
-                  hasNextPage: true,
-                  hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                  endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                },
-              }
-
-              expect(dkimTags).toEqual(expectedStructure)
-            })
-          })
-          describe('ordering is set to DESC', () => {
-            it('returns guidance tag', async () => {
-              const loader = loadDkimGuidanceTagById({ query, language: 'en' })
-              const expectedDkimTag = await loader.load('dkim2')
-
-              const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-                language: 'en',
-              })
-
-              const connectionArgs = {
-                dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
-                first: 5,
-                after: toGlobalId('guidanceTags', 'dkim3'),
-                before: toGlobalId('guidanceTags', 'dkim1'),
-                orderBy: {
-                  field: 'tag-name',
-                  direction: 'DESC',
-                },
-              }
-
-              const dkimTags = await connectionLoader(connectionArgs)
-
-              const expectedStructure = {
-                edges: [
-                  {
-                    cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                    node: {
-                      ...expectedDkimTag,
-                    },
-                  },
-                ],
-                totalCount: 3,
-                pageInfo: {
-                  hasNextPage: true,
-                  hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                  endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                },
-              }
-
-              expect(dkimTags).toEqual(expectedStructure)
-            })
-          })
-        })
-        describe('ordering on GUIDANCE', () => {
-          describe('order is set to ASC', () => {
-            it('returns guidance tag', async () => {
-              const loader = loadDkimGuidanceTagById({ query, language: 'en' })
-              const expectedDkimTag = await loader.load('dkim2')
-
-              const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-                language: 'en',
-              })
-
-              const connectionArgs = {
-                dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
-                first: 5,
-                after: toGlobalId('guidanceTags', 'dkim1'),
-                before: toGlobalId('guidanceTags', 'dkim3'),
-                orderBy: {
-                  field: 'guidance',
-                  direction: 'ASC',
-                },
-              }
-              const dkimTags = await connectionLoader(connectionArgs)
-
-              const expectedStructure = {
-                edges: [
-                  {
-                    cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                    node: {
-                      ...expectedDkimTag,
-                    },
-                  },
-                ],
-                totalCount: 3,
-                pageInfo: {
-                  hasNextPage: true,
-                  hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                  endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                },
-              }
-
-              expect(dkimTags).toEqual(expectedStructure)
-            })
-          })
-          describe('ordering is set to DESC', () => {
-            it('returns guidance tag', async () => {
-              const loader = loadDkimGuidanceTagById({ query, language: 'en' })
-              const expectedDkimTag = await loader.load('dkim2')
-
-              const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-                language: 'en',
-              })
-
-              const connectionArgs = {
-                dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
-                first: 5,
-                after: toGlobalId('guidanceTags', 'dkim3'),
-                // before: toGlobalId('guidanceTags', 'dkim1'),
-                orderBy: {
-                  field: 'guidance',
-                  direction: 'DESC',
-                },
-              }
-              const dkimTags = await connectionLoader(connectionArgs)
-
-              const expectedStructure = {
-                edges: [
-                  {
-                    cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                    node: {
-                      ...expectedDkimTag,
-                    },
-                  },
-                ],
-                totalCount: 3,
-                pageInfo: {
-                  hasNextPage: true,
-                  hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                  endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
-                },
-              }
-
-              expect(dkimTags).toEqual(expectedStructure)
-            })
-          })
-        })
-      })
-      describe('no dkim results are found', () => {
-        it('returns an empty structure', async () => {
-          await truncate()
-          const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
-            query,
-            userKey: user._key,
-            cleanseInput,
-            i18n,
-            language: 'en',
-          })
-
-          const connectionArgs = {
-            first: 5,
-          }
-
-          const dkimGuidanceTags = ['dkim1', 'dkim2']
-          const dkimTags = await connectionLoader({
-            dkimGuidanceTags,
-            ...connectionArgs,
-          })
-
-          const expectedStructure = {
-            edges: [],
-            totalCount: 0,
-            pageInfo: {
-              hasNextPage: false,
-              hasPreviousPage: false,
-              startCursor: '',
-              endCursor: '',
-            },
-          }
-
-          expect(dkimTags).toEqual(expectedStructure)
-        })
-      })
-    })
-  })
   describe('language is set to english', () => {
     beforeAll(() => {
       i18n = setupI18n({
@@ -655,6 +112,597 @@ describe('when given the load dkim guidance tag connection function', () => {
           en: englishMessages.messages,
           fr: frenchMessages.messages,
         },
+      })
+    })
+    describe('given a successful load', () => {
+      describe('language is set to english', () => {
+        describe('using after cursor', () => {
+          it('returns dkim result(s) after a given node id', async () => {
+            const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+              query,
+              userKey: user._key,
+              cleanseInput,
+              i18n,
+              language: 'en',
+            })
+
+            const dkimGuidanceTags = ['dkim1', 'dkim2']
+
+            const dkimTagLoader = loadDkimGuidanceTagById({
+              query,
+              language: 'en',
+            })
+            const expectedDkimTags = await dkimTagLoader.loadMany(
+              dkimGuidanceTags,
+            )
+
+            const connectionArgs = {
+              first: 5,
+              after: toGlobalId('guidanceTag', expectedDkimTags[0]._key),
+            }
+
+            const dkimTags = await connectionLoader({
+              dkimGuidanceTags,
+              ...connectionArgs,
+            })
+
+            const expectedStructure = {
+              edges: [
+                {
+                  cursor: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
+                  node: {
+                    ...expectedDkimTags[1],
+                  },
+                },
+              ],
+              totalCount: 2,
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: true,
+                startCursor: toGlobalId(
+                  'guidanceTags',
+                  expectedDkimTags[1]._key,
+                ),
+                endCursor: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
+              },
+            }
+
+            expect(dkimTags).toEqual(expectedStructure)
+          })
+        })
+        describe('using before cursor', () => {
+          it('returns dkim result(s) before a given node id', async () => {
+            const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+              query,
+              userKey: user._key,
+              cleanseInput,
+              i18n,
+              language: 'en',
+            })
+
+            const dkimGuidanceTags = ['dkim1', 'dkim2']
+
+            const dkimTagLoader = loadDkimGuidanceTagById({
+              query,
+              language: 'en',
+            })
+            const expectedDkimTags = await dkimTagLoader.loadMany(
+              dkimGuidanceTags,
+            )
+
+            const connectionArgs = {
+              first: 5,
+              before: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
+            }
+
+            const dkimTags = await connectionLoader({
+              dkimGuidanceTags,
+              ...connectionArgs,
+            })
+
+            const expectedStructure = {
+              edges: [
+                {
+                  cursor: toGlobalId('guidanceTags', expectedDkimTags[0]._key),
+                  node: {
+                    ...expectedDkimTags[0],
+                  },
+                },
+              ],
+              totalCount: 2,
+              pageInfo: {
+                hasNextPage: true,
+                hasPreviousPage: false,
+                startCursor: toGlobalId(
+                  'guidanceTags',
+                  expectedDkimTags[0]._key,
+                ),
+                endCursor: toGlobalId('guidanceTags', expectedDkimTags[0]._key),
+              },
+            }
+
+            expect(dkimTags).toEqual(expectedStructure)
+          })
+        })
+        describe('using first limit', () => {
+          it('returns the first n amount of item(s)', async () => {
+            const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+              query,
+              userKey: user._key,
+              cleanseInput,
+              i18n,
+              language: 'en',
+            })
+
+            const dkimGuidanceTags = ['dkim1', 'dkim2']
+
+            const dkimTagLoader = loadDkimGuidanceTagById({
+              query,
+              language: 'en',
+            })
+            const expectedDkimTags = await dkimTagLoader.loadMany(
+              dkimGuidanceTags,
+            )
+
+            const connectionArgs = {
+              first: 1,
+            }
+
+            const dkimTags = await connectionLoader({
+              dkimGuidanceTags,
+              ...connectionArgs,
+            })
+
+            const expectedStructure = {
+              edges: [
+                {
+                  cursor: toGlobalId('guidanceTags', expectedDkimTags[0]._key),
+                  node: {
+                    ...expectedDkimTags[0],
+                  },
+                },
+              ],
+              totalCount: 2,
+              pageInfo: {
+                hasNextPage: true,
+                hasPreviousPage: false,
+                startCursor: toGlobalId(
+                  'guidanceTags',
+                  expectedDkimTags[0]._key,
+                ),
+                endCursor: toGlobalId('guidanceTags', expectedDkimTags[0]._key),
+              },
+            }
+
+            expect(dkimTags).toEqual(expectedStructure)
+          })
+        })
+        describe('using last limit', () => {
+          it('returns the last n amount of item(s)', async () => {
+            const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+              query,
+              userKey: user._key,
+              cleanseInput,
+              i18n,
+              language: 'en',
+            })
+
+            const dkimGuidanceTags = ['dkim1', 'dkim2']
+
+            const dkimTagLoader = loadDkimGuidanceTagById({
+              query,
+              language: 'en',
+            })
+            const expectedDkimTags = await dkimTagLoader.loadMany(
+              dkimGuidanceTags,
+            )
+
+            const connectionArgs = {
+              last: 1,
+            }
+
+            const dkimTags = await connectionLoader({
+              dkimGuidanceTags,
+              ...connectionArgs,
+            })
+
+            const expectedStructure = {
+              edges: [
+                {
+                  cursor: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
+                  node: {
+                    ...expectedDkimTags[1],
+                  },
+                },
+              ],
+              totalCount: 2,
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: true,
+                startCursor: toGlobalId(
+                  'guidanceTags',
+                  expectedDkimTags[1]._key,
+                ),
+                endCursor: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
+              },
+            }
+
+            expect(dkimTags).toEqual(expectedStructure)
+          })
+        })
+        describe('using orderBy field', () => {
+          beforeEach(async () => {
+            await collections.dkimGuidanceTags.save({
+              _key: 'dkim3',
+              en: {
+                tagName: 'Some Cool Tag Name C',
+                guidance: 'Some Cool Guidance C',
+                refLinksGuide: [''],
+                refLinksTechnical: [''],
+              },
+              fr: {
+                tagName: 'todo c',
+                guidance: 'todo c',
+                refLinksGuide: [''],
+                refLinksTechnical: [''],
+              },
+            })
+          })
+          describe('ordering on TAG_ID', () => {
+            describe('order is set to ASC', () => {
+              it('returns guidance tag', async () => {
+                const loader = loadDkimGuidanceTagById({
+                  query,
+                  language: 'en',
+                })
+                const expectedDkimTag = await loader.load('dkim2')
+
+                const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'en',
+                })
+
+                const connectionArgs = {
+                  dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
+                  first: 5,
+                  after: toGlobalId('guidanceTags', 'dkim1'),
+                  before: toGlobalId('guidanceTags', 'dkim3'),
+                  orderBy: {
+                    field: 'tag-id',
+                    direction: 'ASC',
+                  },
+                }
+                const dkimTags = await connectionLoader(connectionArgs)
+
+                const expectedStructure = {
+                  edges: [
+                    {
+                      cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                      node: {
+                        ...expectedDkimTag,
+                      },
+                    },
+                  ],
+                  totalCount: 3,
+                  pageInfo: {
+                    hasNextPage: true,
+                    hasPreviousPage: true,
+                    startCursor: toGlobalId(
+                      'guidanceTags',
+                      expectedDkimTag._key,
+                    ),
+                    endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                  },
+                }
+
+                expect(dkimTags).toEqual(expectedStructure)
+              })
+            })
+            describe('ordering is set to DESC', () => {
+              it('returns guidance tag', async () => {
+                const loader = loadDkimGuidanceTagById({
+                  query,
+                  language: 'en',
+                })
+                const expectedDkimTag = await loader.load('dkim2')
+
+                const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'en',
+                })
+
+                const connectionArgs = {
+                  dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
+                  first: 5,
+                  after: toGlobalId('guidanceTags', 'dkim3'),
+                  before: toGlobalId('guidanceTags', 'dkim1'),
+                  orderBy: {
+                    field: 'tag-id',
+                    direction: 'DESC',
+                  },
+                }
+                const dkimTags = await connectionLoader(connectionArgs)
+
+                const expectedStructure = {
+                  edges: [
+                    {
+                      cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                      node: {
+                        ...expectedDkimTag,
+                      },
+                    },
+                  ],
+                  totalCount: 3,
+                  pageInfo: {
+                    hasNextPage: true,
+                    hasPreviousPage: true,
+                    startCursor: toGlobalId(
+                      'guidanceTags',
+                      expectedDkimTag._key,
+                    ),
+                    endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                  },
+                }
+
+                expect(dkimTags).toEqual(expectedStructure)
+              })
+            })
+          })
+          describe('ordering on TAG_NAME', () => {
+            describe('order is set to ASC', () => {
+              it('returns guidance tag', async () => {
+                const loader = loadDkimGuidanceTagById({
+                  query,
+                  language: 'en',
+                })
+                const expectedDkimTag = await loader.load('dkim2')
+
+                const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'en',
+                })
+
+                const connectionArgs = {
+                  dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
+                  first: 5,
+                  after: toGlobalId('guidanceTags', 'dkim1'),
+                  before: toGlobalId('guidanceTags', 'dkim3'),
+                  orderBy: {
+                    field: 'tag-name',
+                    direction: 'ASC',
+                  },
+                }
+                const dkimTags = await connectionLoader(connectionArgs)
+
+                const expectedStructure = {
+                  edges: [
+                    {
+                      cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                      node: {
+                        ...expectedDkimTag,
+                      },
+                    },
+                  ],
+                  totalCount: 3,
+                  pageInfo: {
+                    hasNextPage: true,
+                    hasPreviousPage: true,
+                    startCursor: toGlobalId(
+                      'guidanceTags',
+                      expectedDkimTag._key,
+                    ),
+                    endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                  },
+                }
+
+                expect(dkimTags).toEqual(expectedStructure)
+              })
+            })
+            describe('ordering is set to DESC', () => {
+              it('returns guidance tag', async () => {
+                const loader = loadDkimGuidanceTagById({
+                  query,
+                  language: 'en',
+                })
+                const expectedDkimTag = await loader.load('dkim2')
+
+                const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'en',
+                })
+
+                const connectionArgs = {
+                  dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
+                  first: 5,
+                  after: toGlobalId('guidanceTags', 'dkim3'),
+                  before: toGlobalId('guidanceTags', 'dkim1'),
+                  orderBy: {
+                    field: 'tag-name',
+                    direction: 'DESC',
+                  },
+                }
+
+                const dkimTags = await connectionLoader(connectionArgs)
+
+                const expectedStructure = {
+                  edges: [
+                    {
+                      cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                      node: {
+                        ...expectedDkimTag,
+                      },
+                    },
+                  ],
+                  totalCount: 3,
+                  pageInfo: {
+                    hasNextPage: true,
+                    hasPreviousPage: true,
+                    startCursor: toGlobalId(
+                      'guidanceTags',
+                      expectedDkimTag._key,
+                    ),
+                    endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                  },
+                }
+
+                expect(dkimTags).toEqual(expectedStructure)
+              })
+            })
+          })
+          describe('ordering on GUIDANCE', () => {
+            describe('order is set to ASC', () => {
+              it('returns guidance tag', async () => {
+                const loader = loadDkimGuidanceTagById({
+                  query,
+                  language: 'en',
+                })
+                const expectedDkimTag = await loader.load('dkim2')
+
+                const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'en',
+                })
+
+                const connectionArgs = {
+                  dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
+                  first: 5,
+                  after: toGlobalId('guidanceTags', 'dkim1'),
+                  before: toGlobalId('guidanceTags', 'dkim3'),
+                  orderBy: {
+                    field: 'guidance',
+                    direction: 'ASC',
+                  },
+                }
+                const dkimTags = await connectionLoader(connectionArgs)
+
+                const expectedStructure = {
+                  edges: [
+                    {
+                      cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                      node: {
+                        ...expectedDkimTag,
+                      },
+                    },
+                  ],
+                  totalCount: 3,
+                  pageInfo: {
+                    hasNextPage: true,
+                    hasPreviousPage: true,
+                    startCursor: toGlobalId(
+                      'guidanceTags',
+                      expectedDkimTag._key,
+                    ),
+                    endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                  },
+                }
+
+                expect(dkimTags).toEqual(expectedStructure)
+              })
+            })
+            describe('ordering is set to DESC', () => {
+              it('returns guidance tag', async () => {
+                const loader = loadDkimGuidanceTagById({
+                  query,
+                  language: 'en',
+                })
+                const expectedDkimTag = await loader.load('dkim2')
+
+                const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'en',
+                })
+
+                const connectionArgs = {
+                  dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
+                  first: 5,
+                  after: toGlobalId('guidanceTags', 'dkim3'),
+                  before: toGlobalId('guidanceTags', 'dkim1'),
+                  orderBy: {
+                    field: 'guidance',
+                    direction: 'DESC',
+                  },
+                }
+                const dkimTags = await connectionLoader(connectionArgs)
+
+                const expectedStructure = {
+                  edges: [
+                    {
+                      cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                      node: {
+                        ...expectedDkimTag,
+                      },
+                    },
+                  ],
+                  totalCount: 3,
+                  pageInfo: {
+                    hasNextPage: true,
+                    hasPreviousPage: true,
+                    startCursor: toGlobalId(
+                      'guidanceTags',
+                      expectedDkimTag._key,
+                    ),
+                    endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                  },
+                }
+
+                expect(dkimTags).toEqual(expectedStructure)
+              })
+            })
+          })
+        })
+        describe('no dkim results are found', () => {
+          it('returns an empty structure', async () => {
+            await truncate()
+            const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+              query,
+              userKey: user._key,
+              cleanseInput,
+              i18n,
+              language: 'en',
+            })
+
+            const connectionArgs = {
+              first: 5,
+            }
+
+            const dkimGuidanceTags = ['dkim1', 'dkim2']
+            const dkimTags = await connectionLoader({
+              dkimGuidanceTags,
+              ...connectionArgs,
+            })
+
+            const expectedStructure = {
+              edges: [],
+              totalCount: 0,
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: false,
+                startCursor: '',
+                endCursor: '',
+              },
+            }
+
+            expect(dkimTags).toEqual(expectedStructure)
+          })
+        })
       })
     })
     describe('given a unsuccessful load', () => {
@@ -1017,6 +1065,597 @@ describe('when given the load dkim guidance tag connection function', () => {
           en: englishMessages.messages,
           fr: frenchMessages.messages,
         },
+      })
+    })
+    describe('given a successful load', () => {
+      describe('language is set to english', () => {
+        describe('using after cursor', () => {
+          it('returns dkim result(s) after a given node id', async () => {
+            const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+              query,
+              userKey: user._key,
+              cleanseInput,
+              i18n,
+              language: 'fr',
+            })
+
+            const dkimGuidanceTags = ['dkim1', 'dkim2']
+
+            const dkimTagLoader = loadDkimGuidanceTagById({
+              query,
+              language: 'fr',
+            })
+            const expectedDkimTags = await dkimTagLoader.loadMany(
+              dkimGuidanceTags,
+            )
+
+            const connectionArgs = {
+              first: 5,
+              after: toGlobalId('guidanceTag', expectedDkimTags[0]._key),
+            }
+
+            const dkimTags = await connectionLoader({
+              dkimGuidanceTags,
+              ...connectionArgs,
+            })
+
+            const expectedStructure = {
+              edges: [
+                {
+                  cursor: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
+                  node: {
+                    ...expectedDkimTags[1],
+                  },
+                },
+              ],
+              totalCount: 2,
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: true,
+                startCursor: toGlobalId(
+                  'guidanceTags',
+                  expectedDkimTags[1]._key,
+                ),
+                endCursor: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
+              },
+            }
+
+            expect(dkimTags).toEqual(expectedStructure)
+          })
+        })
+        describe('using before cursor', () => {
+          it('returns dkim result(s) before a given node id', async () => {
+            const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+              query,
+              userKey: user._key,
+              cleanseInput,
+              i18n,
+              language: 'fr',
+            })
+
+            const dkimGuidanceTags = ['dkim1', 'dkim2']
+
+            const dkimTagLoader = loadDkimGuidanceTagById({
+              query,
+              language: 'fr',
+            })
+            const expectedDkimTags = await dkimTagLoader.loadMany(
+              dkimGuidanceTags,
+            )
+
+            const connectionArgs = {
+              first: 5,
+              before: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
+            }
+
+            const dkimTags = await connectionLoader({
+              dkimGuidanceTags,
+              ...connectionArgs,
+            })
+
+            const expectedStructure = {
+              edges: [
+                {
+                  cursor: toGlobalId('guidanceTags', expectedDkimTags[0]._key),
+                  node: {
+                    ...expectedDkimTags[0],
+                  },
+                },
+              ],
+              totalCount: 2,
+              pageInfo: {
+                hasNextPage: true,
+                hasPreviousPage: false,
+                startCursor: toGlobalId(
+                  'guidanceTags',
+                  expectedDkimTags[0]._key,
+                ),
+                endCursor: toGlobalId('guidanceTags', expectedDkimTags[0]._key),
+              },
+            }
+
+            expect(dkimTags).toEqual(expectedStructure)
+          })
+        })
+        describe('using first limit', () => {
+          it('returns the first n amount of item(s)', async () => {
+            const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+              query,
+              userKey: user._key,
+              cleanseInput,
+              i18n,
+              language: 'fr',
+            })
+
+            const dkimGuidanceTags = ['dkim1', 'dkim2']
+
+            const dkimTagLoader = loadDkimGuidanceTagById({
+              query,
+              language: 'fr',
+            })
+            const expectedDkimTags = await dkimTagLoader.loadMany(
+              dkimGuidanceTags,
+            )
+
+            const connectionArgs = {
+              first: 1,
+            }
+
+            const dkimTags = await connectionLoader({
+              dkimGuidanceTags,
+              ...connectionArgs,
+            })
+
+            const expectedStructure = {
+              edges: [
+                {
+                  cursor: toGlobalId('guidanceTags', expectedDkimTags[0]._key),
+                  node: {
+                    ...expectedDkimTags[0],
+                  },
+                },
+              ],
+              totalCount: 2,
+              pageInfo: {
+                hasNextPage: true,
+                hasPreviousPage: false,
+                startCursor: toGlobalId(
+                  'guidanceTags',
+                  expectedDkimTags[0]._key,
+                ),
+                endCursor: toGlobalId('guidanceTags', expectedDkimTags[0]._key),
+              },
+            }
+
+            expect(dkimTags).toEqual(expectedStructure)
+          })
+        })
+        describe('using last limit', () => {
+          it('returns the last n amount of item(s)', async () => {
+            const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+              query,
+              userKey: user._key,
+              cleanseInput,
+              i18n,
+              language: 'fr',
+            })
+
+            const dkimGuidanceTags = ['dkim1', 'dkim2']
+
+            const dkimTagLoader = loadDkimGuidanceTagById({
+              query,
+              language: 'fr',
+            })
+            const expectedDkimTags = await dkimTagLoader.loadMany(
+              dkimGuidanceTags,
+            )
+
+            const connectionArgs = {
+              last: 1,
+            }
+
+            const dkimTags = await connectionLoader({
+              dkimGuidanceTags,
+              ...connectionArgs,
+            })
+
+            const expectedStructure = {
+              edges: [
+                {
+                  cursor: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
+                  node: {
+                    ...expectedDkimTags[1],
+                  },
+                },
+              ],
+              totalCount: 2,
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: true,
+                startCursor: toGlobalId(
+                  'guidanceTags',
+                  expectedDkimTags[1]._key,
+                ),
+                endCursor: toGlobalId('guidanceTags', expectedDkimTags[1]._key),
+              },
+            }
+
+            expect(dkimTags).toEqual(expectedStructure)
+          })
+        })
+        describe('using orderBy field', () => {
+          beforeEach(async () => {
+            await collections.dkimGuidanceTags.save({
+              _key: 'dkim3',
+              en: {
+                tagName: 'Some Cool Tag Name C',
+                guidance: 'Some Cool Guidance C',
+                refLinksGuide: [''],
+                refLinksTechnical: [''],
+              },
+              fr: {
+                tagName: 'todo c',
+                guidance: 'todo c',
+                refLinksGuide: [''],
+                refLinksTechnical: [''],
+              },
+            })
+          })
+          describe('ordering on TAG_ID', () => {
+            describe('order is set to ASC', () => {
+              it('returns guidance tag', async () => {
+                const loader = loadDkimGuidanceTagById({
+                  query,
+                  language: 'fr',
+                })
+                const expectedDkimTag = await loader.load('dkim2')
+
+                const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'fr',
+                })
+
+                const connectionArgs = {
+                  dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
+                  first: 5,
+                  after: toGlobalId('guidanceTags', 'dkim1'),
+                  before: toGlobalId('guidanceTags', 'dkim3'),
+                  orderBy: {
+                    field: 'tag-id',
+                    direction: 'ASC',
+                  },
+                }
+                const dkimTags = await connectionLoader(connectionArgs)
+
+                const expectedStructure = {
+                  edges: [
+                    {
+                      cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                      node: {
+                        ...expectedDkimTag,
+                      },
+                    },
+                  ],
+                  totalCount: 3,
+                  pageInfo: {
+                    hasNextPage: true,
+                    hasPreviousPage: true,
+                    startCursor: toGlobalId(
+                      'guidanceTags',
+                      expectedDkimTag._key,
+                    ),
+                    endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                  },
+                }
+
+                expect(dkimTags).toEqual(expectedStructure)
+              })
+            })
+            describe('ordering is set to DESC', () => {
+              it('returns guidance tag', async () => {
+                const loader = loadDkimGuidanceTagById({
+                  query,
+                  language: 'fr',
+                })
+                const expectedDkimTag = await loader.load('dkim2')
+
+                const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'fr',
+                })
+
+                const connectionArgs = {
+                  dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
+                  first: 5,
+                  after: toGlobalId('guidanceTags', 'dkim3'),
+                  before: toGlobalId('guidanceTags', 'dkim1'),
+                  orderBy: {
+                    field: 'tag-id',
+                    direction: 'DESC',
+                  },
+                }
+                const dkimTags = await connectionLoader(connectionArgs)
+
+                const expectedStructure = {
+                  edges: [
+                    {
+                      cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                      node: {
+                        ...expectedDkimTag,
+                      },
+                    },
+                  ],
+                  totalCount: 3,
+                  pageInfo: {
+                    hasNextPage: true,
+                    hasPreviousPage: true,
+                    startCursor: toGlobalId(
+                      'guidanceTags',
+                      expectedDkimTag._key,
+                    ),
+                    endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                  },
+                }
+
+                expect(dkimTags).toEqual(expectedStructure)
+              })
+            })
+          })
+          describe('ordering on TAG_NAME', () => {
+            describe('order is set to ASC', () => {
+              it('returns guidance tag', async () => {
+                const loader = loadDkimGuidanceTagById({
+                  query,
+                  language: 'fr',
+                })
+                const expectedDkimTag = await loader.load('dkim2')
+
+                const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'fr',
+                })
+
+                const connectionArgs = {
+                  dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
+                  first: 5,
+                  after: toGlobalId('guidanceTags', 'dkim1'),
+                  before: toGlobalId('guidanceTags', 'dkim3'),
+                  orderBy: {
+                    field: 'tag-name',
+                    direction: 'ASC',
+                  },
+                }
+                const dkimTags = await connectionLoader(connectionArgs)
+
+                const expectedStructure = {
+                  edges: [
+                    {
+                      cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                      node: {
+                        ...expectedDkimTag,
+                      },
+                    },
+                  ],
+                  totalCount: 3,
+                  pageInfo: {
+                    hasNextPage: true,
+                    hasPreviousPage: true,
+                    startCursor: toGlobalId(
+                      'guidanceTags',
+                      expectedDkimTag._key,
+                    ),
+                    endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                  },
+                }
+
+                expect(dkimTags).toEqual(expectedStructure)
+              })
+            })
+            describe('ordering is set to DESC', () => {
+              it('returns guidance tag', async () => {
+                const loader = loadDkimGuidanceTagById({
+                  query,
+                  language: 'fr',
+                })
+                const expectedDkimTag = await loader.load('dkim2')
+
+                const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'fr',
+                })
+
+                const connectionArgs = {
+                  dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
+                  first: 5,
+                  after: toGlobalId('guidanceTags', 'dkim3'),
+                  before: toGlobalId('guidanceTags', 'dkim1'),
+                  orderBy: {
+                    field: 'tag-name',
+                    direction: 'DESC',
+                  },
+                }
+
+                const dkimTags = await connectionLoader(connectionArgs)
+
+                const expectedStructure = {
+                  edges: [
+                    {
+                      cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                      node: {
+                        ...expectedDkimTag,
+                      },
+                    },
+                  ],
+                  totalCount: 3,
+                  pageInfo: {
+                    hasNextPage: true,
+                    hasPreviousPage: true,
+                    startCursor: toGlobalId(
+                      'guidanceTags',
+                      expectedDkimTag._key,
+                    ),
+                    endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                  },
+                }
+
+                expect(dkimTags).toEqual(expectedStructure)
+              })
+            })
+          })
+          describe('ordering on GUIDANCE', () => {
+            describe('order is set to ASC', () => {
+              it('returns guidance tag', async () => {
+                const loader = loadDkimGuidanceTagById({
+                  query,
+                  language: 'fr',
+                })
+                const expectedDkimTag = await loader.load('dkim2')
+
+                const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'fr',
+                })
+
+                const connectionArgs = {
+                  dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
+                  first: 5,
+                  after: toGlobalId('guidanceTags', 'dkim1'),
+                  before: toGlobalId('guidanceTags', 'dkim3'),
+                  orderBy: {
+                    field: 'guidance',
+                    direction: 'ASC',
+                  },
+                }
+                const dkimTags = await connectionLoader(connectionArgs)
+
+                const expectedStructure = {
+                  edges: [
+                    {
+                      cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                      node: {
+                        ...expectedDkimTag,
+                      },
+                    },
+                  ],
+                  totalCount: 3,
+                  pageInfo: {
+                    hasNextPage: true,
+                    hasPreviousPage: true,
+                    startCursor: toGlobalId(
+                      'guidanceTags',
+                      expectedDkimTag._key,
+                    ),
+                    endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                  },
+                }
+
+                expect(dkimTags).toEqual(expectedStructure)
+              })
+            })
+            describe('ordering is set to DESC', () => {
+              it('returns guidance tag', async () => {
+                const loader = loadDkimGuidanceTagById({
+                  query,
+                  language: 'fr',
+                })
+                const expectedDkimTag = await loader.load('dkim2')
+
+                const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'fr',
+                })
+
+                const connectionArgs = {
+                  dkimGuidanceTags: ['dkim1', 'dkim2', 'dkim3'],
+                  first: 5,
+                  after: toGlobalId('guidanceTags', 'dkim3'),
+                  before: toGlobalId('guidanceTags', 'dkim1'),
+                  orderBy: {
+                    field: 'guidance',
+                    direction: 'DESC',
+                  },
+                }
+                const dkimTags = await connectionLoader(connectionArgs)
+
+                const expectedStructure = {
+                  edges: [
+                    {
+                      cursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                      node: {
+                        ...expectedDkimTag,
+                      },
+                    },
+                  ],
+                  totalCount: 3,
+                  pageInfo: {
+                    hasNextPage: true,
+                    hasPreviousPage: true,
+                    startCursor: toGlobalId(
+                      'guidanceTags',
+                      expectedDkimTag._key,
+                    ),
+                    endCursor: toGlobalId('guidanceTags', expectedDkimTag._key),
+                  },
+                }
+
+                expect(dkimTags).toEqual(expectedStructure)
+              })
+            })
+          })
+        })
+        describe('no dkim results are found', () => {
+          it('returns an empty structure', async () => {
+            await truncate()
+            const connectionLoader = loadDkimGuidanceTagConnectionsByTagId({
+              query,
+              userKey: user._key,
+              cleanseInput,
+              i18n,
+              language: 'fr',
+            })
+
+            const connectionArgs = {
+              first: 5,
+            }
+
+            const dkimGuidanceTags = ['dkim1', 'dkim2']
+            const dkimTags = await connectionLoader({
+              dkimGuidanceTags,
+              ...connectionArgs,
+            })
+
+            const expectedStructure = {
+              edges: [],
+              totalCount: 0,
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: false,
+                startCursor: '',
+                endCursor: '',
+              },
+            }
+
+            expect(dkimTags).toEqual(expectedStructure)
+          })
+        })
       })
     })
     describe('given a unsuccessful load', () => {

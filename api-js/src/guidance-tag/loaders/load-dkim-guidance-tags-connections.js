@@ -28,10 +28,10 @@ export const loadDkimGuidanceTagConnectionsByTagId = ({
         tagField = aql`tag._key`
         documentField = aql`DOCUMENT(dkimGuidanceTags, ${afterId})._key`
       } else if (orderBy.field === 'tag-name') {
-        tagField = aql`tag.tagName`
+        tagField = aql`TRANSLATE(${language}, tag).tagName`
         documentField = aql`TRANSLATE(${language}, DOCUMENT(dkimGuidanceTags, ${afterId})).tagName`
       } else if (orderBy.field === 'guidance') {
-        tagField = aql`tag.guidance`
+        tagField = aql`TRANSLATE(${language}, tag).guidance`
         documentField = aql`TRANSLATE(${language}, DOCUMENT(dkimGuidanceTags, ${afterId})).guidance`
       }
 
@@ -62,10 +62,10 @@ export const loadDkimGuidanceTagConnectionsByTagId = ({
         tagField = aql`tag._key`
         documentField = aql`DOCUMENT(dkimGuidanceTags, ${beforeId})._key`
       } else if (orderBy.field === 'tag-name') {
-        tagField = aql`tag.tagName`
+        tagField = aql`TRANSLATE(${language}, tag).tagName`
         documentField = aql`TRANSLATE(${language}, DOCUMENT(dkimGuidanceTags, ${beforeId})).tagName`
       } else if (orderBy.field === 'guidance') {
-        tagField = aql`tag.guidance`
+        tagField = aql`TRANSLATE(${language}, tag).guidance`
         documentField = aql`TRANSLATE(${language}, DOCUMENT(dkimGuidanceTags, ${beforeId})).guidance`
       }
 
