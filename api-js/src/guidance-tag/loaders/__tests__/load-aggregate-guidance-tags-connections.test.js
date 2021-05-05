@@ -55,18 +55,36 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
 
     await collections.aggregateGuidanceTags.save({
       _key: 'aggregate1',
-      tagName: 'a',
-      guidance: 'a',
+      en: {
+        tagName: 'a',
+        guidance: 'a',
+      },
+      fr: {
+        tagName: 'a',
+        guidance: 'a',
+      },
     })
     await collections.aggregateGuidanceTags.save({
       _key: 'aggregate2',
-      tagName: 'b',
-      guidance: 'b',
+      en: {
+        tagName: 'b',
+        guidance: 'b',
+      },
+      fr: {
+        tagName: 'b',
+        guidance: 'b',
+      },
     })
     await collections.aggregateGuidanceTags.save({
       _key: 'aggregate3',
-      tagName: 'c',
-      guidance: 'c',
+      en: {
+        tagName: 'c',
+        guidance: 'c',
+      },
+      fr: {
+        tagName: 'c',
+        guidance: 'c',
+      },
     })
   })
 
@@ -79,665 +97,6 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
     await drop()
   })
 
-  describe('given a successful load', () => {
-    describe('using after cursor', () => {
-      it('returns the guidance tags', async () => {
-        const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId({
-          query,
-          userKey: user._key,
-          cleanseInput,
-          i18n,
-        })
-
-        const aggregateGuidanceTags = ['aggregate1', 'aggregate2']
-
-        const aggregateTagLoader = loadAggregateGuidanceTagById({ query })
-        const expectedAggregateTags = await aggregateTagLoader.loadMany(
-          aggregateGuidanceTags,
-        )
-
-        const connectionArgs = {
-          first: 5,
-          after: toGlobalId('guidanceTag', expectedAggregateTags[0]._key),
-        }
-
-        const aggregateTags = await connectionLoader({
-          aggregateGuidanceTags,
-          ...connectionArgs,
-        })
-
-        const expectedStructure = {
-          edges: [
-            {
-              cursor: toGlobalId('guidanceTags', expectedAggregateTags[1]._key),
-              node: {
-                ...expectedAggregateTags[1],
-              },
-            },
-          ],
-          totalCount: 2,
-          pageInfo: {
-            hasNextPage: false,
-            hasPreviousPage: true,
-            startCursor: toGlobalId(
-              'guidanceTags',
-              expectedAggregateTags[1]._key,
-            ),
-            endCursor: toGlobalId(
-              'guidanceTags',
-              expectedAggregateTags[1]._key,
-            ),
-          },
-        }
-
-        expect(aggregateTags).toEqual(expectedStructure)
-      })
-    })
-    describe('using before cursor', () => {
-      it('returns the guidance tags', async () => {
-        const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId({
-          query,
-          userKey: user._key,
-          cleanseInput,
-          i18n,
-        })
-
-        const aggregateGuidanceTags = ['aggregate1', 'aggregate2']
-
-        const aggregateTagLoader = loadAggregateGuidanceTagById({ query })
-        const expectedAggregateTags = await aggregateTagLoader.loadMany(
-          aggregateGuidanceTags,
-        )
-
-        const connectionArgs = {
-          first: 5,
-          before: toGlobalId('guidanceTag', expectedAggregateTags[1]._key),
-        }
-
-        const aggregateTags = await connectionLoader({
-          aggregateGuidanceTags,
-          ...connectionArgs,
-        })
-
-        const expectedStructure = {
-          edges: [
-            {
-              cursor: toGlobalId('guidanceTags', expectedAggregateTags[0]._key),
-              node: {
-                ...expectedAggregateTags[0],
-              },
-            },
-          ],
-          totalCount: 2,
-          pageInfo: {
-            hasNextPage: true,
-            hasPreviousPage: false,
-            startCursor: toGlobalId(
-              'guidanceTags',
-              expectedAggregateTags[0]._key,
-            ),
-            endCursor: toGlobalId(
-              'guidanceTags',
-              expectedAggregateTags[0]._key,
-            ),
-          },
-        }
-
-        expect(aggregateTags).toEqual(expectedStructure)
-      })
-    })
-    describe('using the first limit', () => {
-      it('returns the guidance tags', async () => {
-        const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId({
-          query,
-          userKey: user._key,
-          cleanseInput,
-          i18n,
-        })
-
-        const aggregateGuidanceTags = ['aggregate1', 'aggregate2']
-
-        const aggregateTagLoader = loadAggregateGuidanceTagById({ query })
-        const expectedAggregateTags = await aggregateTagLoader.loadMany(
-          aggregateGuidanceTags,
-        )
-
-        const connectionArgs = {
-          first: 1,
-        }
-
-        const aggregateTags = await connectionLoader({
-          aggregateGuidanceTags,
-          ...connectionArgs,
-        })
-
-        const expectedStructure = {
-          edges: [
-            {
-              cursor: toGlobalId('guidanceTags', expectedAggregateTags[0]._key),
-              node: {
-                ...expectedAggregateTags[0],
-              },
-            },
-          ],
-          totalCount: 2,
-          pageInfo: {
-            hasNextPage: true,
-            hasPreviousPage: false,
-            startCursor: toGlobalId(
-              'guidanceTags',
-              expectedAggregateTags[0]._key,
-            ),
-            endCursor: toGlobalId(
-              'guidanceTags',
-              expectedAggregateTags[0]._key,
-            ),
-          },
-        }
-
-        expect(aggregateTags).toEqual(expectedStructure)
-      })
-    })
-    describe('using the last limit', () => {
-      it('returns the guidance tags', async () => {
-        const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId({
-          query,
-          userKey: user._key,
-          cleanseInput,
-          i18n,
-        })
-
-        const aggregateGuidanceTags = ['aggregate1', 'aggregate2']
-
-        const aggregateTagLoader = loadAggregateGuidanceTagById({ query })
-        const expectedAggregateTags = await aggregateTagLoader.loadMany(
-          aggregateGuidanceTags,
-        )
-
-        const connectionArgs = {
-          last: 1,
-        }
-
-        const aggregateTags = await connectionLoader({
-          aggregateGuidanceTags,
-          ...connectionArgs,
-        })
-
-        const expectedStructure = {
-          edges: [
-            {
-              cursor: toGlobalId('guidanceTags', expectedAggregateTags[1]._key),
-              node: {
-                ...expectedAggregateTags[1],
-              },
-            },
-          ],
-          totalCount: 2,
-          pageInfo: {
-            hasNextPage: false,
-            hasPreviousPage: true,
-            startCursor: toGlobalId(
-              'guidanceTags',
-              expectedAggregateTags[1]._key,
-            ),
-            endCursor: toGlobalId(
-              'guidanceTags',
-              expectedAggregateTags[1]._key,
-            ),
-          },
-        }
-
-        expect(aggregateTags).toEqual(expectedStructure)
-      })
-    })
-    describe('using the orderBy field', () => {
-      describe('ordering on TAG_ID', () => {
-        describe('order is set to ASC', () => {
-          it('returns the guidance tags', async () => {
-            const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
-              {
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-              },
-            )
-
-            const aggregateGuidanceTags = [
-              'aggregate1',
-              'aggregate2',
-              'aggregate3',
-            ]
-
-            const aggregateTagLoader = loadAggregateGuidanceTagById({ query })
-            const expectedAggregateTags = await aggregateTagLoader.loadMany(
-              aggregateGuidanceTags,
-            )
-
-            const connectionArgs = {
-              aggregateGuidanceTags,
-              first: 1,
-              after: toGlobalId('guidanceTags', 'aggregate1'),
-              before: toGlobalId('guidanceTags', 'aggregate3'),
-              orderBy: {
-                field: 'tag-id',
-                direction: 'ASC',
-              },
-            }
-
-            const aggregateTags = await connectionLoader({
-              ...connectionArgs,
-            })
-
-            const expectedStructure = {
-              edges: [
-                {
-                  cursor: toGlobalId(
-                    'guidanceTags',
-                    expectedAggregateTags[1]._key,
-                  ),
-                  node: {
-                    ...expectedAggregateTags[1],
-                  },
-                },
-              ],
-              totalCount: 3,
-              pageInfo: {
-                hasNextPage: true,
-                hasPreviousPage: true,
-                startCursor: toGlobalId(
-                  'guidanceTags',
-                  expectedAggregateTags[1]._key,
-                ),
-                endCursor: toGlobalId(
-                  'guidanceTags',
-                  expectedAggregateTags[1]._key,
-                ),
-              },
-            }
-
-            expect(aggregateTags).toEqual(expectedStructure)
-          })
-        })
-        describe('order is set to DESC', () => {
-          it('returns the guidance tags', async () => {
-            const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
-              {
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-              },
-            )
-
-            const aggregateGuidanceTags = [
-              'aggregate1',
-              'aggregate2',
-              'aggregate3',
-            ]
-
-            const aggregateTagLoader = loadAggregateGuidanceTagById({ query })
-            const expectedAggregateTags = await aggregateTagLoader.loadMany(
-              aggregateGuidanceTags,
-            )
-
-            const connectionArgs = {
-              aggregateGuidanceTags,
-              first: 1,
-              after: toGlobalId('guidanceTags', 'aggregate3'),
-              before: toGlobalId('guidanceTags', 'aggregate1'),
-              orderBy: {
-                field: 'tag-id',
-                direction: 'DESC',
-              },
-            }
-
-            const aggregateTags = await connectionLoader({
-              ...connectionArgs,
-            })
-
-            const expectedStructure = {
-              edges: [
-                {
-                  cursor: toGlobalId(
-                    'guidanceTags',
-                    expectedAggregateTags[1]._key,
-                  ),
-                  node: {
-                    ...expectedAggregateTags[1],
-                  },
-                },
-              ],
-              totalCount: 3,
-              pageInfo: {
-                hasNextPage: true,
-                hasPreviousPage: true,
-                startCursor: toGlobalId(
-                  'guidanceTags',
-                  expectedAggregateTags[1]._key,
-                ),
-                endCursor: toGlobalId(
-                  'guidanceTags',
-                  expectedAggregateTags[1]._key,
-                ),
-              },
-            }
-
-            expect(aggregateTags).toEqual(expectedStructure)
-          })
-        })
-      })
-      describe('ordering on TAG_NAME', () => {
-        describe('order is set to ASC', () => {
-          it('returns the guidance tags', async () => {
-            const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
-              {
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-              },
-            )
-
-            const aggregateGuidanceTags = [
-              'aggregate1',
-              'aggregate2',
-              'aggregate3',
-            ]
-
-            const aggregateTagLoader = loadAggregateGuidanceTagById({ query })
-            const expectedAggregateTags = await aggregateTagLoader.loadMany(
-              aggregateGuidanceTags,
-            )
-
-            const connectionArgs = {
-              aggregateGuidanceTags,
-              first: 1,
-              after: toGlobalId('guidanceTags', 'aggregate1'),
-              before: toGlobalId('guidanceTags', 'aggregate3'),
-              orderBy: {
-                field: 'tag-name',
-                direction: 'ASC',
-              },
-            }
-
-            const aggregateTags = await connectionLoader({
-              ...connectionArgs,
-            })
-
-            const expectedStructure = {
-              edges: [
-                {
-                  cursor: toGlobalId(
-                    'guidanceTags',
-                    expectedAggregateTags[1]._key,
-                  ),
-                  node: {
-                    ...expectedAggregateTags[1],
-                  },
-                },
-              ],
-              totalCount: 3,
-              pageInfo: {
-                hasNextPage: true,
-                hasPreviousPage: true,
-                startCursor: toGlobalId(
-                  'guidanceTags',
-                  expectedAggregateTags[1]._key,
-                ),
-                endCursor: toGlobalId(
-                  'guidanceTags',
-                  expectedAggregateTags[1]._key,
-                ),
-              },
-            }
-
-            expect(aggregateTags).toEqual(expectedStructure)
-          })
-        })
-        describe('order is set to DESC', () => {
-          it('returns the guidance tags', async () => {
-            const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
-              {
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-              },
-            )
-
-            const aggregateGuidanceTags = [
-              'aggregate1',
-              'aggregate2',
-              'aggregate3',
-            ]
-
-            const aggregateTagLoader = loadAggregateGuidanceTagById({ query })
-            const expectedAggregateTags = await aggregateTagLoader.loadMany(
-              aggregateGuidanceTags,
-            )
-
-            const connectionArgs = {
-              aggregateGuidanceTags,
-              first: 1,
-              after: toGlobalId('guidanceTags', 'aggregate3'),
-              before: toGlobalId('guidanceTags', 'aggregate1'),
-              orderBy: {
-                field: 'tag-name',
-                direction: 'DESC',
-              },
-            }
-
-            const aggregateTags = await connectionLoader({
-              ...connectionArgs,
-            })
-
-            const expectedStructure = {
-              edges: [
-                {
-                  cursor: toGlobalId(
-                    'guidanceTags',
-                    expectedAggregateTags[1]._key,
-                  ),
-                  node: {
-                    ...expectedAggregateTags[1],
-                  },
-                },
-              ],
-              totalCount: 3,
-              pageInfo: {
-                hasNextPage: true,
-                hasPreviousPage: true,
-                startCursor: toGlobalId(
-                  'guidanceTags',
-                  expectedAggregateTags[1]._key,
-                ),
-                endCursor: toGlobalId(
-                  'guidanceTags',
-                  expectedAggregateTags[1]._key,
-                ),
-              },
-            }
-
-            expect(aggregateTags).toEqual(expectedStructure)
-          })
-        })
-      })
-      describe('ordering on GUIDANCE', () => {
-        describe('order is set to ASC', () => {
-          it('returns the guidance tags', async () => {
-            const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
-              {
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-              },
-            )
-
-            const aggregateGuidanceTags = [
-              'aggregate1',
-              'aggregate2',
-              'aggregate3',
-            ]
-
-            const aggregateTagLoader = loadAggregateGuidanceTagById({ query })
-            const expectedAggregateTags = await aggregateTagLoader.loadMany(
-              aggregateGuidanceTags,
-            )
-
-            const connectionArgs = {
-              aggregateGuidanceTags,
-              first: 1,
-              after: toGlobalId('guidanceTags', 'aggregate1'),
-              before: toGlobalId('guidanceTags', 'aggregate3'),
-              orderBy: {
-                field: 'guidance',
-                direction: 'ASC',
-              },
-            }
-
-            const aggregateTags = await connectionLoader({
-              ...connectionArgs,
-            })
-
-            const expectedStructure = {
-              edges: [
-                {
-                  cursor: toGlobalId(
-                    'guidanceTags',
-                    expectedAggregateTags[1]._key,
-                  ),
-                  node: {
-                    ...expectedAggregateTags[1],
-                  },
-                },
-              ],
-              totalCount: 3,
-              pageInfo: {
-                hasNextPage: true,
-                hasPreviousPage: true,
-                startCursor: toGlobalId(
-                  'guidanceTags',
-                  expectedAggregateTags[1]._key,
-                ),
-                endCursor: toGlobalId(
-                  'guidanceTags',
-                  expectedAggregateTags[1]._key,
-                ),
-              },
-            }
-
-            expect(aggregateTags).toEqual(expectedStructure)
-          })
-        })
-        describe('order is set to DESC', () => {
-          it('returns the guidance tags', async () => {
-            const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
-              {
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-              },
-            )
-
-            const aggregateGuidanceTags = [
-              'aggregate1',
-              'aggregate2',
-              'aggregate3',
-            ]
-
-            const aggregateTagLoader = loadAggregateGuidanceTagById({ query })
-            const expectedAggregateTags = await aggregateTagLoader.loadMany(
-              aggregateGuidanceTags,
-            )
-
-            const connectionArgs = {
-              aggregateGuidanceTags,
-              first: 1,
-              after: toGlobalId('guidanceTags', 'aggregate3'),
-              before: toGlobalId('guidanceTags', 'aggregate1'),
-              orderBy: {
-                field: 'guidance',
-                direction: 'DESC',
-              },
-            }
-
-            const aggregateTags = await connectionLoader({
-              ...connectionArgs,
-            })
-
-            const expectedStructure = {
-              edges: [
-                {
-                  cursor: toGlobalId(
-                    'guidanceTags',
-                    expectedAggregateTags[1]._key,
-                  ),
-                  node: {
-                    ...expectedAggregateTags[1],
-                  },
-                },
-              ],
-              totalCount: 3,
-              pageInfo: {
-                hasNextPage: true,
-                hasPreviousPage: true,
-                startCursor: toGlobalId(
-                  'guidanceTags',
-                  expectedAggregateTags[1]._key,
-                ),
-                endCursor: toGlobalId(
-                  'guidanceTags',
-                  expectedAggregateTags[1]._key,
-                ),
-              },
-            }
-
-            expect(aggregateTags).toEqual(expectedStructure)
-          })
-        })
-      })
-    })
-    describe('no tags are found', () => {
-      beforeEach(async () => {
-        await truncate()
-      })
-      it('returns an empty structure', async () => {
-        const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId({
-          query,
-          userKey: user._key,
-          cleanseInput,
-          i18n,
-        })
-
-        const aggregateGuidanceTags = ['aggregate1', 'aggregate2']
-
-        const connectionArgs = {
-          first: 5,
-        }
-
-        const aggregateTags = await connectionLoader({
-          aggregateGuidanceTags,
-          ...connectionArgs,
-        })
-
-        const expectedStructure = {
-          edges: [],
-          totalCount: 0,
-          pageInfo: {
-            hasNextPage: false,
-            hasPreviousPage: false,
-            startCursor: '',
-            endCursor: '',
-          },
-        }
-
-        expect(aggregateTags).toEqual(expectedStructure)
-      })
-    })
-  })
   describe('language is set to english', () => {
     beforeAll(() => {
       i18n = setupI18n({
@@ -751,6 +110,718 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
           en: englishMessages.messages,
           fr: frenchMessages.messages,
         },
+      })
+    })
+    describe('given a successful load', () => {
+      describe('using after cursor', () => {
+        it('returns the guidance tags', async () => {
+          const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId({
+            query,
+            userKey: user._key,
+            cleanseInput,
+            i18n,
+            language: 'en',
+          })
+
+          const aggregateGuidanceTags = ['aggregate1', 'aggregate2']
+
+          const aggregateTagLoader = loadAggregateGuidanceTagById({
+            query,
+            language: 'en',
+          })
+          const expectedAggregateTags = await aggregateTagLoader.loadMany(
+            aggregateGuidanceTags,
+          )
+
+          const connectionArgs = {
+            first: 5,
+            after: toGlobalId('guidanceTag', expectedAggregateTags[0]._key),
+          }
+
+          const aggregateTags = await connectionLoader({
+            aggregateGuidanceTags,
+            ...connectionArgs,
+          })
+
+          const expectedStructure = {
+            edges: [
+              {
+                cursor: toGlobalId(
+                  'guidanceTags',
+                  expectedAggregateTags[1]._key,
+                ),
+                node: {
+                  ...expectedAggregateTags[1],
+                },
+              },
+            ],
+            totalCount: 2,
+            pageInfo: {
+              hasNextPage: false,
+              hasPreviousPage: true,
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[1]._key,
+              ),
+              endCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[1]._key,
+              ),
+            },
+          }
+
+          expect(aggregateTags).toEqual(expectedStructure)
+        })
+      })
+      describe('using before cursor', () => {
+        it('returns the guidance tags', async () => {
+          const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId({
+            query,
+            userKey: user._key,
+            cleanseInput,
+            i18n,
+            language: 'en',
+          })
+
+          const aggregateGuidanceTags = ['aggregate1', 'aggregate2']
+
+          const aggregateTagLoader = loadAggregateGuidanceTagById({
+            query,
+            language: 'en',
+          })
+          const expectedAggregateTags = await aggregateTagLoader.loadMany(
+            aggregateGuidanceTags,
+          )
+
+          const connectionArgs = {
+            first: 5,
+            before: toGlobalId('guidanceTag', expectedAggregateTags[1]._key),
+          }
+
+          const aggregateTags = await connectionLoader({
+            aggregateGuidanceTags,
+            ...connectionArgs,
+          })
+
+          const expectedStructure = {
+            edges: [
+              {
+                cursor: toGlobalId(
+                  'guidanceTags',
+                  expectedAggregateTags[0]._key,
+                ),
+                node: {
+                  ...expectedAggregateTags[0],
+                },
+              },
+            ],
+            totalCount: 2,
+            pageInfo: {
+              hasNextPage: true,
+              hasPreviousPage: false,
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[0]._key,
+              ),
+              endCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[0]._key,
+              ),
+            },
+          }
+
+          expect(aggregateTags).toEqual(expectedStructure)
+        })
+      })
+      describe('using the first limit', () => {
+        it('returns the guidance tags', async () => {
+          const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId({
+            query,
+            userKey: user._key,
+            cleanseInput,
+            i18n,
+            language: 'en',
+          })
+
+          const aggregateGuidanceTags = ['aggregate1', 'aggregate2']
+
+          const aggregateTagLoader = loadAggregateGuidanceTagById({
+            query,
+            language: 'en',
+          })
+          const expectedAggregateTags = await aggregateTagLoader.loadMany(
+            aggregateGuidanceTags,
+          )
+
+          const connectionArgs = {
+            first: 1,
+          }
+
+          const aggregateTags = await connectionLoader({
+            aggregateGuidanceTags,
+            ...connectionArgs,
+          })
+
+          const expectedStructure = {
+            edges: [
+              {
+                cursor: toGlobalId(
+                  'guidanceTags',
+                  expectedAggregateTags[0]._key,
+                ),
+                node: {
+                  ...expectedAggregateTags[0],
+                },
+              },
+            ],
+            totalCount: 2,
+            pageInfo: {
+              hasNextPage: true,
+              hasPreviousPage: false,
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[0]._key,
+              ),
+              endCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[0]._key,
+              ),
+            },
+          }
+
+          expect(aggregateTags).toEqual(expectedStructure)
+        })
+      })
+      describe('using the last limit', () => {
+        it('returns the guidance tags', async () => {
+          const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId({
+            query,
+            userKey: user._key,
+            cleanseInput,
+            i18n,
+            language: 'en',
+          })
+
+          const aggregateGuidanceTags = ['aggregate1', 'aggregate2']
+
+          const aggregateTagLoader = loadAggregateGuidanceTagById({
+            query,
+            language: 'en',
+          })
+          const expectedAggregateTags = await aggregateTagLoader.loadMany(
+            aggregateGuidanceTags,
+          )
+
+          const connectionArgs = {
+            last: 1,
+          }
+
+          const aggregateTags = await connectionLoader({
+            aggregateGuidanceTags,
+            ...connectionArgs,
+          })
+
+          const expectedStructure = {
+            edges: [
+              {
+                cursor: toGlobalId(
+                  'guidanceTags',
+                  expectedAggregateTags[1]._key,
+                ),
+                node: {
+                  ...expectedAggregateTags[1],
+                },
+              },
+            ],
+            totalCount: 2,
+            pageInfo: {
+              hasNextPage: false,
+              hasPreviousPage: true,
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[1]._key,
+              ),
+              endCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[1]._key,
+              ),
+            },
+          }
+
+          expect(aggregateTags).toEqual(expectedStructure)
+        })
+      })
+      describe('using the orderBy field', () => {
+        describe('ordering on TAG_ID', () => {
+          describe('order is set to ASC', () => {
+            it('returns the guidance tags', async () => {
+              const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
+                {
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'en',
+                },
+              )
+
+              const aggregateGuidanceTags = [
+                'aggregate1',
+                'aggregate2',
+                'aggregate3',
+              ]
+
+              const aggregateTagLoader = loadAggregateGuidanceTagById({
+                query,
+                language: 'en',
+              })
+              const expectedAggregateTags = await aggregateTagLoader.loadMany(
+                aggregateGuidanceTags,
+              )
+
+              const connectionArgs = {
+                aggregateGuidanceTags,
+                first: 1,
+                after: toGlobalId('guidanceTags', 'aggregate1'),
+                before: toGlobalId('guidanceTags', 'aggregate3'),
+                orderBy: {
+                  field: 'tag-id',
+                  direction: 'ASC',
+                },
+              }
+
+              const aggregateTags = await connectionLoader({
+                ...connectionArgs,
+              })
+
+              const expectedStructure = {
+                edges: [
+                  {
+                    cursor: toGlobalId(
+                      'guidanceTags',
+                      expectedAggregateTags[1]._key,
+                    ),
+                    node: {
+                      ...expectedAggregateTags[1],
+                    },
+                  },
+                ],
+                totalCount: 3,
+                pageInfo: {
+                  hasNextPage: true,
+                  hasPreviousPage: true,
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                  endCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                },
+              }
+
+              expect(aggregateTags).toEqual(expectedStructure)
+            })
+          })
+          describe('order is set to DESC', () => {
+            it('returns the guidance tags', async () => {
+              const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
+                {
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'en',
+                },
+              )
+
+              const aggregateGuidanceTags = [
+                'aggregate1',
+                'aggregate2',
+                'aggregate3',
+              ]
+
+              const aggregateTagLoader = loadAggregateGuidanceTagById({
+                query,
+                language: 'en',
+              })
+              const expectedAggregateTags = await aggregateTagLoader.loadMany(
+                aggregateGuidanceTags,
+              )
+
+              const connectionArgs = {
+                aggregateGuidanceTags,
+                first: 1,
+                after: toGlobalId('guidanceTags', 'aggregate3'),
+                before: toGlobalId('guidanceTags', 'aggregate1'),
+                orderBy: {
+                  field: 'tag-id',
+                  direction: 'DESC',
+                },
+              }
+
+              const aggregateTags = await connectionLoader({
+                ...connectionArgs,
+              })
+
+              const expectedStructure = {
+                edges: [
+                  {
+                    cursor: toGlobalId(
+                      'guidanceTags',
+                      expectedAggregateTags[1]._key,
+                    ),
+                    node: {
+                      ...expectedAggregateTags[1],
+                    },
+                  },
+                ],
+                totalCount: 3,
+                pageInfo: {
+                  hasNextPage: true,
+                  hasPreviousPage: true,
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                  endCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                },
+              }
+
+              expect(aggregateTags).toEqual(expectedStructure)
+            })
+          })
+        })
+        describe('ordering on TAG_NAME', () => {
+          describe('order is set to ASC', () => {
+            it('returns the guidance tags', async () => {
+              const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
+                {
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'en',
+                },
+              )
+
+              const aggregateGuidanceTags = [
+                'aggregate1',
+                'aggregate2',
+                'aggregate3',
+              ]
+
+              const aggregateTagLoader = loadAggregateGuidanceTagById({
+                query,
+                language: 'en',
+              })
+              const expectedAggregateTags = await aggregateTagLoader.loadMany(
+                aggregateGuidanceTags,
+              )
+
+              const connectionArgs = {
+                aggregateGuidanceTags,
+                first: 1,
+                after: toGlobalId('guidanceTags', 'aggregate1'),
+                before: toGlobalId('guidanceTags', 'aggregate3'),
+                orderBy: {
+                  field: 'tag-name',
+                  direction: 'ASC',
+                },
+              }
+
+              const aggregateTags = await connectionLoader({
+                ...connectionArgs,
+              })
+
+              const expectedStructure = {
+                edges: [
+                  {
+                    cursor: toGlobalId(
+                      'guidanceTags',
+                      expectedAggregateTags[1]._key,
+                    ),
+                    node: {
+                      ...expectedAggregateTags[1],
+                    },
+                  },
+                ],
+                totalCount: 3,
+                pageInfo: {
+                  hasNextPage: true,
+                  hasPreviousPage: true,
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                  endCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                },
+              }
+
+              expect(aggregateTags).toEqual(expectedStructure)
+            })
+          })
+          describe('order is set to DESC', () => {
+            it('returns the guidance tags', async () => {
+              const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
+                {
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'en',
+                },
+              )
+
+              const aggregateGuidanceTags = [
+                'aggregate1',
+                'aggregate2',
+                'aggregate3',
+              ]
+
+              const aggregateTagLoader = loadAggregateGuidanceTagById({
+                query,
+                language: 'en',
+              })
+              const expectedAggregateTags = await aggregateTagLoader.loadMany(
+                aggregateGuidanceTags,
+              )
+
+              const connectionArgs = {
+                aggregateGuidanceTags,
+                first: 1,
+                after: toGlobalId('guidanceTags', 'aggregate3'),
+                before: toGlobalId('guidanceTags', 'aggregate1'),
+                orderBy: {
+                  field: 'tag-name',
+                  direction: 'DESC',
+                },
+              }
+
+              const aggregateTags = await connectionLoader({
+                ...connectionArgs,
+              })
+
+              const expectedStructure = {
+                edges: [
+                  {
+                    cursor: toGlobalId(
+                      'guidanceTags',
+                      expectedAggregateTags[1]._key,
+                    ),
+                    node: {
+                      ...expectedAggregateTags[1],
+                    },
+                  },
+                ],
+                totalCount: 3,
+                pageInfo: {
+                  hasNextPage: true,
+                  hasPreviousPage: true,
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                  endCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                },
+              }
+
+              expect(aggregateTags).toEqual(expectedStructure)
+            })
+          })
+        })
+        describe('ordering on GUIDANCE', () => {
+          describe('order is set to ASC', () => {
+            it('returns the guidance tags', async () => {
+              const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
+                {
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'en',
+                },
+              )
+
+              const aggregateGuidanceTags = [
+                'aggregate1',
+                'aggregate2',
+                'aggregate3',
+              ]
+
+              const aggregateTagLoader = loadAggregateGuidanceTagById({
+                query,
+                language: 'en',
+              })
+              const expectedAggregateTags = await aggregateTagLoader.loadMany(
+                aggregateGuidanceTags,
+              )
+
+              const connectionArgs = {
+                aggregateGuidanceTags,
+                first: 1,
+                after: toGlobalId('guidanceTags', 'aggregate1'),
+                before: toGlobalId('guidanceTags', 'aggregate3'),
+                orderBy: {
+                  field: 'guidance',
+                  direction: 'ASC',
+                },
+              }
+
+              const aggregateTags = await connectionLoader({
+                ...connectionArgs,
+              })
+
+              const expectedStructure = {
+                edges: [
+                  {
+                    cursor: toGlobalId(
+                      'guidanceTags',
+                      expectedAggregateTags[1]._key,
+                    ),
+                    node: {
+                      ...expectedAggregateTags[1],
+                    },
+                  },
+                ],
+                totalCount: 3,
+                pageInfo: {
+                  hasNextPage: true,
+                  hasPreviousPage: true,
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                  endCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                },
+              }
+
+              expect(aggregateTags).toEqual(expectedStructure)
+            })
+          })
+          describe('order is set to DESC', () => {
+            it('returns the guidance tags', async () => {
+              const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
+                {
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'en',
+                },
+              )
+
+              const aggregateGuidanceTags = [
+                'aggregate1',
+                'aggregate2',
+                'aggregate3',
+              ]
+
+              const aggregateTagLoader = loadAggregateGuidanceTagById({
+                query,
+                language: 'en',
+              })
+              const expectedAggregateTags = await aggregateTagLoader.loadMany(
+                aggregateGuidanceTags,
+              )
+
+              const connectionArgs = {
+                aggregateGuidanceTags,
+                first: 1,
+                after: toGlobalId('guidanceTags', 'aggregate3'),
+                before: toGlobalId('guidanceTags', 'aggregate1'),
+                orderBy: {
+                  field: 'guidance',
+                  direction: 'DESC',
+                },
+              }
+
+              const aggregateTags = await connectionLoader({
+                ...connectionArgs,
+              })
+
+              const expectedStructure = {
+                edges: [
+                  {
+                    cursor: toGlobalId(
+                      'guidanceTags',
+                      expectedAggregateTags[1]._key,
+                    ),
+                    node: {
+                      ...expectedAggregateTags[1],
+                    },
+                  },
+                ],
+                totalCount: 3,
+                pageInfo: {
+                  hasNextPage: true,
+                  hasPreviousPage: true,
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                  endCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                },
+              }
+
+              expect(aggregateTags).toEqual(expectedStructure)
+            })
+          })
+        })
+      })
+      describe('no tags are found', () => {
+        beforeEach(async () => {
+          await truncate()
+        })
+        it('returns an empty structure', async () => {
+          const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId({
+            query,
+            userKey: user._key,
+            cleanseInput,
+            i18n,
+            language: 'en',
+          })
+
+          const aggregateGuidanceTags = ['aggregate1', 'aggregate2']
+
+          const connectionArgs = {
+            first: 5,
+          }
+
+          const aggregateTags = await connectionLoader({
+            aggregateGuidanceTags,
+            ...connectionArgs,
+          })
+
+          const expectedStructure = {
+            edges: [],
+            totalCount: 0,
+            pageInfo: {
+              hasNextPage: false,
+              hasPreviousPage: false,
+              startCursor: '',
+              endCursor: '',
+            },
+          }
+
+          expect(aggregateTags).toEqual(expectedStructure)
+        })
       })
     })
     describe('given an unsuccessful load', () => {
@@ -1109,7 +1180,7 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
       })
     })
   })
-  describe('language is set to english', () => {
+  describe('language is set to french', () => {
     beforeAll(() => {
       i18n = setupI18n({
         locale: 'fr',
@@ -1122,6 +1193,718 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
           en: englishMessages.messages,
           fr: frenchMessages.messages,
         },
+      })
+    })
+    describe('given a successful load', () => {
+      describe('using after cursor', () => {
+        it('returns the guidance tags', async () => {
+          const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId({
+            query,
+            userKey: user._key,
+            cleanseInput,
+            i18n,
+            language: 'fr',
+          })
+
+          const aggregateGuidanceTags = ['aggregate1', 'aggregate2']
+
+          const aggregateTagLoader = loadAggregateGuidanceTagById({
+            query,
+            language: 'fr',
+          })
+          const expectedAggregateTags = await aggregateTagLoader.loadMany(
+            aggregateGuidanceTags,
+          )
+
+          const connectionArgs = {
+            first: 5,
+            after: toGlobalId('guidanceTag', expectedAggregateTags[0]._key),
+          }
+
+          const aggregateTags = await connectionLoader({
+            aggregateGuidanceTags,
+            ...connectionArgs,
+          })
+
+          const expectedStructure = {
+            edges: [
+              {
+                cursor: toGlobalId(
+                  'guidanceTags',
+                  expectedAggregateTags[1]._key,
+                ),
+                node: {
+                  ...expectedAggregateTags[1],
+                },
+              },
+            ],
+            totalCount: 2,
+            pageInfo: {
+              hasNextPage: false,
+              hasPreviousPage: true,
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[1]._key,
+              ),
+              endCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[1]._key,
+              ),
+            },
+          }
+
+          expect(aggregateTags).toEqual(expectedStructure)
+        })
+      })
+      describe('using before cursor', () => {
+        it('returns the guidance tags', async () => {
+          const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId({
+            query,
+            userKey: user._key,
+            cleanseInput,
+            i18n,
+            language: 'fr',
+          })
+
+          const aggregateGuidanceTags = ['aggregate1', 'aggregate2']
+
+          const aggregateTagLoader = loadAggregateGuidanceTagById({
+            query,
+            language: 'fr',
+          })
+          const expectedAggregateTags = await aggregateTagLoader.loadMany(
+            aggregateGuidanceTags,
+          )
+
+          const connectionArgs = {
+            first: 5,
+            before: toGlobalId('guidanceTag', expectedAggregateTags[1]._key),
+          }
+
+          const aggregateTags = await connectionLoader({
+            aggregateGuidanceTags,
+            ...connectionArgs,
+          })
+
+          const expectedStructure = {
+            edges: [
+              {
+                cursor: toGlobalId(
+                  'guidanceTags',
+                  expectedAggregateTags[0]._key,
+                ),
+                node: {
+                  ...expectedAggregateTags[0],
+                },
+              },
+            ],
+            totalCount: 2,
+            pageInfo: {
+              hasNextPage: true,
+              hasPreviousPage: false,
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[0]._key,
+              ),
+              endCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[0]._key,
+              ),
+            },
+          }
+
+          expect(aggregateTags).toEqual(expectedStructure)
+        })
+      })
+      describe('using the first limit', () => {
+        it('returns the guidance tags', async () => {
+          const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId({
+            query,
+            userKey: user._key,
+            cleanseInput,
+            i18n,
+            language: 'fr',
+          })
+
+          const aggregateGuidanceTags = ['aggregate1', 'aggregate2']
+
+          const aggregateTagLoader = loadAggregateGuidanceTagById({
+            query,
+            language: 'fr',
+          })
+          const expectedAggregateTags = await aggregateTagLoader.loadMany(
+            aggregateGuidanceTags,
+          )
+
+          const connectionArgs = {
+            first: 1,
+          }
+
+          const aggregateTags = await connectionLoader({
+            aggregateGuidanceTags,
+            ...connectionArgs,
+          })
+
+          const expectedStructure = {
+            edges: [
+              {
+                cursor: toGlobalId(
+                  'guidanceTags',
+                  expectedAggregateTags[0]._key,
+                ),
+                node: {
+                  ...expectedAggregateTags[0],
+                },
+              },
+            ],
+            totalCount: 2,
+            pageInfo: {
+              hasNextPage: true,
+              hasPreviousPage: false,
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[0]._key,
+              ),
+              endCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[0]._key,
+              ),
+            },
+          }
+
+          expect(aggregateTags).toEqual(expectedStructure)
+        })
+      })
+      describe('using the last limit', () => {
+        it('returns the guidance tags', async () => {
+          const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId({
+            query,
+            userKey: user._key,
+            cleanseInput,
+            i18n,
+            language: 'fr',
+          })
+
+          const aggregateGuidanceTags = ['aggregate1', 'aggregate2']
+
+          const aggregateTagLoader = loadAggregateGuidanceTagById({
+            query,
+            language: 'fr',
+          })
+          const expectedAggregateTags = await aggregateTagLoader.loadMany(
+            aggregateGuidanceTags,
+          )
+
+          const connectionArgs = {
+            last: 1,
+          }
+
+          const aggregateTags = await connectionLoader({
+            aggregateGuidanceTags,
+            ...connectionArgs,
+          })
+
+          const expectedStructure = {
+            edges: [
+              {
+                cursor: toGlobalId(
+                  'guidanceTags',
+                  expectedAggregateTags[1]._key,
+                ),
+                node: {
+                  ...expectedAggregateTags[1],
+                },
+              },
+            ],
+            totalCount: 2,
+            pageInfo: {
+              hasNextPage: false,
+              hasPreviousPage: true,
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[1]._key,
+              ),
+              endCursor: toGlobalId(
+                'guidanceTags',
+                expectedAggregateTags[1]._key,
+              ),
+            },
+          }
+
+          expect(aggregateTags).toEqual(expectedStructure)
+        })
+      })
+      describe('using the orderBy field', () => {
+        describe('ordering on TAG_ID', () => {
+          describe('order is set to ASC', () => {
+            it('returns the guidance tags', async () => {
+              const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
+                {
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'fr',
+                },
+              )
+
+              const aggregateGuidanceTags = [
+                'aggregate1',
+                'aggregate2',
+                'aggregate3',
+              ]
+
+              const aggregateTagLoader = loadAggregateGuidanceTagById({
+                query,
+                language: 'fr',
+              })
+              const expectedAggregateTags = await aggregateTagLoader.loadMany(
+                aggregateGuidanceTags,
+              )
+
+              const connectionArgs = {
+                aggregateGuidanceTags,
+                first: 1,
+                after: toGlobalId('guidanceTags', 'aggregate1'),
+                before: toGlobalId('guidanceTags', 'aggregate3'),
+                orderBy: {
+                  field: 'tag-id',
+                  direction: 'ASC',
+                },
+              }
+
+              const aggregateTags = await connectionLoader({
+                ...connectionArgs,
+              })
+
+              const expectedStructure = {
+                edges: [
+                  {
+                    cursor: toGlobalId(
+                      'guidanceTags',
+                      expectedAggregateTags[1]._key,
+                    ),
+                    node: {
+                      ...expectedAggregateTags[1],
+                    },
+                  },
+                ],
+                totalCount: 3,
+                pageInfo: {
+                  hasNextPage: true,
+                  hasPreviousPage: true,
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                  endCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                },
+              }
+
+              expect(aggregateTags).toEqual(expectedStructure)
+            })
+          })
+          describe('order is set to DESC', () => {
+            it('returns the guidance tags', async () => {
+              const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
+                {
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'fr',
+                },
+              )
+
+              const aggregateGuidanceTags = [
+                'aggregate1',
+                'aggregate2',
+                'aggregate3',
+              ]
+
+              const aggregateTagLoader = loadAggregateGuidanceTagById({
+                query,
+                language: 'fr',
+              })
+              const expectedAggregateTags = await aggregateTagLoader.loadMany(
+                aggregateGuidanceTags,
+              )
+
+              const connectionArgs = {
+                aggregateGuidanceTags,
+                first: 1,
+                after: toGlobalId('guidanceTags', 'aggregate3'),
+                before: toGlobalId('guidanceTags', 'aggregate1'),
+                orderBy: {
+                  field: 'tag-id',
+                  direction: 'DESC',
+                },
+              }
+
+              const aggregateTags = await connectionLoader({
+                ...connectionArgs,
+              })
+
+              const expectedStructure = {
+                edges: [
+                  {
+                    cursor: toGlobalId(
+                      'guidanceTags',
+                      expectedAggregateTags[1]._key,
+                    ),
+                    node: {
+                      ...expectedAggregateTags[1],
+                    },
+                  },
+                ],
+                totalCount: 3,
+                pageInfo: {
+                  hasNextPage: true,
+                  hasPreviousPage: true,
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                  endCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                },
+              }
+
+              expect(aggregateTags).toEqual(expectedStructure)
+            })
+          })
+        })
+        describe('ordering on TAG_NAME', () => {
+          describe('order is set to ASC', () => {
+            it('returns the guidance tags', async () => {
+              const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
+                {
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'fr',
+                },
+              )
+
+              const aggregateGuidanceTags = [
+                'aggregate1',
+                'aggregate2',
+                'aggregate3',
+              ]
+
+              const aggregateTagLoader = loadAggregateGuidanceTagById({
+                query,
+                language: 'fr',
+              })
+              const expectedAggregateTags = await aggregateTagLoader.loadMany(
+                aggregateGuidanceTags,
+              )
+
+              const connectionArgs = {
+                aggregateGuidanceTags,
+                first: 1,
+                after: toGlobalId('guidanceTags', 'aggregate1'),
+                before: toGlobalId('guidanceTags', 'aggregate3'),
+                orderBy: {
+                  field: 'tag-name',
+                  direction: 'ASC',
+                },
+              }
+
+              const aggregateTags = await connectionLoader({
+                ...connectionArgs,
+              })
+
+              const expectedStructure = {
+                edges: [
+                  {
+                    cursor: toGlobalId(
+                      'guidanceTags',
+                      expectedAggregateTags[1]._key,
+                    ),
+                    node: {
+                      ...expectedAggregateTags[1],
+                    },
+                  },
+                ],
+                totalCount: 3,
+                pageInfo: {
+                  hasNextPage: true,
+                  hasPreviousPage: true,
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                  endCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                },
+              }
+
+              expect(aggregateTags).toEqual(expectedStructure)
+            })
+          })
+          describe('order is set to DESC', () => {
+            it('returns the guidance tags', async () => {
+              const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
+                {
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'fr',
+                },
+              )
+
+              const aggregateGuidanceTags = [
+                'aggregate1',
+                'aggregate2',
+                'aggregate3',
+              ]
+
+              const aggregateTagLoader = loadAggregateGuidanceTagById({
+                query,
+                language: 'fr',
+              })
+              const expectedAggregateTags = await aggregateTagLoader.loadMany(
+                aggregateGuidanceTags,
+              )
+
+              const connectionArgs = {
+                aggregateGuidanceTags,
+                first: 1,
+                after: toGlobalId('guidanceTags', 'aggregate3'),
+                before: toGlobalId('guidanceTags', 'aggregate1'),
+                orderBy: {
+                  field: 'tag-name',
+                  direction: 'DESC',
+                },
+              }
+
+              const aggregateTags = await connectionLoader({
+                ...connectionArgs,
+              })
+
+              const expectedStructure = {
+                edges: [
+                  {
+                    cursor: toGlobalId(
+                      'guidanceTags',
+                      expectedAggregateTags[1]._key,
+                    ),
+                    node: {
+                      ...expectedAggregateTags[1],
+                    },
+                  },
+                ],
+                totalCount: 3,
+                pageInfo: {
+                  hasNextPage: true,
+                  hasPreviousPage: true,
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                  endCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                },
+              }
+
+              expect(aggregateTags).toEqual(expectedStructure)
+            })
+          })
+        })
+        describe('ordering on GUIDANCE', () => {
+          describe('order is set to ASC', () => {
+            it('returns the guidance tags', async () => {
+              const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
+                {
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'fr',
+                },
+              )
+
+              const aggregateGuidanceTags = [
+                'aggregate1',
+                'aggregate2',
+                'aggregate3',
+              ]
+
+              const aggregateTagLoader = loadAggregateGuidanceTagById({
+                query,
+                language: 'fr',
+              })
+              const expectedAggregateTags = await aggregateTagLoader.loadMany(
+                aggregateGuidanceTags,
+              )
+
+              const connectionArgs = {
+                aggregateGuidanceTags,
+                first: 1,
+                after: toGlobalId('guidanceTags', 'aggregate1'),
+                before: toGlobalId('guidanceTags', 'aggregate3'),
+                orderBy: {
+                  field: 'guidance',
+                  direction: 'ASC',
+                },
+              }
+
+              const aggregateTags = await connectionLoader({
+                ...connectionArgs,
+              })
+
+              const expectedStructure = {
+                edges: [
+                  {
+                    cursor: toGlobalId(
+                      'guidanceTags',
+                      expectedAggregateTags[1]._key,
+                    ),
+                    node: {
+                      ...expectedAggregateTags[1],
+                    },
+                  },
+                ],
+                totalCount: 3,
+                pageInfo: {
+                  hasNextPage: true,
+                  hasPreviousPage: true,
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                  endCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                },
+              }
+
+              expect(aggregateTags).toEqual(expectedStructure)
+            })
+          })
+          describe('order is set to DESC', () => {
+            it('returns the guidance tags', async () => {
+              const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId(
+                {
+                  query,
+                  userKey: user._key,
+                  cleanseInput,
+                  i18n,
+                  language: 'fr',
+                },
+              )
+
+              const aggregateGuidanceTags = [
+                'aggregate1',
+                'aggregate2',
+                'aggregate3',
+              ]
+
+              const aggregateTagLoader = loadAggregateGuidanceTagById({
+                query,
+                language: 'fr',
+              })
+              const expectedAggregateTags = await aggregateTagLoader.loadMany(
+                aggregateGuidanceTags,
+              )
+
+              const connectionArgs = {
+                aggregateGuidanceTags,
+                first: 1,
+                after: toGlobalId('guidanceTags', 'aggregate3'),
+                before: toGlobalId('guidanceTags', 'aggregate1'),
+                orderBy: {
+                  field: 'guidance',
+                  direction: 'DESC',
+                },
+              }
+
+              const aggregateTags = await connectionLoader({
+                ...connectionArgs,
+              })
+
+              const expectedStructure = {
+                edges: [
+                  {
+                    cursor: toGlobalId(
+                      'guidanceTags',
+                      expectedAggregateTags[1]._key,
+                    ),
+                    node: {
+                      ...expectedAggregateTags[1],
+                    },
+                  },
+                ],
+                totalCount: 3,
+                pageInfo: {
+                  hasNextPage: true,
+                  hasPreviousPage: true,
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                  endCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedAggregateTags[1]._key,
+                  ),
+                },
+              }
+
+              expect(aggregateTags).toEqual(expectedStructure)
+            })
+          })
+        })
+      })
+      describe('no tags are found', () => {
+        beforeEach(async () => {
+          await truncate()
+        })
+        it('returns an empty structure', async () => {
+          const connectionLoader = loadAggregateGuidanceTagConnectionsByTagId({
+            query,
+            userKey: user._key,
+            cleanseInput,
+            i18n,
+            language: 'fr',
+          })
+
+          const aggregateGuidanceTags = ['aggregate1', 'aggregate2']
+
+          const connectionArgs = {
+            first: 5,
+          }
+
+          const aggregateTags = await connectionLoader({
+            aggregateGuidanceTags,
+            ...connectionArgs,
+          })
+
+          const expectedStructure = {
+            edges: [],
+            totalCount: 0,
+            pageInfo: {
+              hasNextPage: false,
+              hasPreviousPage: false,
+              startCursor: '',
+              endCursor: '',
+            },
+          }
+
+          expect(aggregateTags).toEqual(expectedStructure)
+        })
       })
     })
     describe('given an unsuccessful load', () => {

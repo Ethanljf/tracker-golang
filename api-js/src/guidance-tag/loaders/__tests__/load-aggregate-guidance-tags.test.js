@@ -41,49 +41,58 @@ describe('given the loadAggregateGuidanceTagById function', () => {
     consoleErrorOutput.length = 0
 
     await truncate()
-    await collections.aggregateGuidanceTags.save({})
-    await collections.aggregateGuidanceTags.save({})
+    await collections.aggregateGuidanceTags.save({
+      _key: 'agg1',
+      en: {
+        tagName: 'Some Cool Tag Name A',
+        guidance: 'Some Cool Guidance A',
+        refLinksGuide: [
+          {
+            description: 'IT PIN A',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+      fr: {
+        tagName: 'todo a',
+        guidance: 'todo a',
+        refLinksGuide: [
+          {
+            description: 'todo a',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+    })
+    await collections.aggregateGuidanceTags.save({
+      _key: 'agg2',
+      en: {
+        tagName: 'Some Cool Tag Name B',
+        guidance: 'Some Cool Guidance B',
+        refLinksGuide: [
+          {
+            description: 'IT PIN B',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+      fr: {
+        tagName: 'todo b',
+        guidance: 'todo b',
+        refLinksGuide: [
+          {
+            description: 'todo b',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+    })
   })
 
   afterAll(async () => {
     await drop()
   })
 
-  describe('given a single id', () => {
-    it('returns a single aggregate guidance tag', async () => {
-      const expectedCursor = await query`
-        FOR tag IN aggregateGuidanceTags
-          SORT tag._key ASC LIMIT 1
-          RETURN MERGE(tag, { tagId: tag._key, id: tag._key, _type: "guidanceTag" })
-      `
-      const expectedAggregateTag = await expectedCursor.next()
-
-      const loader = loadAggregateGuidanceTagById({ query, i18n })
-      const aggregateTag = await loader.load(expectedAggregateTag._key)
-
-      expect(aggregateTag).toEqual(expectedAggregateTag)
-    })
-  })
-  describe('given multiple ids', () => {
-    it('returns multiple aggregate guidance tags', async () => {
-      const aggregateTagKeys = []
-      const expectedAggregateTags = []
-      const expectedCursor = await query`
-        FOR tag IN aggregateGuidanceTags
-          RETURN MERGE(tag, { tagId: tag._key, id: tag._key, _type: "guidanceTag" })
-      `
-
-      while (expectedCursor.hasMore) {
-        const tempAggregate = await expectedCursor.next()
-        aggregateTagKeys.push(tempAggregate._key)
-        expectedAggregateTags.push(tempAggregate)
-      }
-
-      const loader = loadAggregateGuidanceTagById({ query, i18n })
-      const aggregateTags = await loader.loadMany(aggregateTagKeys)
-      expect(aggregateTags).toEqual(expectedAggregateTags)
-    })
-  })
   describe('users language is set to english', () => {
     beforeAll(() => {
       i18n = setupI18n({
@@ -99,13 +108,78 @@ describe('given the loadAggregateGuidanceTagById function', () => {
         },
       })
     })
+    describe('given a successful load', () => {
+      describe('given a single id', () => {
+        it('returns a single aggregate guidance tag', async () => {
+          const expectedCursor = await query`
+            FOR tag IN aggregateGuidanceTags
+              SORT tag._key ASC LIMIT 1
+              RETURN MERGE(
+                {
+                  _id: tag._id,
+                  _key: tag._key,
+                  _rev: tag._rev,
+                  _type: "guidanceTag",
+                  id: tag._key,
+                  tagId: tag._key
+                },
+                TRANSLATE("en", tag)
+              )
+          `
+          const expectedAggregateTag = await expectedCursor.next()
+
+          const loader = loadAggregateGuidanceTagById({
+            query,
+            i18n,
+            language: 'en',
+          })
+          const aggregateTag = await loader.load(expectedAggregateTag._key)
+
+          expect(aggregateTag).toEqual(expectedAggregateTag)
+        })
+      })
+      describe('given multiple ids', () => {
+        it('returns multiple aggregate guidance tags', async () => {
+          const aggregateTagKeys = []
+          const expectedAggregateTags = []
+          const expectedCursor = await query`
+            FOR tag IN aggregateGuidanceTags
+              RETURN MERGE(
+                {
+                  _id: tag._id,
+                  _key: tag._key,
+                  _rev: tag._rev,
+                  _type: "guidanceTag",
+                  id: tag._key,
+                  tagId: tag._key
+                },
+                TRANSLATE("en", tag)
+              )
+          `
+
+          while (expectedCursor.hasMore) {
+            const tempAggregate = await expectedCursor.next()
+            aggregateTagKeys.push(tempAggregate._key)
+            expectedAggregateTags.push(tempAggregate)
+          }
+
+          const loader = loadAggregateGuidanceTagById({
+            query,
+            i18n,
+            language: 'en',
+          })
+          const aggregateTags = await loader.loadMany(aggregateTagKeys)
+          expect(aggregateTags).toEqual(expectedAggregateTags)
+        })
+      })
+    })
     describe('given a database error', () => {
       it('raises an error', async () => {
-        query = jest
+        const mockedQuery = jest
           .fn()
           .mockRejectedValue(new Error('Database error occurred.'))
         const loader = loadAggregateGuidanceTagById({
-          query,
+          query: mockedQuery,
           userKey: '1234',
           i18n,
         })
@@ -132,9 +206,9 @@ describe('given the loadAggregateGuidanceTagById function', () => {
             throw new Error('Cursor error occurred.')
           },
         }
-        query = jest.fn().mockReturnValue(cursor)
+        const mockedQuery = jest.fn().mockReturnValue(cursor)
         const loader = loadAggregateGuidanceTagById({
-          query,
+          query: mockedQuery,
           userKey: '1234',
           i18n,
         })
@@ -170,13 +244,79 @@ describe('given the loadAggregateGuidanceTagById function', () => {
         },
       })
     })
+    describe('given a successful load', () => {
+      describe('given a single id', () => {
+        it('returns a single aggregate guidance tag', async () => {
+          const expectedCursor = await query`
+            FOR tag IN aggregateGuidanceTags
+              SORT tag._key ASC LIMIT 1
+              RETURN MERGE(
+                {
+                  _id: tag._id,
+                  _key: tag._key,
+                  _rev: tag._rev,
+                  _type: "guidanceTag",
+                  id: tag._key,
+                  tagId: tag._key
+                },
+                TRANSLATE("fr", tag)
+              )
+          `
+          console.log(expectedCursor)
+          const expectedAggregateTag = await expectedCursor.next()
+
+          const loader = loadAggregateGuidanceTagById({
+            query,
+            i18n,
+            language: 'fr',
+          })
+          const aggregateTag = await loader.load(expectedAggregateTag._key)
+
+          expect(aggregateTag).toEqual(expectedAggregateTag)
+        })
+      })
+      describe('given multiple ids', () => {
+        it('returns multiple aggregate guidance tags', async () => {
+          const aggregateTagKeys = []
+          const expectedAggregateTags = []
+          const expectedCursor = await query`
+            FOR tag IN aggregateGuidanceTags
+              RETURN MERGE(
+                {
+                  _id: tag._id,
+                  _key: tag._key,
+                  _rev: tag._rev,
+                  _type: "guidanceTag",
+                  id: tag._key,
+                  tagId: tag._key
+                },
+                TRANSLATE("fr", tag)
+              )
+          `
+
+          while (expectedCursor.hasMore) {
+            const tempAggregate = await expectedCursor.next()
+            aggregateTagKeys.push(tempAggregate._key)
+            expectedAggregateTags.push(tempAggregate)
+          }
+
+          const loader = loadAggregateGuidanceTagById({
+            query,
+            i18n,
+            language: 'fr',
+          })
+          const aggregateTags = await loader.loadMany(aggregateTagKeys)
+          expect(aggregateTags).toEqual(expectedAggregateTags)
+        })
+      })
+    })
     describe('given a database error', () => {
       it('raises an error', async () => {
-        query = jest
+        const mockedQuery = jest
           .fn()
           .mockRejectedValue(new Error('Database error occurred.'))
         const loader = loadAggregateGuidanceTagById({
-          query,
+          query: mockedQuery,
           userKey: '1234',
           i18n,
         })
@@ -199,9 +339,9 @@ describe('given the loadAggregateGuidanceTagById function', () => {
             throw new Error('Cursor error occurred.')
           },
         }
-        query = jest.fn().mockReturnValue(cursor)
+        const mockedQuery = jest.fn().mockReturnValue(cursor)
         const loader = loadAggregateGuidanceTagById({
-          query,
+          query: mockedQuery,
           userKey: '1234',
           i18n,
         })

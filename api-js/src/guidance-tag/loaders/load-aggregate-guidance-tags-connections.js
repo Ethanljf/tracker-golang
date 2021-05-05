@@ -7,6 +7,7 @@ export const loadAggregateGuidanceTagConnectionsByTagId = ({
   userKey,
   cleanseInput,
   i18n,
+  language,
 }) => async ({
   aggregateGuidanceTags,
   after,
@@ -32,11 +33,11 @@ export const loadAggregateGuidanceTagConnectionsByTagId = ({
         tagField = aql`tag._key`
         documentField = aql`DOCUMENT(aggregateGuidanceTags, ${afterId})._key`
       } else if (orderBy.field === 'tag-name') {
-        tagField = aql`tag.tagName`
-        documentField = aql`DOCUMENT(aggregateGuidanceTags, ${afterId}).tagName`
+        tagField = aql`TRANSLATE(${language}, tag).tagName`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(aggregateGuidanceTags, ${afterId})).tagName`
       } else if (orderBy.field === 'guidance') {
-        tagField = aql`tag.guidance`
-        documentField = aql`DOCUMENT(aggregateGuidanceTags, ${afterId}).guidance`
+        tagField = aql`TRANSLATE(${language}, tag).guidance`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(aggregateGuidanceTags, ${afterId})).guidance`
       }
 
       afterTemplate = aql`
@@ -64,11 +65,11 @@ export const loadAggregateGuidanceTagConnectionsByTagId = ({
         tagField = aql`tag._key`
         documentField = aql`DOCUMENT(aggregateGuidanceTags, ${beforeId})._key`
       } else if (orderBy.field === 'tag-name') {
-        tagField = aql`tag.tagName`
-        documentField = aql`DOCUMENT(aggregateGuidanceTags, ${beforeId}).tagName`
+        tagField = aql`TRANSLATE(${language}, tag).tagName`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(aggregateGuidanceTags, ${beforeId})).tagName`
       } else if (orderBy.field === 'guidance') {
-        tagField = aql`tag.guidance`
-        documentField = aql`DOCUMENT(aggregateGuidanceTags, ${beforeId}).guidance`
+        tagField = aql`TRANSLATE(${language}, tag).guidance`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(aggregateGuidanceTags, ${beforeId})).guidance`
       }
 
       beforeTemplate = aql`
@@ -156,12 +157,12 @@ export const loadAggregateGuidanceTagConnectionsByTagId = ({
       hasPreviousPageDocument = aql`FIRST(retrievedAggregateGuidanceTags)._key`
     } else if (orderBy.field === 'tag-name') {
       tagField = aql`tag.tagName`
-      hasNextPageDocument = aql`LAST(retrievedAggregateGuidanceTags).tagName`
-      hasPreviousPageDocument = aql`FIRST(retrievedAggregateGuidanceTags).tagName`
+      hasNextPageDocument = aql`TRANSLATE(${language}, LAST(retrievedAggregateGuidanceTags)).tagName`
+      hasPreviousPageDocument = aql`TRANSLATE(${language}, FIRST(retrievedAggregateGuidanceTags)).tagName`
     } else if (orderBy.field === 'guidance') {
       tagField = aql`tag.guidance`
-      hasNextPageDocument = aql`LAST(retrievedAggregateGuidanceTags).guidance`
-      hasPreviousPageDocument = aql`FIRST(retrievedAggregateGuidanceTags).guidance`
+      hasNextPageDocument = aql`TRANSLATE(${language}, LAST(retrievedAggregateGuidanceTags)).guidance`
+      hasPreviousPageDocument = aql`TRANSLATE(${language}, FIRST(retrievedAggregateGuidanceTags)).guidance`
     }
 
     hasNextPageFilter = aql`
@@ -183,9 +184,9 @@ export const loadAggregateGuidanceTagConnectionsByTagId = ({
     if (orderBy.field === 'tag-id') {
       sortByField = aql`tag._key ${orderBy.direction},`
     } else if (orderBy.field === 'tag-name') {
-      sortByField = aql`tag.tagName ${orderBy.direction},`
+      sortByField = aql`TRANSLATE(${language}, tag).tagName ${orderBy.direction},`
     } else if (orderBy.field === 'guidance') {
-      sortByField = aql`tag.guidance ${orderBy.direction},`
+      sortByField = aql`TRANSLATE(${language}, tag).guidance ${orderBy.direction},`
     }
   }
 
@@ -208,7 +209,17 @@ export const loadAggregateGuidanceTagConnectionsByTagId = ({
           SORT
           ${sortByField}
           ${limitTemplate}
-          RETURN MERGE(tag, { tagId: tag._key, id: tag._key, _type: "guidanceTag" })
+          RETURN MERGE(
+            {
+              _id: tag._id,
+              _key: tag._key,
+              _rev: tag._rev,
+              _type: "guidanceTag",
+              id: tag._key,
+              tagId: tag._key
+            },
+            TRANSLATE(${language}, tag)
+          )
       )
 
       LET hasNextPage = (LENGTH(
