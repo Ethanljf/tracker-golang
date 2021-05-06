@@ -156,11 +156,11 @@ export const loadAggregateGuidanceTagConnectionsByTagId = ({
       hasNextPageDocument = aql`LAST(retrievedAggregateGuidanceTags)._key`
       hasPreviousPageDocument = aql`FIRST(retrievedAggregateGuidanceTags)._key`
     } else if (orderBy.field === 'tag-name') {
-      tagField = aql`tag.tagName`
+      tagField = aql`TRANSLATE(${language}, tag).tagName`
       hasNextPageDocument = aql`TRANSLATE(${language}, LAST(retrievedAggregateGuidanceTags)).tagName`
       hasPreviousPageDocument = aql`TRANSLATE(${language}, FIRST(retrievedAggregateGuidanceTags)).tagName`
     } else if (orderBy.field === 'guidance') {
-      tagField = aql`tag.guidance`
+      tagField = aql`TRANSLATE(${language}, tag).guidance`
       hasNextPageDocument = aql`TRANSLATE(${language}, LAST(retrievedAggregateGuidanceTags)).guidance`
       hasPreviousPageDocument = aql`TRANSLATE(${language}, FIRST(retrievedAggregateGuidanceTags)).guidance`
     }

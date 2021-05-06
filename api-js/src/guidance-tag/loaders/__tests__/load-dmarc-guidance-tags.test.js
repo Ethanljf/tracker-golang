@@ -41,49 +41,56 @@ describe('given the loadDmarcGuidanceTagByTagId function', () => {
     consoleErrorOutput.length = 0
 
     await truncate()
-    await collections.dmarcGuidanceTags.save({})
-    await collections.dmarcGuidanceTags.save({})
+    await collections.dmarcGuidanceTags.save({
+      _key: 'dmarc1',
+      en: {
+        tagName: 'Some Cool Tag Name A',
+        guidance: 'Some Cool Guidance A',
+        refLinksGuide: [
+          {
+            description: 'IT PIN A',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+      fr: {
+        tagName: 'todo a',
+        guidance: 'todo a',
+        refLinksGuide: [
+          {
+            description: 'todo a',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+    })
+    await collections.dmarcGuidanceTags.save({
+      _key: 'dmarc2',
+      en: {
+        tagName: 'Some Cool Tag Name B',
+        guidance: 'Some Cool Guidance B',
+        refLinksGuide: [
+          {
+            description: 'IT PIN B',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+      fr: {
+        tagName: 'todo b',
+        guidance: 'todo b',
+        refLinksGuide: [
+          {
+            description: 'todo b',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+    })
   })
 
   afterAll(async () => {
     await drop()
-  })
-
-  describe('given a single id', () => {
-    it('returns a single dmarc guidance tag', async () => {
-      // Get dmarc tag from db
-      const expectedCursor = await query`
-        FOR tag IN dmarcGuidanceTags
-          SORT tag._key ASC LIMIT 1
-          RETURN MERGE(tag, { tagId: tag._key, id: tag._key, _type: "guidanceTag" })
-      `
-      const expectedDmarcTag = await expectedCursor.next()
-
-      const loader = loadDmarcGuidanceTagByTagId({ query, i18n })
-      const dmarcTag = await loader.load(expectedDmarcTag._key)
-
-      expect(dmarcTag).toEqual(expectedDmarcTag)
-    })
-  })
-  describe('given multiple ids', () => {
-    it('returns multiple dmarc guidance tags', async () => {
-      const dmarcTagKeys = []
-      const expectedDmarcTags = []
-      const expectedCursor = await query`
-        FOR tag IN dmarcGuidanceTags
-          RETURN MERGE(tag, { tagId: tag._key, id: tag._key, _type: "guidanceTag" })
-      `
-
-      while (expectedCursor.hasMore) {
-        const tempDkim = await expectedCursor.next()
-        dmarcTagKeys.push(tempDkim._key)
-        expectedDmarcTags.push(tempDkim)
-      }
-
-      const loader = loadDmarcGuidanceTagByTagId({ query, i18n })
-      const dmarcTags = await loader.loadMany(dmarcTagKeys)
-      expect(dmarcTags).toEqual(expectedDmarcTags)
-    })
   })
   describe('users language is set to english', () => {
     beforeAll(() => {
@@ -100,13 +107,79 @@ describe('given the loadDmarcGuidanceTagByTagId function', () => {
         },
       })
     })
+    describe('given a successful load', () => {
+      describe('given a single id', () => {
+        it('returns a single dmarc guidance tag', async () => {
+          // Get dmarc tag from db
+          const expectedCursor = await query`
+            FOR tag IN dmarcGuidanceTags
+              SORT tag._key ASC LIMIT 1
+              RETURN MERGE(
+                {
+                  _id: tag._id,
+                  _key: tag._key,
+                  _rev: tag._rev,
+                  _type: "guidanceTag",
+                  id: tag._key,
+                  tagId: tag._key
+                },
+                TRANSLATE("en", tag)
+              )
+          `
+          const expectedDmarcTag = await expectedCursor.next()
+
+          const loader = loadDmarcGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'en',
+          })
+          const dmarcTag = await loader.load(expectedDmarcTag._key)
+
+          expect(dmarcTag).toEqual(expectedDmarcTag)
+        })
+      })
+      describe('given multiple ids', () => {
+        it('returns multiple dmarc guidance tags', async () => {
+          const dmarcTagKeys = []
+          const expectedDmarcTags = []
+          const expectedCursor = await query`
+            FOR tag IN dmarcGuidanceTags
+            RETURN MERGE(
+              {
+                _id: tag._id,
+                _key: tag._key,
+                _rev: tag._rev,
+                _type: "guidanceTag",
+                id: tag._key,
+                tagId: tag._key
+              },
+              TRANSLATE("en", tag)
+            )
+          `
+
+          while (expectedCursor.hasMore) {
+            const tempDkim = await expectedCursor.next()
+            dmarcTagKeys.push(tempDkim._key)
+            expectedDmarcTags.push(tempDkim)
+          }
+
+          const loader = loadDmarcGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'en',
+          })
+          const dmarcTags = await loader.loadMany(dmarcTagKeys)
+          expect(dmarcTags).toEqual(expectedDmarcTags)
+        })
+      })
+    })
     describe('given a database error', () => {
       it('raises an error', async () => {
-        query = jest
+        const mockedQuery = jest
           .fn()
           .mockRejectedValue(new Error('Database error occurred.'))
         const loader = loadDmarcGuidanceTagByTagId({
-          query,
+          query: mockedQuery,
           userKey: '1234',
           i18n,
         })
@@ -133,9 +206,9 @@ describe('given the loadDmarcGuidanceTagByTagId function', () => {
             throw new Error('Cursor error occurred.')
           },
         }
-        query = jest.fn().mockReturnValue(cursor)
+        const mockedQuery = jest.fn().mockReturnValue(cursor)
         const loader = loadDmarcGuidanceTagByTagId({
-          query,
+          query: mockedQuery,
           userKey: '1234',
           i18n,
         })
@@ -171,13 +244,79 @@ describe('given the loadDmarcGuidanceTagByTagId function', () => {
         },
       })
     })
+    describe('given a successful load', () => {
+      describe('given a single id', () => {
+        it('returns a single dmarc guidance tag', async () => {
+          // Get dmarc tag from db
+          const expectedCursor = await query`
+            FOR tag IN dmarcGuidanceTags
+              SORT tag._key ASC LIMIT 1
+              RETURN MERGE(
+                {
+                  _id: tag._id,
+                  _key: tag._key,
+                  _rev: tag._rev,
+                  _type: "guidanceTag",
+                  id: tag._key,
+                  tagId: tag._key
+                },
+                TRANSLATE("fr", tag)
+              )
+          `
+          const expectedDmarcTag = await expectedCursor.next()
+
+          const loader = loadDmarcGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'fr',
+          })
+          const dmarcTag = await loader.load(expectedDmarcTag._key)
+
+          expect(dmarcTag).toEqual(expectedDmarcTag)
+        })
+      })
+      describe('given multiple ids', () => {
+        it('returns multiple dmarc guidance tags', async () => {
+          const dmarcTagKeys = []
+          const expectedDmarcTags = []
+          const expectedCursor = await query`
+            FOR tag IN dmarcGuidanceTags
+            RETURN MERGE(
+              {
+                _id: tag._id,
+                _key: tag._key,
+                _rev: tag._rev,
+                _type: "guidanceTag",
+                id: tag._key,
+                tagId: tag._key
+              },
+              TRANSLATE("fr", tag)
+            )
+          `
+
+          while (expectedCursor.hasMore) {
+            const tempDkim = await expectedCursor.next()
+            dmarcTagKeys.push(tempDkim._key)
+            expectedDmarcTags.push(tempDkim)
+          }
+
+          const loader = loadDmarcGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'fr',
+          })
+          const dmarcTags = await loader.loadMany(dmarcTagKeys)
+          expect(dmarcTags).toEqual(expectedDmarcTags)
+        })
+      })
+    })
     describe('given a database error', () => {
       it('raises an error', async () => {
-        query = jest
+        const mockedQuery = jest
           .fn()
           .mockRejectedValue(new Error('Database error occurred.'))
         const loader = loadDmarcGuidanceTagByTagId({
-          query,
+          query: mockedQuery,
           userKey: '1234',
           i18n,
         })
@@ -200,9 +339,9 @@ describe('given the loadDmarcGuidanceTagByTagId function', () => {
             throw new Error('Cursor error occurred.')
           },
         }
-        query = jest.fn().mockReturnValue(cursor)
+        const mockedQuery = jest.fn().mockReturnValue(cursor)
         const loader = loadDmarcGuidanceTagByTagId({
-          query,
+          query: mockedQuery,
           userKey: '1234',
           i18n,
         })

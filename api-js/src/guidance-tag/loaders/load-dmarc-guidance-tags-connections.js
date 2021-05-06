@@ -7,6 +7,7 @@ export const loadDmarcGuidanceTagConnectionsByTagId = ({
   userKey,
   cleanseInput,
   i18n,
+  language,
 }) => async ({ dmarcGuidanceTags, after, before, first, last, orderBy }) => {
   let afterTemplate = aql``
   if (typeof after !== 'undefined') {
@@ -27,11 +28,11 @@ export const loadDmarcGuidanceTagConnectionsByTagId = ({
         tagField = aql`tag._key`
         documentField = aql`DOCUMENT(dmarcGuidanceTags, ${afterId})._key`
       } else if (orderBy.field === 'tag-name') {
-        tagField = aql`tag.tagName`
-        documentField = aql`DOCUMENT(dmarcGuidanceTags, ${afterId}).tagName`
+        tagField = aql`TRANSLATE(${language}, tag).tagName`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(dmarcGuidanceTags, ${afterId})).tagName`
       } else if (orderBy.field === 'guidance') {
-        tagField = aql`tag.guidance`
-        documentField = aql`DOCUMENT(dmarcGuidanceTags, ${afterId}).guidance`
+        tagField = aql`TRANSLATE(${language}, tag).guidance`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(dmarcGuidanceTags, ${afterId})).guidance`
       }
 
       afterTemplate = aql`
@@ -61,11 +62,11 @@ export const loadDmarcGuidanceTagConnectionsByTagId = ({
         tagField = aql`tag._key`
         documentField = aql`DOCUMENT(dmarcGuidanceTags, ${beforeId})._key`
       } else if (orderBy.field === 'tag-name') {
-        tagField = aql`tag.tagName`
-        documentField = aql`DOCUMENT(dmarcGuidanceTags, ${beforeId}).tagName`
+        tagField = aql`TRANSLATE(${language}, tag).tagName`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(dmarcGuidanceTags, ${beforeId})).tagName`
       } else if (orderBy.field === 'guidance') {
-        tagField = aql`tag.guidance`
-        documentField = aql`DOCUMENT(dmarcGuidanceTags, ${beforeId}).guidance`
+        tagField = aql`TRANSLATE(${language}, tag).guidance`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(dmarcGuidanceTags, ${beforeId})).guidance`
       }
 
       beforeTemplate = aql`
@@ -154,13 +155,13 @@ export const loadDmarcGuidanceTagConnectionsByTagId = ({
       hasNextPageDocument = aql`LAST(retrievedDmarcGuidanceTags)._key`
       hasPreviousPageDocument = aql`FIRST(retrievedDmarcGuidanceTags)._key`
     } else if (orderBy.field === 'tag-name') {
-      tagField = aql`tag.tagName`
+      tagField = aql`TRANSLATE(${language}, tag).tagName`
       hasNextPageDocument = aql`LAST(retrievedDmarcGuidanceTags).tagName`
       hasPreviousPageDocument = aql`FIRST(retrievedDmarcGuidanceTags).tagName`
     } else if (orderBy.field === 'guidance') {
-      tagField = aql`tag.guidance`
-      hasNextPageDocument = aql`LAST(retrievedDmarcGuidanceTags).guidance`
-      hasPreviousPageDocument = aql`FIRST(retrievedDmarcGuidanceTags).guidance`
+      tagField = aql`TRANSLATE(${language}, tag).guidance`
+      hasNextPageDocument = aql`TRANSLATE(${language}, LAST(retrievedDmarcGuidanceTags)).guidance`
+      hasPreviousPageDocument = aql`TRANSLATE(${language}, FIRST(retrievedDmarcGuidanceTags)).guidance`
     }
 
     hasNextPageFilter = aql`
@@ -182,9 +183,9 @@ export const loadDmarcGuidanceTagConnectionsByTagId = ({
     if (orderBy.field === 'tag-id') {
       sortByField = aql`tag._key ${orderBy.direction},`
     } else if (orderBy.field === 'tag-name') {
-      sortByField = aql`tag.tagName ${orderBy.direction},`
+      sortByField = aql`TRANSLATE(${language}, tag).tagName ${orderBy.direction},`
     } else if (orderBy.field === 'guidance') {
-      sortByField = aql`tag.guidance ${orderBy.direction},`
+      sortByField = aql`TRANSLATE(${language}, tag).guidance ${orderBy.direction},`
     }
   }
 

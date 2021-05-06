@@ -155,11 +155,11 @@ export const loadDkimGuidanceTagConnectionsByTagId = ({
       hasNextPageDocument = aql`LAST(retrievedDkimGuidanceTags)._key`
       hasPreviousPageDocument = aql`FIRST(retrievedDkimGuidanceTags)._key`
     } else if (orderBy.field === 'tag-name') {
-      tagField = aql`tag.tagName`
+      tagField = aql`TRANSLATE(${language}, tag).tagName`
       hasNextPageDocument = aql`TRANSLATE(${language}, LAST(retrievedDkimGuidanceTags)).tagName`
       hasPreviousPageDocument = aql`TRANSLATE(${language}, FIRST(retrievedDkimGuidanceTags)).tagName`
     } else if (orderBy.field === 'guidance') {
-      tagField = aql`tag.guidance`
+      tagField = aql`TRANSLATE(${language}, tag).guidance`
       hasNextPageDocument = aql`TRANSLATE(${language}, LAST(retrievedDkimGuidanceTags)).guidance`
       hasPreviousPageDocument = aql`TRANSLATE(${language}, FIRST(retrievedDkimGuidanceTags)).guidance`
     }
