@@ -156,12 +156,12 @@ export const loadDkimGuidanceTagConnectionsByTagId = ({
       hasPreviousPageDocument = aql`FIRST(retrievedDkimGuidanceTags)._key`
     } else if (orderBy.field === 'tag-name') {
       tagField = aql`TRANSLATE(${language}, tag).tagName`
-      hasNextPageDocument = aql`TRANSLATE(${language}, LAST(retrievedDkimGuidanceTags)).tagName`
-      hasPreviousPageDocument = aql`TRANSLATE(${language}, FIRST(retrievedDkimGuidanceTags)).tagName`
+      hasNextPageDocument = aql`LAST(retrievedDkimGuidanceTags).tagName`
+      hasPreviousPageDocument = aql`FIRST(retrievedDkimGuidanceTags).tagName`
     } else if (orderBy.field === 'guidance') {
       tagField = aql`TRANSLATE(${language}, tag).guidance`
-      hasNextPageDocument = aql`TRANSLATE(${language}, LAST(retrievedDkimGuidanceTags)).guidance`
-      hasPreviousPageDocument = aql`TRANSLATE(${language}, FIRST(retrievedDkimGuidanceTags)).guidance`
+      hasNextPageDocument = aql`LAST(retrievedDkimGuidanceTags).guidance`
+      hasPreviousPageDocument = aql`FIRST(retrievedDkimGuidanceTags).guidance`
     }
 
     hasNextPageFilter = aql`

@@ -22,16 +22,18 @@ export const loadAggregateGuidanceTagConnectionsByTagId = ({
     if (typeof orderBy === 'undefined') {
       afterTemplate = aql`FILTER TO_NUMBER(REGEX_SPLIT(tag._key, "[a-z]+")[1]) > TO_NUMBER(REGEX_SPLIT(${afterId}, "[a-z]+")[1])`
     } else {
-      let afterTemplateDirection = aql`<`
+      let afterTemplateDirection
       if (orderBy.direction === 'ASC') {
         afterTemplateDirection = aql`>`
+      } else {
+        afterTemplateDirection = aql`<`
       }
 
       let tagField, documentField
       /* istanbul ignore else */
       if (orderBy.field === 'tag-id') {
-        tagField = aql`tag._key`
-        documentField = aql`DOCUMENT(aggregateGuidanceTags, ${afterId})._key`
+        tagField = aql` TO_NUMBER(REGEX_SPLIT(tag._key, "[a-z]+")[1])`
+        documentField = aql`TO_NUMBER(REGEX_SPLIT(DOCUMENT(aggregateGuidanceTags, ${afterId})._key, "[a-z]+")[1])`
       } else if (orderBy.field === 'tag-name') {
         tagField = aql`TRANSLATE(${language}, tag).tagName`
         documentField = aql`TRANSLATE(${language}, DOCUMENT(aggregateGuidanceTags, ${afterId})).tagName`
@@ -54,16 +56,18 @@ export const loadAggregateGuidanceTagConnectionsByTagId = ({
     if (typeof orderBy === 'undefined') {
       beforeTemplate = aql`FILTER TO_NUMBER(REGEX_SPLIT(tag._key, "[a-z]+")[1]) < TO_NUMBER(REGEX_SPLIT(${beforeId}, "[a-z]+")[1])`
     } else {
-      let beforeTemplateDirection = aql`>`
+      let beforeTemplateDirection
       if (orderBy.direction === 'ASC') {
         beforeTemplateDirection = aql`<`
+      } else {
+        beforeTemplateDirection = aql`>`
       }
 
       let tagField, documentField
       /* istanbul ignore else */
       if (orderBy.field === 'tag-id') {
-        tagField = aql`tag._key`
-        documentField = aql`DOCUMENT(aggregateGuidanceTags, ${beforeId})._key`
+        tagField = aql` TO_NUMBER(REGEX_SPLIT(tag._key, "[a-z]+")[1])`
+        documentField = aql`TO_NUMBER(REGEX_SPLIT(DOCUMENT(aggregateGuidanceTags, ${beforeId})._key, "[a-z]+")[1])`
       } else if (orderBy.field === 'tag-name') {
         tagField = aql`TRANSLATE(${language}, tag).tagName`
         documentField = aql`TRANSLATE(${language}, DOCUMENT(aggregateGuidanceTags, ${beforeId})).tagName`
@@ -142,27 +146,30 @@ export const loadAggregateGuidanceTagConnectionsByTagId = ({
   let hasPreviousPageFilter = aql`FILTER TO_NUMBER(REGEX_SPLIT(tag._key, "[a-z]+")[1]) < TO_NUMBER(REGEX_SPLIT(FIRST(retrievedAggregateGuidanceTags)._key, "[a-z]+")[1])`
 
   if (typeof orderBy !== 'undefined') {
-    let hasNextPageDirection = aql`<`
-    let hasPreviousPageDirection = aql`>`
+    let hasNextPageDirection
+    let hasPreviousPageDirection
     if (orderBy.direction === 'ASC') {
       hasNextPageDirection = aql`>`
       hasPreviousPageDirection = aql`<`
+    } else {
+      hasNextPageDirection = aql`<`
+      hasPreviousPageDirection = aql`>`
     }
 
     let tagField, hasNextPageDocument, hasPreviousPageDocument
     /* istanbul ignore else */
     if (orderBy.field === 'tag-id') {
-      tagField = aql`tag._key`
-      hasNextPageDocument = aql`LAST(retrievedAggregateGuidanceTags)._key`
-      hasPreviousPageDocument = aql`FIRST(retrievedAggregateGuidanceTags)._key`
+      tagField = aql`TO_NUMBER(REGEX_SPLIT(tag._key, "[a-z]+")[1])`
+      hasNextPageDocument = aql`TO_NUMBER(REGEX_SPLIT(LAST(retrievedAggregateGuidanceTags)._key, "[a-z]+")[1])`
+      hasPreviousPageDocument = aql`TO_NUMBER(REGEX_SPLIT(FIRST(retrievedAggregateGuidanceTags)._key, "[a-z]+")[1])`
     } else if (orderBy.field === 'tag-name') {
       tagField = aql`TRANSLATE(${language}, tag).tagName`
-      hasNextPageDocument = aql`TRANSLATE(${language}, LAST(retrievedAggregateGuidanceTags)).tagName`
-      hasPreviousPageDocument = aql`TRANSLATE(${language}, FIRST(retrievedAggregateGuidanceTags)).tagName`
+      hasNextPageDocument = aql`LAST(retrievedAggregateGuidanceTags).tagName`
+      hasPreviousPageDocument = aql`FIRST(retrievedAggregateGuidanceTags).tagName`
     } else if (orderBy.field === 'guidance') {
       tagField = aql`TRANSLATE(${language}, tag).guidance`
-      hasNextPageDocument = aql`TRANSLATE(${language}, LAST(retrievedAggregateGuidanceTags)).guidance`
-      hasPreviousPageDocument = aql`TRANSLATE(${language}, FIRST(retrievedAggregateGuidanceTags)).guidance`
+      hasNextPageDocument = aql`LAST(retrievedAggregateGuidanceTags).guidance`
+      hasPreviousPageDocument = aql`FIRST(retrievedAggregateGuidanceTags).guidance`
     }
 
     hasNextPageFilter = aql`
@@ -182,7 +189,7 @@ export const loadAggregateGuidanceTagConnectionsByTagId = ({
   if (typeof orderBy !== 'undefined') {
     /* istanbul ignore else */
     if (orderBy.field === 'tag-id') {
-      sortByField = aql`tag._key ${orderBy.direction},`
+      sortByField = aql`TO_NUMBER(REGEX_SPLIT(tag._key, "[a-z]+")[1]) ${orderBy.direction},`
     } else if (orderBy.field === 'tag-name') {
       sortByField = aql`TRANSLATE(${language}, tag).tagName ${orderBy.direction},`
     } else if (orderBy.field === 'guidance') {
