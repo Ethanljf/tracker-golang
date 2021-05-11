@@ -40,51 +40,62 @@ describe('given the loadSpfGuidanceTagByTagId function', () => {
   beforeEach(async () => {
     consoleErrorOutput.length = 0
 
+    await collections.spfGuidanceTags.save({
+      _key: 'spf1',
+      en: {
+        tagName: 'Some Cool Tag Name A',
+        guidance: 'Some Cool Guidance A',
+        refLinksGuide: [
+          {
+            description: 'IT PIN A',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+      fr: {
+        tagName: 'todo a',
+        guidance: 'todo a',
+        refLinksGuide: [
+          {
+            description: 'todo a',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+    })
+    await collections.spfGuidanceTags.save({
+      _key: 'spf2',
+      en: {
+        tagName: 'Some Cool Tag Name B',
+        guidance: 'Some Cool Guidance B',
+        refLinksGuide: [
+          {
+            description: 'IT PIN B',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+      fr: {
+        tagName: 'todo b',
+        guidance: 'todo b',
+        refLinksGuide: [
+          {
+            description: 'todo b',
+          },
+        ],
+        refLinksTechnical: [''],
+      },
+    })
+  })
+
+  afterEach(async () => {
     await truncate()
-    await collections.spfGuidanceTags.save({})
-    await collections.spfGuidanceTags.save({})
   })
 
   afterAll(async () => {
     await drop()
   })
 
-  describe('given a single id', () => {
-    it('returns a single spf guidance tag', async () => {
-      // Get spf tag from db
-      const expectedCursor = await query`
-        FOR tag IN spfGuidanceTags
-          SORT tag._key ASC LIMIT 1
-          RETURN MERGE(tag, { tagId: tag._key, id: tag._key, _type: "guidanceTag" })
-      `
-      const expectedSpfTag = await expectedCursor.next()
-
-      const loader = loadSpfGuidanceTagByTagId({ query, i18n })
-      const spfTag = await loader.load(expectedSpfTag._key)
-
-      expect(spfTag).toEqual(expectedSpfTag)
-    })
-  })
-  describe('given multiple ids', () => {
-    it('returns multiple spf guidance tags', async () => {
-      const spfTagKeys = []
-      const expectedSpfTags = []
-      const expectedCursor = await query`
-        FOR tag IN spfGuidanceTags
-          RETURN MERGE(tag, { tagId: tag._key, id: tag._key, _type: "guidanceTag" })
-      `
-
-      while (expectedCursor.hasMore) {
-        const tempSpf = await expectedCursor.next()
-        spfTagKeys.push(tempSpf._key)
-        expectedSpfTags.push(tempSpf)
-      }
-
-      const loader = loadSpfGuidanceTagByTagId({ query, i18n })
-      const spfTags = await loader.loadMany(spfTagKeys)
-      expect(spfTags).toEqual(expectedSpfTags)
-    })
-  })
   describe('users language is set to english', () => {
     beforeAll(() => {
       i18n = setupI18n({
@@ -100,13 +111,71 @@ describe('given the loadSpfGuidanceTagByTagId function', () => {
         },
       })
     })
+    describe('given a successful load', () => {
+      describe('given a single id', () => {
+        it('returns a single spf guidance tag', async () => {
+          // Get spf tag from db
+          const expectedCursor = await query`
+            FOR tag IN spfGuidanceTags
+              SORT tag._key ASC LIMIT 1
+              RETURN MERGE(
+                {
+                  _id: tag._id,
+                  _key: tag._key,
+                  _rev: tag._rev,
+                  _type: "guidanceTag",
+                  id: tag._key,
+                  tagId: tag._key
+                },
+                TRANSLATE("en", tag)
+              )
+          `
+          const expectedSpfTag = await expectedCursor.next()
+    
+          const loader = loadSpfGuidanceTagByTagId({ query, i18n, language: 'en' })
+          const spfTag = await loader.load(expectedSpfTag._key)
+    
+          expect(spfTag).toEqual(expectedSpfTag)
+        })
+      })
+      describe('given multiple ids', () => {
+        it('returns multiple spf guidance tags', async () => {
+          const spfTagKeys = []
+          const expectedSpfTags = []
+          const expectedCursor = await query`
+            FOR tag IN spfGuidanceTags
+            RETURN MERGE(
+              {
+                _id: tag._id,
+                _key: tag._key,
+                _rev: tag._rev,
+                _type: "guidanceTag",
+                id: tag._key,
+                tagId: tag._key
+              },
+              TRANSLATE("en", tag)
+            )
+          `
+    
+          while (expectedCursor.hasMore) {
+            const tempSpf = await expectedCursor.next()
+            spfTagKeys.push(tempSpf._key)
+            expectedSpfTags.push(tempSpf)
+          }
+    
+          const loader = loadSpfGuidanceTagByTagId({ query, i18n, language: 'en' })
+          const spfTags = await loader.loadMany(spfTagKeys)
+          expect(spfTags).toEqual(expectedSpfTags)
+        })
+      })
+    })
     describe('given a database error', () => {
       it('raises an error', async () => {
-        query = jest
+        const mockedQuery = jest
           .fn()
           .mockRejectedValue(new Error('Database error occurred.'))
         const loader = loadSpfGuidanceTagByTagId({
-          query,
+          query: mockedQuery,
           userKey: '1234',
           i18n,
         })
@@ -131,9 +200,9 @@ describe('given the loadSpfGuidanceTagByTagId function', () => {
             throw new Error('Cursor error occurred.')
           },
         }
-        query = jest.fn().mockReturnValue(cursor)
+        const mockedQuery = jest.fn().mockReturnValue(cursor)
         const loader = loadSpfGuidanceTagByTagId({
-          query,
+          query: mockedQuery,
           userKey: '1234',
           i18n,
         })
@@ -167,13 +236,71 @@ describe('given the loadSpfGuidanceTagByTagId function', () => {
         },
       })
     })
+    describe('given a successful loading', () => {
+      describe('given a single id', () => {
+        it('returns a single spf guidance tag', async () => {
+          // Get spf tag from db
+          const expectedCursor = await query`
+            FOR tag IN spfGuidanceTags
+              SORT tag._key ASC LIMIT 1
+              RETURN MERGE(
+                {
+                  _id: tag._id,
+                  _key: tag._key,
+                  _rev: tag._rev,
+                  _type: "guidanceTag",
+                  id: tag._key,
+                  tagId: tag._key
+                },
+                TRANSLATE("fr", tag)
+              )
+          `
+          const expectedSpfTag = await expectedCursor.next()
+    
+          const loader = loadSpfGuidanceTagByTagId({ query, i18n, language: 'fr' })
+          const spfTag = await loader.load(expectedSpfTag._key)
+    
+          expect(spfTag).toEqual(expectedSpfTag)
+        })
+      })
+      describe('given multiple ids', () => {
+        it('returns multiple spf guidance tags', async () => {
+          const spfTagKeys = []
+          const expectedSpfTags = []
+          const expectedCursor = await query`
+            FOR tag IN spfGuidanceTags
+            RETURN MERGE(
+              {
+                _id: tag._id,
+                _key: tag._key,
+                _rev: tag._rev,
+                _type: "guidanceTag",
+                id: tag._key,
+                tagId: tag._key
+              },
+              TRANSLATE("fr", tag)
+            )
+          `
+    
+          while (expectedCursor.hasMore) {
+            const tempSpf = await expectedCursor.next()
+            spfTagKeys.push(tempSpf._key)
+            expectedSpfTags.push(tempSpf)
+          }
+    
+          const loader = loadSpfGuidanceTagByTagId({ query, i18n, language: 'fr' })
+          const spfTags = await loader.loadMany(spfTagKeys)
+          expect(spfTags).toEqual(expectedSpfTags)
+        })
+      })
+    })
     describe('given a database error', () => {
       it('raises an error', async () => {
-        query = jest
+        const mockedQuery = jest
           .fn()
           .mockRejectedValue(new Error('Database error occurred.'))
         const loader = loadSpfGuidanceTagByTagId({
-          query,
+          query: mockedQuery,
           userKey: '1234',
           i18n,
         })
@@ -196,9 +323,9 @@ describe('given the loadSpfGuidanceTagByTagId function', () => {
             throw new Error('Cursor error occurred.')
           },
         }
-        query = jest.fn().mockReturnValue(cursor)
+        const mockedQuery = jest.fn().mockReturnValue(cursor)
         const loader = loadSpfGuidanceTagByTagId({
-          query,
+          query: mockedQuery,
           userKey: '1234',
           i18n,
         })

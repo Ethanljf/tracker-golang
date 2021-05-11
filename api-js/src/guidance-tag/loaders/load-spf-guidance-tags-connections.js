@@ -7,6 +7,7 @@ export const loadSpfGuidanceTagConnectionsByTagId = ({
   userKey,
   cleanseInput,
   i18n,
+  language,
 }) => async ({ spfGuidanceTags, after, before, first, last, orderBy }) => {
   let afterTemplate = aql``
   if (typeof after !== 'undefined') {
@@ -14,11 +15,9 @@ export const loadSpfGuidanceTagConnectionsByTagId = ({
     if (typeof orderBy === 'undefined') {
       afterTemplate = aql`FILTER TO_NUMBER(REGEX_SPLIT(tag._key, "[a-z]+")[1]) > TO_NUMBER(REGEX_SPLIT(${afterId}, "[a-z]+")[1])`
     } else {
-      let afterTemplateDirection
+      let afterTemplateDirection = aql`<`
       if (orderBy.direction === 'ASC') {
         afterTemplateDirection = aql`>`
-      } else {
-        afterTemplateDirection = aql`<`
       }
 
       let tagField, documentField
@@ -27,11 +26,11 @@ export const loadSpfGuidanceTagConnectionsByTagId = ({
         tagField = aql`tag._key`
         documentField = aql`DOCUMENT(spfGuidanceTags, ${afterId})._key`
       } else if (orderBy.field === 'tag-name') {
-        tagField = aql`tag.tagName`
-        documentField = aql`DOCUMENT(spfGuidanceTags, ${afterId}).tagName`
+        tagField = aql`TRANSLATE(${language}, tag).tagName`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(spfGuidanceTags, ${afterId})).tagName`
       } else if (orderBy.field === 'guidance') {
-        tagField = aql`tag.guidance`
-        documentField = aql`DOCUMENT(spfGuidanceTags, ${afterId}).guidance`
+        tagField = aql`TRANSLATE(${language}, tag).guidance`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(spfGuidanceTags, ${afterId})).guidance`
       }
 
       afterTemplate = aql`
@@ -48,11 +47,9 @@ export const loadSpfGuidanceTagConnectionsByTagId = ({
     if (typeof orderBy === 'undefined') {
       beforeTemplate = aql`FILTER TO_NUMBER(REGEX_SPLIT(tag._key, "[a-z]+")[1]) < TO_NUMBER(REGEX_SPLIT(${beforeId}, "[a-z]+")[1])`
     } else {
-      let beforeTemplateDirection
+      let beforeTemplateDirection = aql`>`
       if (orderBy.direction === 'ASC') {
         beforeTemplateDirection = aql`<`
-      } else {
-        beforeTemplateDirection = aql`>`
       }
 
       let tagField, documentField
@@ -61,11 +58,11 @@ export const loadSpfGuidanceTagConnectionsByTagId = ({
         tagField = aql`tag._key`
         documentField = aql`DOCUMENT(spfGuidanceTags, ${beforeId})._key`
       } else if (orderBy.field === 'tag-name') {
-        tagField = aql`tag.tagName`
-        documentField = aql`DOCUMENT(spfGuidanceTags, ${beforeId}).tagName`
+        tagField = aql`TRANSLATE(${language}, tag).tagName`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(spfGuidanceTags, ${beforeId})).tagName`
       } else if (orderBy.field === 'guidance') {
-        tagField = aql`tag.guidance`
-        documentField = aql`DOCUMENT(spfGuidanceTags, ${beforeId}).guidance`
+        tagField = aql`TRANSLATE(${language}, tag).guidance`
+        documentField = aql`TRANSLATE(${language}, DOCUMENT(spfGuidanceTags, ${beforeId})).guidance`
       }
 
       beforeTemplate = aql`
@@ -137,14 +134,11 @@ export const loadSpfGuidanceTagConnectionsByTagId = ({
   let hasNextPageFilter = aql`FILTER TO_NUMBER(REGEX_SPLIT(tag._key, "[a-z]+")[1]) > TO_NUMBER(REGEX_SPLIT(LAST(retrievedSpfGuidanceTags)._key, "[a-z]+")[1])`
   let hasPreviousPageFilter = aql`FILTER TO_NUMBER(REGEX_SPLIT(tag._key, "[a-z]+")[1]) < TO_NUMBER(REGEX_SPLIT(FIRST(retrievedSpfGuidanceTags)._key, "[a-z]+")[1])`
   if (typeof orderBy !== 'undefined') {
-    let hasNextPageDirection
-    let hasPreviousPageDirection
+    let hasNextPageDirection = aql`<`
+    let hasPreviousPageDirection = aql`>`
     if (orderBy.direction === 'ASC') {
       hasNextPageDirection = aql`>`
       hasPreviousPageDirection = aql`<`
-    } else {
-      hasNextPageDirection = aql`<`
-      hasPreviousPageDirection = aql`>`
     }
 
     let tagField, hasNextPageDocument, hasPreviousPageDocument
@@ -154,11 +148,11 @@ export const loadSpfGuidanceTagConnectionsByTagId = ({
       hasNextPageDocument = aql`LAST(retrievedSpfGuidanceTags)._key`
       hasPreviousPageDocument = aql`FIRST(retrievedSpfGuidanceTags)._key`
     } else if (orderBy.field === 'tag-name') {
-      tagField = aql`tag.tagName`
+      tagField = aql`TRANSLATE(${language}, tag).tagName`
       hasNextPageDocument = aql`LAST(retrievedSpfGuidanceTags).tagName`
       hasPreviousPageDocument = aql`FIRST(retrievedSpfGuidanceTags).tagName`
     } else if (orderBy.field === 'guidance') {
-      tagField = aql`tag.guidance`
+      tagField = aql`TRANSLATE(${language}, tag).guidance`
       hasNextPageDocument = aql`LAST(retrievedSpfGuidanceTags).guidance`
       hasPreviousPageDocument = aql`FIRST(retrievedSpfGuidanceTags).guidance`
     }
@@ -182,17 +176,15 @@ export const loadSpfGuidanceTagConnectionsByTagId = ({
     if (orderBy.field === 'tag-id') {
       sortByField = aql`tag._key ${orderBy.direction},`
     } else if (orderBy.field === 'tag-name') {
-      sortByField = aql`tag.tagName ${orderBy.direction},`
+      sortByField = aql`TRANSLATE(${language}, tag).tagName ${orderBy.direction},`
     } else if (orderBy.field === 'guidance') {
-      sortByField = aql`tag.guidance ${orderBy.direction},`
+      sortByField = aql`TRANSLATE(${language}, tag).guidance ${orderBy.direction},`
     }
   }
 
-  let sortString
+  let sortString = aql`ASC`
   if (typeof last !== 'undefined') {
     sortString = aql`DESC`
-  } else {
-    sortString = aql`ASC`
   }
 
   let spfGuidanceTagInfoCursor
@@ -207,7 +199,17 @@ export const loadSpfGuidanceTagConnectionsByTagId = ({
           SORT
           ${sortByField}
           ${limitTemplate}
-          RETURN MERGE(tag, { tagId: tag._key, id: tag._key, _type: "guidanceTag" })
+          RETURN MERGE(
+            {
+              _id: tag._id,
+              _key: tag._key,
+              _rev: tag._rev,
+              _type: "guidanceTag",
+              id: tag._key,
+              tagId: tag._key
+            },
+            TRANSLATE(${language}, tag)
+          )
       )
 
       LET hasNextPage = (LENGTH(
