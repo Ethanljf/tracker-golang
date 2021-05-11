@@ -140,24 +140,28 @@ describe('when given the load https guidance tag connection function', () => {
             i18n,
             language: 'en',
           })
-  
+
           const httpsGuidanceTags = ['https1', 'https2']
-  
-          const httpsTagLoader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'en' })
+
+          const httpsTagLoader = loadHttpsGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'en',
+          })
           const expectedHttpsTags = await httpsTagLoader.loadMany(
             httpsGuidanceTags,
           )
-  
+
           const connectionArgs = {
             first: 5,
             after: toGlobalId('guidanceTag', expectedHttpsTags[0]._key),
           }
-  
+
           const httpsTags = await connectionLoader({
             httpsGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -171,11 +175,14 @@ describe('when given the load https guidance tag connection function', () => {
             pageInfo: {
               hasNextPage: false,
               hasPreviousPage: true,
-              startCursor: toGlobalId('guidanceTags', expectedHttpsTags[1]._key),
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedHttpsTags[1]._key,
+              ),
               endCursor: toGlobalId('guidanceTags', expectedHttpsTags[1]._key),
             },
           }
-  
+
           expect(httpsTags).toEqual(expectedStructure)
         })
       })
@@ -188,24 +195,28 @@ describe('when given the load https guidance tag connection function', () => {
             i18n,
             language: 'en',
           })
-  
+
           const httpsGuidanceTags = ['https1', 'https2']
-  
-          const httpsTagLoader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'en' })
+
+          const httpsTagLoader = loadHttpsGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'en',
+          })
           const expectedHttpsTags = await httpsTagLoader.loadMany(
             httpsGuidanceTags,
           )
-  
+
           const connectionArgs = {
             first: 5,
             before: toGlobalId('guidanceTags', expectedHttpsTags[1]._key),
           }
-  
+
           const httpsTags = await connectionLoader({
             httpsGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -219,11 +230,14 @@ describe('when given the load https guidance tag connection function', () => {
             pageInfo: {
               hasNextPage: true,
               hasPreviousPage: false,
-              startCursor: toGlobalId('guidanceTags', expectedHttpsTags[0]._key),
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedHttpsTags[0]._key,
+              ),
               endCursor: toGlobalId('guidanceTags', expectedHttpsTags[0]._key),
             },
           }
-  
+
           expect(httpsTags).toEqual(expectedStructure)
         })
       })
@@ -236,23 +250,27 @@ describe('when given the load https guidance tag connection function', () => {
             i18n,
             language: 'en',
           })
-  
+
           const httpsGuidanceTags = ['https1', 'https2']
-  
-          const httpsTagLoader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'en' })
+
+          const httpsTagLoader = loadHttpsGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'en',
+          })
           const expectedHttpsTags = await httpsTagLoader.loadMany(
             httpsGuidanceTags,
           )
-  
+
           const connectionArgs = {
             first: 1,
           }
-  
+
           const httpsTags = await connectionLoader({
             httpsGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -266,11 +284,14 @@ describe('when given the load https guidance tag connection function', () => {
             pageInfo: {
               hasNextPage: true,
               hasPreviousPage: false,
-              startCursor: toGlobalId('guidanceTags', expectedHttpsTags[0]._key),
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedHttpsTags[0]._key,
+              ),
               endCursor: toGlobalId('guidanceTags', expectedHttpsTags[0]._key),
             },
           }
-  
+
           expect(httpsTags).toEqual(expectedStructure)
         })
       })
@@ -283,23 +304,27 @@ describe('when given the load https guidance tag connection function', () => {
             i18n,
             language: 'en',
           })
-  
+
           const httpsGuidanceTags = ['https1', 'https2']
-  
-          const httpsTagLoader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'en' })
+
+          const httpsTagLoader = loadHttpsGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'en',
+          })
           const expectedHttpsTags = await httpsTagLoader.loadMany(
             httpsGuidanceTags,
           )
-  
+
           const connectionArgs = {
             last: 1,
           }
-  
+
           const httpsTags = await connectionLoader({
             httpsGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -313,11 +338,14 @@ describe('when given the load https guidance tag connection function', () => {
             pageInfo: {
               hasNextPage: false,
               hasPreviousPage: true,
-              startCursor: toGlobalId('guidanceTags', expectedHttpsTags[1]._key),
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedHttpsTags[1]._key,
+              ),
               endCursor: toGlobalId('guidanceTags', expectedHttpsTags[1]._key),
             },
           }
-  
+
           expect(httpsTags).toEqual(expectedStructure)
         })
       })
@@ -350,9 +378,13 @@ describe('when given the load https guidance tag connection function', () => {
         describe('ordering on TAG_ID', () => {
           describe('order is set to ASC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'en' })
+              const loader = loadHttpsGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'en',
+              })
               const expectedHttpsTag = await loader.load('https2')
-  
+
               const connectionLoader = loadHttpsGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -360,7 +392,7 @@ describe('when given the load https guidance tag connection function', () => {
                 i18n,
                 language: 'en',
               })
-  
+
               const connectionArgs = {
                 httpsGuidanceTags: ['https1', 'https2', 'https3'],
                 first: 5,
@@ -372,7 +404,7 @@ describe('when given the load https guidance tag connection function', () => {
                 },
               }
               const httpsTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -386,19 +418,26 @@ describe('when given the load https guidance tag connection function', () => {
                 pageInfo: {
                   hasNextPage: true,
                   hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedHttpsTag._key,
+                  ),
                   endCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
                 },
               }
-  
+
               expect(httpsTags).toEqual(expectedStructure)
             })
           })
           describe('ordering is set to DESC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'en' })
+              const loader = loadHttpsGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'en',
+              })
               const expectedHttpsTag = await loader.load('https2')
-  
+
               const connectionLoader = loadHttpsGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -406,7 +445,7 @@ describe('when given the load https guidance tag connection function', () => {
                 i18n,
                 language: 'en',
               })
-  
+
               const connectionArgs = {
                 httpsGuidanceTags: ['https1', 'https2', 'https3'],
                 first: 5,
@@ -418,7 +457,7 @@ describe('when given the load https guidance tag connection function', () => {
                 },
               }
               const httpsTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -432,11 +471,14 @@ describe('when given the load https guidance tag connection function', () => {
                 pageInfo: {
                   hasNextPage: true,
                   hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedHttpsTag._key,
+                  ),
                   endCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
                 },
               }
-  
+
               expect(httpsTags).toEqual(expectedStructure)
             })
           })
@@ -444,9 +486,13 @@ describe('when given the load https guidance tag connection function', () => {
         describe('ordering on TAG_NAME', () => {
           describe('order is set to ASC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'en' })
+              const loader = loadHttpsGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'en',
+              })
               const expectedHttpsTag = await loader.load('https2')
-  
+
               const connectionLoader = loadHttpsGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -454,7 +500,7 @@ describe('when given the load https guidance tag connection function', () => {
                 i18n,
                 language: 'en',
               })
-  
+
               const connectionArgs = {
                 httpsGuidanceTags: ['https1', 'https2', 'https3'],
                 first: 5,
@@ -466,7 +512,7 @@ describe('when given the load https guidance tag connection function', () => {
                 },
               }
               const httpsTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -480,19 +526,26 @@ describe('when given the load https guidance tag connection function', () => {
                 pageInfo: {
                   hasNextPage: true,
                   hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedHttpsTag._key,
+                  ),
                   endCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
                 },
               }
-  
+
               expect(httpsTags).toEqual(expectedStructure)
             })
           })
           describe('ordering is set to DESC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'en' })
+              const loader = loadHttpsGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'en',
+              })
               const expectedHttpsTag = await loader.load('https2')
-  
+
               const connectionLoader = loadHttpsGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -500,7 +553,7 @@ describe('when given the load https guidance tag connection function', () => {
                 i18n,
                 language: 'en',
               })
-  
+
               const connectionArgs = {
                 httpsGuidanceTags: ['https1', 'https2', 'https3'],
                 first: 5,
@@ -512,7 +565,7 @@ describe('when given the load https guidance tag connection function', () => {
                 },
               }
               const httpsTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -526,11 +579,14 @@ describe('when given the load https guidance tag connection function', () => {
                 pageInfo: {
                   hasNextPage: true,
                   hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedHttpsTag._key,
+                  ),
                   endCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
                 },
               }
-  
+
               expect(httpsTags).toEqual(expectedStructure)
             })
           })
@@ -538,9 +594,13 @@ describe('when given the load https guidance tag connection function', () => {
         describe('ordering on GUIDANCE', () => {
           describe('order is set to ASC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'en' })
+              const loader = loadHttpsGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'en',
+              })
               const expectedHttpsTag = await loader.load('https2')
-  
+
               const connectionLoader = loadHttpsGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -548,7 +608,7 @@ describe('when given the load https guidance tag connection function', () => {
                 i18n,
                 language: 'en',
               })
-  
+
               const connectionArgs = {
                 httpsGuidanceTags: ['https1', 'https2', 'https3'],
                 first: 5,
@@ -560,7 +620,7 @@ describe('when given the load https guidance tag connection function', () => {
                 },
               }
               const httpsTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -574,19 +634,26 @@ describe('when given the load https guidance tag connection function', () => {
                 pageInfo: {
                   hasNextPage: true,
                   hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedHttpsTag._key,
+                  ),
                   endCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
                 },
               }
-  
+
               expect(httpsTags).toEqual(expectedStructure)
             })
           })
           describe('ordering is set to DESC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'en' })
+              const loader = loadHttpsGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'en',
+              })
               const expectedHttpsTag = await loader.load('https2')
-  
+
               const connectionLoader = loadHttpsGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -594,7 +661,7 @@ describe('when given the load https guidance tag connection function', () => {
                 i18n,
                 language: 'en',
               })
-  
+
               const connectionArgs = {
                 httpsGuidanceTags: ['https1', 'https2', 'https3'],
                 first: 5,
@@ -606,7 +673,7 @@ describe('when given the load https guidance tag connection function', () => {
                 },
               }
               const httpsTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -620,11 +687,14 @@ describe('when given the load https guidance tag connection function', () => {
                 pageInfo: {
                   hasNextPage: true,
                   hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedHttpsTag._key,
+                  ),
                   endCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
                 },
               }
-  
+
               expect(httpsTags).toEqual(expectedStructure)
             })
           })
@@ -640,17 +710,17 @@ describe('when given the load https guidance tag connection function', () => {
             i18n,
             language: 'en',
           })
-  
+
           const connectionArgs = {
             first: 5,
           }
-  
+
           const httpsGuidanceTags = ['https1', 'https2']
           const httpsTags = await connectionLoader({
             httpsGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [],
             totalCount: 0,
@@ -661,7 +731,7 @@ describe('when given the load https guidance tag connection function', () => {
               endCursor: '',
             },
           }
-  
+
           expect(httpsTags).toEqual(expectedStructure)
         })
       })
@@ -1032,24 +1102,28 @@ describe('when given the load https guidance tag connection function', () => {
             i18n,
             language: 'fr',
           })
-  
+
           const httpsGuidanceTags = ['https1', 'https2']
-  
-          const httpsTagLoader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'fr' })
+
+          const httpsTagLoader = loadHttpsGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'fr',
+          })
           const expectedHttpsTags = await httpsTagLoader.loadMany(
             httpsGuidanceTags,
           )
-  
+
           const connectionArgs = {
             first: 5,
             after: toGlobalId('guidanceTag', expectedHttpsTags[0]._key),
           }
-  
+
           const httpsTags = await connectionLoader({
             httpsGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -1063,11 +1137,14 @@ describe('when given the load https guidance tag connection function', () => {
             pageInfo: {
               hasNextPage: false,
               hasPreviousPage: true,
-              startCursor: toGlobalId('guidanceTags', expectedHttpsTags[1]._key),
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedHttpsTags[1]._key,
+              ),
               endCursor: toGlobalId('guidanceTags', expectedHttpsTags[1]._key),
             },
           }
-  
+
           expect(httpsTags).toEqual(expectedStructure)
         })
       })
@@ -1080,24 +1157,28 @@ describe('when given the load https guidance tag connection function', () => {
             i18n,
             language: 'fr',
           })
-  
+
           const httpsGuidanceTags = ['https1', 'https2']
-  
-          const httpsTagLoader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'fr' })
+
+          const httpsTagLoader = loadHttpsGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'fr',
+          })
           const expectedHttpsTags = await httpsTagLoader.loadMany(
             httpsGuidanceTags,
           )
-  
+
           const connectionArgs = {
             first: 5,
             before: toGlobalId('guidanceTags', expectedHttpsTags[1]._key),
           }
-  
+
           const httpsTags = await connectionLoader({
             httpsGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -1111,11 +1192,14 @@ describe('when given the load https guidance tag connection function', () => {
             pageInfo: {
               hasNextPage: true,
               hasPreviousPage: false,
-              startCursor: toGlobalId('guidanceTags', expectedHttpsTags[0]._key),
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedHttpsTags[0]._key,
+              ),
               endCursor: toGlobalId('guidanceTags', expectedHttpsTags[0]._key),
             },
           }
-  
+
           expect(httpsTags).toEqual(expectedStructure)
         })
       })
@@ -1128,23 +1212,27 @@ describe('when given the load https guidance tag connection function', () => {
             i18n,
             language: 'fr',
           })
-  
+
           const httpsGuidanceTags = ['https1', 'https2']
-  
-          const httpsTagLoader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'fr' })
+
+          const httpsTagLoader = loadHttpsGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'fr',
+          })
           const expectedHttpsTags = await httpsTagLoader.loadMany(
             httpsGuidanceTags,
           )
-  
+
           const connectionArgs = {
             first: 1,
           }
-  
+
           const httpsTags = await connectionLoader({
             httpsGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -1158,11 +1246,14 @@ describe('when given the load https guidance tag connection function', () => {
             pageInfo: {
               hasNextPage: true,
               hasPreviousPage: false,
-              startCursor: toGlobalId('guidanceTags', expectedHttpsTags[0]._key),
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedHttpsTags[0]._key,
+              ),
               endCursor: toGlobalId('guidanceTags', expectedHttpsTags[0]._key),
             },
           }
-  
+
           expect(httpsTags).toEqual(expectedStructure)
         })
       })
@@ -1175,23 +1266,27 @@ describe('when given the load https guidance tag connection function', () => {
             i18n,
             language: 'fr',
           })
-  
+
           const httpsGuidanceTags = ['https1', 'https2']
-  
-          const httpsTagLoader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'fr' })
+
+          const httpsTagLoader = loadHttpsGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'fr',
+          })
           const expectedHttpsTags = await httpsTagLoader.loadMany(
             httpsGuidanceTags,
           )
-  
+
           const connectionArgs = {
             last: 1,
           }
-  
+
           const httpsTags = await connectionLoader({
             httpsGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -1205,11 +1300,14 @@ describe('when given the load https guidance tag connection function', () => {
             pageInfo: {
               hasNextPage: false,
               hasPreviousPage: true,
-              startCursor: toGlobalId('guidanceTags', expectedHttpsTags[1]._key),
+              startCursor: toGlobalId(
+                'guidanceTags',
+                expectedHttpsTags[1]._key,
+              ),
               endCursor: toGlobalId('guidanceTags', expectedHttpsTags[1]._key),
             },
           }
-  
+
           expect(httpsTags).toEqual(expectedStructure)
         })
       })
@@ -1242,9 +1340,13 @@ describe('when given the load https guidance tag connection function', () => {
         describe('ordering on TAG_ID', () => {
           describe('order is set to ASC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'fr' })
+              const loader = loadHttpsGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'fr',
+              })
               const expectedHttpsTag = await loader.load('https2')
-  
+
               const connectionLoader = loadHttpsGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -1252,7 +1354,7 @@ describe('when given the load https guidance tag connection function', () => {
                 i18n,
                 language: 'fr',
               })
-  
+
               const connectionArgs = {
                 httpsGuidanceTags: ['https1', 'https2', 'https3'],
                 first: 5,
@@ -1264,7 +1366,7 @@ describe('when given the load https guidance tag connection function', () => {
                 },
               }
               const httpsTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -1278,19 +1380,26 @@ describe('when given the load https guidance tag connection function', () => {
                 pageInfo: {
                   hasNextPage: true,
                   hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedHttpsTag._key,
+                  ),
                   endCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
                 },
               }
-  
+
               expect(httpsTags).toEqual(expectedStructure)
             })
           })
           describe('ordering is set to DESC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'fr' })
+              const loader = loadHttpsGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'fr',
+              })
               const expectedHttpsTag = await loader.load('https2')
-  
+
               const connectionLoader = loadHttpsGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -1298,7 +1407,7 @@ describe('when given the load https guidance tag connection function', () => {
                 i18n,
                 language: 'fr',
               })
-  
+
               const connectionArgs = {
                 httpsGuidanceTags: ['https1', 'https2', 'https3'],
                 first: 5,
@@ -1310,7 +1419,7 @@ describe('when given the load https guidance tag connection function', () => {
                 },
               }
               const httpsTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -1324,11 +1433,14 @@ describe('when given the load https guidance tag connection function', () => {
                 pageInfo: {
                   hasNextPage: true,
                   hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedHttpsTag._key,
+                  ),
                   endCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
                 },
               }
-  
+
               expect(httpsTags).toEqual(expectedStructure)
             })
           })
@@ -1336,9 +1448,13 @@ describe('when given the load https guidance tag connection function', () => {
         describe('ordering on TAG_NAME', () => {
           describe('order is set to ASC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'fr' })
+              const loader = loadHttpsGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'fr',
+              })
               const expectedHttpsTag = await loader.load('https2')
-  
+
               const connectionLoader = loadHttpsGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -1346,7 +1462,7 @@ describe('when given the load https guidance tag connection function', () => {
                 i18n,
                 language: 'fr',
               })
-  
+
               const connectionArgs = {
                 httpsGuidanceTags: ['https1', 'https2', 'https3'],
                 first: 5,
@@ -1358,7 +1474,7 @@ describe('when given the load https guidance tag connection function', () => {
                 },
               }
               const httpsTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -1372,19 +1488,26 @@ describe('when given the load https guidance tag connection function', () => {
                 pageInfo: {
                   hasNextPage: true,
                   hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedHttpsTag._key,
+                  ),
                   endCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
                 },
               }
-  
+
               expect(httpsTags).toEqual(expectedStructure)
             })
           })
           describe('ordering is set to DESC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'fr' })
+              const loader = loadHttpsGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'fr',
+              })
               const expectedHttpsTag = await loader.load('https2')
-  
+
               const connectionLoader = loadHttpsGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -1392,7 +1515,7 @@ describe('when given the load https guidance tag connection function', () => {
                 i18n,
                 language: 'fr',
               })
-  
+
               const connectionArgs = {
                 httpsGuidanceTags: ['https1', 'https2', 'https3'],
                 first: 5,
@@ -1404,7 +1527,7 @@ describe('when given the load https guidance tag connection function', () => {
                 },
               }
               const httpsTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -1418,11 +1541,14 @@ describe('when given the load https guidance tag connection function', () => {
                 pageInfo: {
                   hasNextPage: true,
                   hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedHttpsTag._key,
+                  ),
                   endCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
                 },
               }
-  
+
               expect(httpsTags).toEqual(expectedStructure)
             })
           })
@@ -1430,9 +1556,13 @@ describe('when given the load https guidance tag connection function', () => {
         describe('ordering on GUIDANCE', () => {
           describe('order is set to ASC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'fr' })
+              const loader = loadHttpsGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'fr',
+              })
               const expectedHttpsTag = await loader.load('https2')
-  
+
               const connectionLoader = loadHttpsGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -1440,7 +1570,7 @@ describe('when given the load https guidance tag connection function', () => {
                 i18n,
                 language: 'fr',
               })
-  
+
               const connectionArgs = {
                 httpsGuidanceTags: ['https1', 'https2', 'https3'],
                 first: 5,
@@ -1452,7 +1582,7 @@ describe('when given the load https guidance tag connection function', () => {
                 },
               }
               const httpsTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -1466,19 +1596,26 @@ describe('when given the load https guidance tag connection function', () => {
                 pageInfo: {
                   hasNextPage: true,
                   hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedHttpsTag._key,
+                  ),
                   endCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
                 },
               }
-  
+
               expect(httpsTags).toEqual(expectedStructure)
             })
           })
           describe('ordering is set to DESC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadHttpsGuidanceTagByTagId({ query, i18n, language: 'fr' })
+              const loader = loadHttpsGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'fr',
+              })
               const expectedHttpsTag = await loader.load('https2')
-  
+
               const connectionLoader = loadHttpsGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -1486,7 +1623,7 @@ describe('when given the load https guidance tag connection function', () => {
                 i18n,
                 language: 'fr',
               })
-  
+
               const connectionArgs = {
                 httpsGuidanceTags: ['https1', 'https2', 'https3'],
                 first: 5,
@@ -1498,7 +1635,7 @@ describe('when given the load https guidance tag connection function', () => {
                 },
               }
               const httpsTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -1512,11 +1649,14 @@ describe('when given the load https guidance tag connection function', () => {
                 pageInfo: {
                   hasNextPage: true,
                   hasPreviousPage: true,
-                  startCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
+                  startCursor: toGlobalId(
+                    'guidanceTags',
+                    expectedHttpsTag._key,
+                  ),
                   endCursor: toGlobalId('guidanceTags', expectedHttpsTag._key),
                 },
               }
-  
+
               expect(httpsTags).toEqual(expectedStructure)
             })
           })
@@ -1532,17 +1672,17 @@ describe('when given the load https guidance tag connection function', () => {
             i18n,
             language: 'fr',
           })
-  
+
           const connectionArgs = {
             first: 5,
           }
-  
+
           const httpsGuidanceTags = ['https1', 'https2']
           const httpsTags = await connectionLoader({
             httpsGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [],
             totalCount: 0,
@@ -1553,7 +1693,7 @@ describe('when given the load https guidance tag connection function', () => {
               endCursor: '',
             },
           }
-  
+
           expect(httpsTags).toEqual(expectedStructure)
         })
       })

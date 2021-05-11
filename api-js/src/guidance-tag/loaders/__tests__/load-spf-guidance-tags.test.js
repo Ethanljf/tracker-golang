@@ -131,10 +131,14 @@ describe('given the loadSpfGuidanceTagByTagId function', () => {
               )
           `
           const expectedSpfTag = await expectedCursor.next()
-    
-          const loader = loadSpfGuidanceTagByTagId({ query, i18n, language: 'en' })
+
+          const loader = loadSpfGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'en',
+          })
           const spfTag = await loader.load(expectedSpfTag._key)
-    
+
           expect(spfTag).toEqual(expectedSpfTag)
         })
       })
@@ -156,14 +160,18 @@ describe('given the loadSpfGuidanceTagByTagId function', () => {
               TRANSLATE("en", tag)
             )
           `
-    
+
           while (expectedCursor.hasMore) {
             const tempSpf = await expectedCursor.next()
             spfTagKeys.push(tempSpf._key)
             expectedSpfTags.push(tempSpf)
           }
-    
-          const loader = loadSpfGuidanceTagByTagId({ query, i18n, language: 'en' })
+
+          const loader = loadSpfGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'en',
+          })
           const spfTags = await loader.loadMany(spfTagKeys)
           expect(spfTags).toEqual(expectedSpfTags)
         })
@@ -256,10 +264,14 @@ describe('given the loadSpfGuidanceTagByTagId function', () => {
               )
           `
           const expectedSpfTag = await expectedCursor.next()
-    
-          const loader = loadSpfGuidanceTagByTagId({ query, i18n, language: 'fr' })
+
+          const loader = loadSpfGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'fr',
+          })
           const spfTag = await loader.load(expectedSpfTag._key)
-    
+
           expect(spfTag).toEqual(expectedSpfTag)
         })
       })
@@ -281,14 +293,18 @@ describe('given the loadSpfGuidanceTagByTagId function', () => {
               TRANSLATE("fr", tag)
             )
           `
-    
+
           while (expectedCursor.hasMore) {
             const tempSpf = await expectedCursor.next()
             spfTagKeys.push(tempSpf._key)
             expectedSpfTags.push(tempSpf)
           }
-    
-          const loader = loadSpfGuidanceTagByTagId({ query, i18n, language: 'fr' })
+
+          const loader = loadSpfGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'fr',
+          })
           const spfTags = await loader.loadMany(spfTagKeys)
           expect(spfTags).toEqual(expectedSpfTags)
         })

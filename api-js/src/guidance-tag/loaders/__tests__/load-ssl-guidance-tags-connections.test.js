@@ -140,22 +140,26 @@ describe('when given the load ssl guidance tag connection function', () => {
             i18n,
             language: 'en',
           })
-  
+
           const sslGuidanceTags = ['ssl1', 'ssl2']
-  
-          const sslTagLoader = loadSslGuidanceTagByTagId({ query, i18n, language: 'en' })
+
+          const sslTagLoader = loadSslGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'en',
+          })
           const expectedSslTags = await sslTagLoader.loadMany(sslGuidanceTags)
-  
+
           const connectionArgs = {
             first: 5,
             after: toGlobalId('guidanceTag', expectedSslTags[0]._key),
           }
-  
+
           const sslTags = await connectionLoader({
             sslGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -173,7 +177,7 @@ describe('when given the load ssl guidance tag connection function', () => {
               endCursor: toGlobalId('guidanceTags', expectedSslTags[1]._key),
             },
           }
-  
+
           expect(sslTags).toEqual(expectedStructure)
         })
       })
@@ -186,22 +190,26 @@ describe('when given the load ssl guidance tag connection function', () => {
             i18n,
             language: 'en',
           })
-  
+
           const sslGuidanceTags = ['ssl1', 'ssl2']
-  
-          const sslTagLoader = loadSslGuidanceTagByTagId({ query, i18n, language: 'en' })
+
+          const sslTagLoader = loadSslGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'en',
+          })
           const expectedSslTags = await sslTagLoader.loadMany(sslGuidanceTags)
-  
+
           const connectionArgs = {
             first: 5,
             before: toGlobalId('guidanceTags', expectedSslTags[1]._key),
           }
-  
+
           const sslTags = await connectionLoader({
             sslGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -219,7 +227,7 @@ describe('when given the load ssl guidance tag connection function', () => {
               endCursor: toGlobalId('guidanceTags', expectedSslTags[0]._key),
             },
           }
-  
+
           expect(sslTags).toEqual(expectedStructure)
         })
       })
@@ -232,21 +240,25 @@ describe('when given the load ssl guidance tag connection function', () => {
             i18n,
             language: 'en',
           })
-  
+
           const sslGuidanceTags = ['ssl1', 'ssl2']
-  
-          const sslTagLoader = loadSslGuidanceTagByTagId({ query, i18n, language: 'en' })
+
+          const sslTagLoader = loadSslGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'en',
+          })
           const expectedSslTags = await sslTagLoader.loadMany(sslGuidanceTags)
-  
+
           const connectionArgs = {
             first: 1,
           }
-  
+
           const sslTags = await connectionLoader({
             sslGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -264,7 +276,7 @@ describe('when given the load ssl guidance tag connection function', () => {
               endCursor: toGlobalId('guidanceTags', expectedSslTags[0]._key),
             },
           }
-  
+
           expect(sslTags).toEqual(expectedStructure)
         })
       })
@@ -277,21 +289,25 @@ describe('when given the load ssl guidance tag connection function', () => {
             i18n,
             language: 'en',
           })
-  
+
           const sslGuidanceTags = ['ssl1', 'ssl2']
-  
-          const sslTagLoader = loadSslGuidanceTagByTagId({ query, i18n, language: 'en' })
+
+          const sslTagLoader = loadSslGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'en',
+          })
           const expectedSslTags = await sslTagLoader.loadMany(sslGuidanceTags)
-  
+
           const connectionArgs = {
             last: 1,
           }
-  
+
           const sslTags = await connectionLoader({
             sslGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -309,7 +325,7 @@ describe('when given the load ssl guidance tag connection function', () => {
               endCursor: toGlobalId('guidanceTags', expectedSslTags[1]._key),
             },
           }
-  
+
           expect(sslTags).toEqual(expectedStructure)
         })
       })
@@ -342,9 +358,13 @@ describe('when given the load ssl guidance tag connection function', () => {
         describe('ordering on TAG_ID', () => {
           describe('order is set to ASC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'en' })
+              const loader = loadSslGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'en',
+              })
               const expectedSslTag = await loader.load('ssl2')
-  
+
               const connectionLoader = loadSslGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -352,7 +372,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 i18n,
                 language: 'en',
               })
-  
+
               const connectionArgs = {
                 sslGuidanceTags: ['ssl1', 'ssl2', 'ssl3'],
                 first: 5,
@@ -364,7 +384,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 },
               }
               const sslTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -382,15 +402,19 @@ describe('when given the load ssl guidance tag connection function', () => {
                   endCursor: toGlobalId('guidanceTags', expectedSslTag._key),
                 },
               }
-  
+
               expect(sslTags).toEqual(expectedStructure)
             })
           })
           describe('ordering is set to DESC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'en' })
+              const loader = loadSslGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'en',
+              })
               const expectedSslTag = await loader.load('ssl2')
-  
+
               const connectionLoader = loadSslGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -398,7 +422,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 i18n,
                 language: 'en',
               })
-  
+
               const connectionArgs = {
                 sslGuidanceTags: ['ssl1', 'ssl2', 'ssl3'],
                 first: 5,
@@ -410,7 +434,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 },
               }
               const sslTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -428,7 +452,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                   endCursor: toGlobalId('guidanceTags', expectedSslTag._key),
                 },
               }
-  
+
               expect(sslTags).toEqual(expectedStructure)
             })
           })
@@ -436,9 +460,13 @@ describe('when given the load ssl guidance tag connection function', () => {
         describe('ordering on TAG_NAME', () => {
           describe('order is set to ASC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'en' })
+              const loader = loadSslGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'en',
+              })
               const expectedSslTag = await loader.load('ssl2')
-  
+
               const connectionLoader = loadSslGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -446,7 +474,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 i18n,
                 language: 'en',
               })
-  
+
               const connectionArgs = {
                 sslGuidanceTags: ['ssl1', 'ssl2', 'ssl3'],
                 first: 5,
@@ -458,7 +486,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 },
               }
               const sslTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -476,15 +504,19 @@ describe('when given the load ssl guidance tag connection function', () => {
                   endCursor: toGlobalId('guidanceTags', expectedSslTag._key),
                 },
               }
-  
+
               expect(sslTags).toEqual(expectedStructure)
             })
           })
           describe('ordering is set to DESC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'en' })
+              const loader = loadSslGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'en',
+              })
               const expectedSslTag = await loader.load('ssl2')
-  
+
               const connectionLoader = loadSslGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -492,7 +524,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 i18n,
                 language: 'en',
               })
-  
+
               const connectionArgs = {
                 sslGuidanceTags: ['ssl1', 'ssl2', 'ssl3'],
                 first: 5,
@@ -504,7 +536,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 },
               }
               const sslTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -522,7 +554,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                   endCursor: toGlobalId('guidanceTags', expectedSslTag._key),
                 },
               }
-  
+
               expect(sslTags).toEqual(expectedStructure)
             })
           })
@@ -530,9 +562,13 @@ describe('when given the load ssl guidance tag connection function', () => {
         describe('ordering on GUIDANCE', () => {
           describe('order is set to ASC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'en' })
+              const loader = loadSslGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'en',
+              })
               const expectedSslTag = await loader.load('ssl2')
-  
+
               const connectionLoader = loadSslGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -540,7 +576,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 i18n,
                 language: 'en',
               })
-  
+
               const connectionArgs = {
                 sslGuidanceTags: ['ssl1', 'ssl2', 'ssl3'],
                 first: 5,
@@ -552,7 +588,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 },
               }
               const sslTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -570,15 +606,19 @@ describe('when given the load ssl guidance tag connection function', () => {
                   endCursor: toGlobalId('guidanceTags', expectedSslTag._key),
                 },
               }
-  
+
               expect(sslTags).toEqual(expectedStructure)
             })
           })
           describe('ordering is set to DESC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'en' })
+              const loader = loadSslGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'en',
+              })
               const expectedSslTag = await loader.load('ssl2')
-  
+
               const connectionLoader = loadSslGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -586,7 +626,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 i18n,
                 language: 'en',
               })
-  
+
               const connectionArgs = {
                 sslGuidanceTags: ['ssl1', 'ssl2', 'ssl3'],
                 first: 5,
@@ -598,7 +638,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 },
               }
               const sslTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -616,7 +656,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                   endCursor: toGlobalId('guidanceTags', expectedSslTag._key),
                 },
               }
-  
+
               expect(sslTags).toEqual(expectedStructure)
             })
           })
@@ -632,17 +672,17 @@ describe('when given the load ssl guidance tag connection function', () => {
             i18n,
             language: 'en',
           })
-  
+
           const connectionArgs = {
             first: 5,
           }
-  
+
           const sslGuidanceTags = ['ssl1', 'ssl2']
           const sslTags = await connectionLoader({
             sslGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [],
             totalCount: 0,
@@ -653,7 +693,7 @@ describe('when given the load ssl guidance tag connection function', () => {
               endCursor: '',
             },
           }
-  
+
           expect(sslTags).toEqual(expectedStructure)
         })
       })
@@ -1020,22 +1060,26 @@ describe('when given the load ssl guidance tag connection function', () => {
             i18n,
             language: 'fr',
           })
-  
+
           const sslGuidanceTags = ['ssl1', 'ssl2']
-  
-          const sslTagLoader = loadSslGuidanceTagByTagId({ query, i18n, language: 'fr' })
+
+          const sslTagLoader = loadSslGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'fr',
+          })
           const expectedSslTags = await sslTagLoader.loadMany(sslGuidanceTags)
-  
+
           const connectionArgs = {
             first: 5,
             after: toGlobalId('guidanceTag', expectedSslTags[0]._key),
           }
-  
+
           const sslTags = await connectionLoader({
             sslGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -1053,7 +1097,7 @@ describe('when given the load ssl guidance tag connection function', () => {
               endCursor: toGlobalId('guidanceTags', expectedSslTags[1]._key),
             },
           }
-  
+
           expect(sslTags).toEqual(expectedStructure)
         })
       })
@@ -1066,22 +1110,26 @@ describe('when given the load ssl guidance tag connection function', () => {
             i18n,
             language: 'fr',
           })
-  
+
           const sslGuidanceTags = ['ssl1', 'ssl2']
-  
-          const sslTagLoader = loadSslGuidanceTagByTagId({ query, i18n, language: 'fr' })
+
+          const sslTagLoader = loadSslGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'fr',
+          })
           const expectedSslTags = await sslTagLoader.loadMany(sslGuidanceTags)
-  
+
           const connectionArgs = {
             first: 5,
             before: toGlobalId('guidanceTags', expectedSslTags[1]._key),
           }
-  
+
           const sslTags = await connectionLoader({
             sslGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -1099,7 +1147,7 @@ describe('when given the load ssl guidance tag connection function', () => {
               endCursor: toGlobalId('guidanceTags', expectedSslTags[0]._key),
             },
           }
-  
+
           expect(sslTags).toEqual(expectedStructure)
         })
       })
@@ -1112,21 +1160,25 @@ describe('when given the load ssl guidance tag connection function', () => {
             i18n,
             language: 'fr',
           })
-  
+
           const sslGuidanceTags = ['ssl1', 'ssl2']
-  
-          const sslTagLoader = loadSslGuidanceTagByTagId({ query, i18n, language: 'fr' })
+
+          const sslTagLoader = loadSslGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'fr',
+          })
           const expectedSslTags = await sslTagLoader.loadMany(sslGuidanceTags)
-  
+
           const connectionArgs = {
             first: 1,
           }
-  
+
           const sslTags = await connectionLoader({
             sslGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -1144,7 +1196,7 @@ describe('when given the load ssl guidance tag connection function', () => {
               endCursor: toGlobalId('guidanceTags', expectedSslTags[0]._key),
             },
           }
-  
+
           expect(sslTags).toEqual(expectedStructure)
         })
       })
@@ -1157,21 +1209,25 @@ describe('when given the load ssl guidance tag connection function', () => {
             i18n,
             language: 'fr',
           })
-  
+
           const sslGuidanceTags = ['ssl1', 'ssl2']
-  
-          const sslTagLoader = loadSslGuidanceTagByTagId({ query, i18n, language: 'fr' })
+
+          const sslTagLoader = loadSslGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'fr',
+          })
           const expectedSslTags = await sslTagLoader.loadMany(sslGuidanceTags)
-  
+
           const connectionArgs = {
             last: 1,
           }
-  
+
           const sslTags = await connectionLoader({
             sslGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [
               {
@@ -1189,7 +1245,7 @@ describe('when given the load ssl guidance tag connection function', () => {
               endCursor: toGlobalId('guidanceTags', expectedSslTags[1]._key),
             },
           }
-  
+
           expect(sslTags).toEqual(expectedStructure)
         })
       })
@@ -1222,9 +1278,13 @@ describe('when given the load ssl guidance tag connection function', () => {
         describe('ordering on TAG_ID', () => {
           describe('order is set to ASC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'fr' })
+              const loader = loadSslGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'fr',
+              })
               const expectedSslTag = await loader.load('ssl2')
-  
+
               const connectionLoader = loadSslGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -1232,7 +1292,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 i18n,
                 language: 'fr',
               })
-  
+
               const connectionArgs = {
                 sslGuidanceTags: ['ssl1', 'ssl2', 'ssl3'],
                 first: 5,
@@ -1244,7 +1304,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 },
               }
               const sslTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -1262,15 +1322,19 @@ describe('when given the load ssl guidance tag connection function', () => {
                   endCursor: toGlobalId('guidanceTags', expectedSslTag._key),
                 },
               }
-  
+
               expect(sslTags).toEqual(expectedStructure)
             })
           })
           describe('ordering is set to DESC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'fr' })
+              const loader = loadSslGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'fr',
+              })
               const expectedSslTag = await loader.load('ssl2')
-  
+
               const connectionLoader = loadSslGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -1278,7 +1342,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 i18n,
                 language: 'fr',
               })
-  
+
               const connectionArgs = {
                 sslGuidanceTags: ['ssl1', 'ssl2', 'ssl3'],
                 first: 5,
@@ -1290,7 +1354,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 },
               }
               const sslTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -1308,7 +1372,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                   endCursor: toGlobalId('guidanceTags', expectedSslTag._key),
                 },
               }
-  
+
               expect(sslTags).toEqual(expectedStructure)
             })
           })
@@ -1316,9 +1380,13 @@ describe('when given the load ssl guidance tag connection function', () => {
         describe('ordering on TAG_NAME', () => {
           describe('order is set to ASC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'fr' })
+              const loader = loadSslGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'fr',
+              })
               const expectedSslTag = await loader.load('ssl2')
-  
+
               const connectionLoader = loadSslGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -1326,7 +1394,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 i18n,
                 language: 'fr',
               })
-  
+
               const connectionArgs = {
                 sslGuidanceTags: ['ssl1', 'ssl2', 'ssl3'],
                 first: 5,
@@ -1338,7 +1406,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 },
               }
               const sslTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -1356,15 +1424,19 @@ describe('when given the load ssl guidance tag connection function', () => {
                   endCursor: toGlobalId('guidanceTags', expectedSslTag._key),
                 },
               }
-  
+
               expect(sslTags).toEqual(expectedStructure)
             })
           })
           describe('ordering is set to DESC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'fr' })
+              const loader = loadSslGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'fr',
+              })
               const expectedSslTag = await loader.load('ssl2')
-  
+
               const connectionLoader = loadSslGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -1372,7 +1444,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 i18n,
                 language: 'fr',
               })
-  
+
               const connectionArgs = {
                 sslGuidanceTags: ['ssl1', 'ssl2', 'ssl3'],
                 first: 5,
@@ -1384,7 +1456,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 },
               }
               const sslTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -1402,7 +1474,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                   endCursor: toGlobalId('guidanceTags', expectedSslTag._key),
                 },
               }
-  
+
               expect(sslTags).toEqual(expectedStructure)
             })
           })
@@ -1410,9 +1482,13 @@ describe('when given the load ssl guidance tag connection function', () => {
         describe('ordering on GUIDANCE', () => {
           describe('order is set to ASC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'fr' })
+              const loader = loadSslGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'fr',
+              })
               const expectedSslTag = await loader.load('ssl2')
-  
+
               const connectionLoader = loadSslGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -1420,7 +1496,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 i18n,
                 language: 'fr',
               })
-  
+
               const connectionArgs = {
                 sslGuidanceTags: ['ssl1', 'ssl2', 'ssl3'],
                 first: 5,
@@ -1432,7 +1508,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 },
               }
               const sslTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -1450,15 +1526,19 @@ describe('when given the load ssl guidance tag connection function', () => {
                   endCursor: toGlobalId('guidanceTags', expectedSslTag._key),
                 },
               }
-  
+
               expect(sslTags).toEqual(expectedStructure)
             })
           })
           describe('ordering is set to DESC', () => {
             it('returns guidance tag', async () => {
-              const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'fr' })
+              const loader = loadSslGuidanceTagByTagId({
+                query,
+                i18n,
+                language: 'fr',
+              })
               const expectedSslTag = await loader.load('ssl2')
-  
+
               const connectionLoader = loadSslGuidanceTagConnectionsByTagId({
                 query,
                 userKey: user._key,
@@ -1466,7 +1546,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 i18n,
                 language: 'fr',
               })
-  
+
               const connectionArgs = {
                 sslGuidanceTags: ['ssl1', 'ssl2', 'ssl3'],
                 first: 5,
@@ -1478,7 +1558,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                 },
               }
               const sslTags = await connectionLoader(connectionArgs)
-  
+
               const expectedStructure = {
                 edges: [
                   {
@@ -1496,7 +1576,7 @@ describe('when given the load ssl guidance tag connection function', () => {
                   endCursor: toGlobalId('guidanceTags', expectedSslTag._key),
                 },
               }
-  
+
               expect(sslTags).toEqual(expectedStructure)
             })
           })
@@ -1512,17 +1592,17 @@ describe('when given the load ssl guidance tag connection function', () => {
             i18n,
             language: 'fr',
           })
-  
+
           const connectionArgs = {
             first: 5,
           }
-  
+
           const sslGuidanceTags = ['ssl1', 'ssl2']
           const sslTags = await connectionLoader({
             sslGuidanceTags,
             ...connectionArgs,
           })
-  
+
           const expectedStructure = {
             edges: [],
             totalCount: 0,
@@ -1533,7 +1613,7 @@ describe('when given the load ssl guidance tag connection function', () => {
               endCursor: '',
             },
           }
-  
+
           expect(sslTags).toEqual(expectedStructure)
         })
       })

@@ -82,7 +82,7 @@ describe('given the loadDkimGuidanceTagById function', () => {
   afterAll(async () => {
     await drop()
   })
-  
+
   describe('users language is set to english', () => {
     beforeAll(() => {
       i18n = setupI18n({

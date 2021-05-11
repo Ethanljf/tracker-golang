@@ -131,10 +131,14 @@ describe('given the loadSslGuidanceTagByTagId function', () => {
               )
           `
           const expectedSslTag = await expectedCursor.next()
-    
-          const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'en' })
+
+          const loader = loadSslGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'en',
+          })
           const sslTag = await loader.load(expectedSslTag._key)
-    
+
           expect(sslTag).toEqual(expectedSslTag)
         })
       })
@@ -156,14 +160,18 @@ describe('given the loadSslGuidanceTagByTagId function', () => {
               TRANSLATE("en", tag)
             )
           `
-    
+
           while (expectedCursor.hasMore) {
             const tempSsl = await expectedCursor.next()
             sslTagKeys.push(tempSsl._key)
             expectedSslTags.push(tempSsl)
           }
-    
-          const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'en' })
+
+          const loader = loadSslGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'en',
+          })
           const sslTags = await loader.loadMany(sslTagKeys)
           expect(sslTags).toEqual(expectedSslTags)
         })
@@ -256,10 +264,14 @@ describe('given the loadSslGuidanceTagByTagId function', () => {
               )
           `
           const expectedSslTag = await expectedCursor.next()
-    
-          const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'fr' })
+
+          const loader = loadSslGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'fr',
+          })
           const sslTag = await loader.load(expectedSslTag._key)
-    
+
           expect(sslTag).toEqual(expectedSslTag)
         })
       })
@@ -281,14 +293,18 @@ describe('given the loadSslGuidanceTagByTagId function', () => {
               TRANSLATE("fr", tag)
             )
           `
-    
+
           while (expectedCursor.hasMore) {
             const tempSsl = await expectedCursor.next()
             sslTagKeys.push(tempSsl._key)
             expectedSslTags.push(tempSsl)
           }
-    
-          const loader = loadSslGuidanceTagByTagId({ query, i18n, language: 'fr' })
+
+          const loader = loadSslGuidanceTagByTagId({
+            query,
+            i18n,
+            language: 'fr',
+          })
           const sslTags = await loader.loadMany(sslTagKeys)
           expect(sslTags).toEqual(expectedSslTags)
         })

@@ -1,7 +1,12 @@
 import DataLoader from 'dataloader'
 import { t } from '@lingui/macro'
 
-export const loadHttpsGuidanceTagByTagId = ({ query, userKey, i18n, language }) =>
+export const loadHttpsGuidanceTagByTagId = ({
+  query,
+  userKey,
+  i18n,
+  language,
+}) =>
   new DataLoader(async (tags) => {
     let cursor
     try {

@@ -365,11 +365,7 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
                 },
               )
 
-              const aggregateGuidanceTags = [
-                'agg1',
-                'agg2',
-                'agg3',
-              ]
+              const aggregateGuidanceTags = ['agg1', 'agg2', 'agg3']
 
               const aggregateTagLoader = loadAggregateGuidanceTagById({
                 query,
@@ -436,11 +432,7 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
                 },
               )
 
-              const aggregateGuidanceTags = [
-                'agg1',
-                'agg2',
-                'agg3',
-              ]
+              const aggregateGuidanceTags = ['agg1', 'agg2', 'agg3']
 
               const aggregateTagLoader = loadAggregateGuidanceTagById({
                 query,
@@ -509,11 +501,7 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
                 },
               )
 
-              const aggregateGuidanceTags = [
-                'agg1',
-                'agg2',
-                'agg3',
-              ]
+              const aggregateGuidanceTags = ['agg1', 'agg2', 'agg3']
 
               const aggregateTagLoader = loadAggregateGuidanceTagById({
                 query,
@@ -580,11 +568,7 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
                 },
               )
 
-              const aggregateGuidanceTags = [
-                'agg1',
-                'agg2',
-                'agg3',
-              ]
+              const aggregateGuidanceTags = ['agg1', 'agg2', 'agg3']
 
               const aggregateTagLoader = loadAggregateGuidanceTagById({
                 query,
@@ -653,11 +637,7 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
                 },
               )
 
-              const aggregateGuidanceTags = [
-                'agg1',
-                'agg2',
-                'agg3',
-              ]
+              const aggregateGuidanceTags = ['agg1', 'agg2', 'agg3']
 
               const aggregateTagLoader = loadAggregateGuidanceTagById({
                 query,
@@ -724,11 +704,7 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
                 },
               )
 
-              const aggregateGuidanceTags = [
-                'agg1',
-                'agg2',
-                'agg3',
-              ]
+              const aggregateGuidanceTags = ['agg1', 'agg2', 'agg3']
 
               const aggregateTagLoader = loadAggregateGuidanceTagById({
                 query,
@@ -1448,11 +1424,7 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
                 },
               )
 
-              const aggregateGuidanceTags = [
-                'agg1',
-                'agg2',
-                'agg3',
-              ]
+              const aggregateGuidanceTags = ['agg1', 'agg2', 'agg3']
 
               const aggregateTagLoader = loadAggregateGuidanceTagById({
                 query,
@@ -1519,11 +1491,7 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
                 },
               )
 
-              const aggregateGuidanceTags = [
-                'agg1',
-                'agg2',
-                'agg3',
-              ]
+              const aggregateGuidanceTags = ['agg1', 'agg2', 'agg3']
 
               const aggregateTagLoader = loadAggregateGuidanceTagById({
                 query,
@@ -1592,11 +1560,7 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
                 },
               )
 
-              const aggregateGuidanceTags = [
-                'agg1',
-                'agg2',
-                'agg3',
-              ]
+              const aggregateGuidanceTags = ['agg1', 'agg2', 'agg3']
 
               const aggregateTagLoader = loadAggregateGuidanceTagById({
                 query,
@@ -1663,11 +1627,7 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
                 },
               )
 
-              const aggregateGuidanceTags = [
-                'agg1',
-                'agg2',
-                'agg3',
-              ]
+              const aggregateGuidanceTags = ['agg1', 'agg2', 'agg3']
 
               const aggregateTagLoader = loadAggregateGuidanceTagById({
                 query,
@@ -1736,11 +1696,7 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
                 },
               )
 
-              const aggregateGuidanceTags = [
-                'agg1',
-                'agg2',
-                'agg3',
-              ]
+              const aggregateGuidanceTags = ['agg1', 'agg2', 'agg3']
 
               const aggregateTagLoader = loadAggregateGuidanceTagById({
                 query,
@@ -1807,11 +1763,7 @@ describe('given the loadAggregateGuidanceTagConnectionsByTagId loader', () => {
                 },
               )
 
-              const aggregateGuidanceTags = [
-                'agg1',
-                'agg2',
-                'agg3',
-              ]
+              const aggregateGuidanceTags = ['agg1', 'agg2', 'agg3']
 
               const aggregateTagLoader = loadAggregateGuidanceTagById({
                 query,
