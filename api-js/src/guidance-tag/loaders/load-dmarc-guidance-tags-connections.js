@@ -160,8 +160,8 @@ export const loadDmarcGuidanceTagConnectionsByTagId = ({
       hasPreviousPageDocument = aql`FIRST(retrievedDmarcGuidanceTags).tagName`
     } else if (orderBy.field === 'guidance') {
       tagField = aql`TRANSLATE(${language}, tag).guidance`
-      hasNextPageDocument = aql`TRANSLATE(${language}, LAST(retrievedDmarcGuidanceTags)).guidance`
-      hasPreviousPageDocument = aql`TRANSLATE(${language}, FIRST(retrievedDmarcGuidanceTags)).guidance`
+      hasNextPageDocument = aql`LAST(retrievedDmarcGuidanceTags).guidance`
+      hasPreviousPageDocument = aql`FIRST(retrievedDmarcGuidanceTags).guidance`
     }
 
     hasNextPageFilter = aql`
@@ -208,7 +208,17 @@ export const loadDmarcGuidanceTagConnectionsByTagId = ({
           SORT
           ${sortByField}
           ${limitTemplate}
-          RETURN MERGE(tag, { tagId: tag._key, id: tag._key, _type: "guidanceTag" })
+          RETURN MERGE(
+            {
+              _id: tag._id,
+              _key: tag._key,
+              _rev: tag._rev,
+              _type: "guidanceTag",
+              id: tag._key,
+              tagId: tag._key
+            },
+            TRANSLATE(${language}, tag)
+          )
       )
 
       LET hasNextPage = (LENGTH(
