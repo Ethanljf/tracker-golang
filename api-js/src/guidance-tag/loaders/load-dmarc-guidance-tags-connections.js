@@ -15,11 +15,9 @@ export const loadDmarcGuidanceTagConnectionsByTagId = ({
     if (typeof orderBy === 'undefined') {
       afterTemplate = aql`FILTER TO_NUMBER(REGEX_SPLIT(tag._key, "[a-z]+")[1]) > TO_NUMBER(REGEX_SPLIT(${afterId}, "[a-z]+")[1])`
     } else {
-      let afterTemplateDirection
+      let afterTemplateDirection = aql`<`
       if (orderBy.direction === 'ASC') {
         afterTemplateDirection = aql`>`
-      } else {
-        afterTemplateDirection = aql`<`
       }
 
       let tagField, documentField
@@ -49,11 +47,9 @@ export const loadDmarcGuidanceTagConnectionsByTagId = ({
     if (typeof orderBy === 'undefined') {
       beforeTemplate = aql`FILTER TO_NUMBER(REGEX_SPLIT(tag._key, "[a-z]+")[1]) < TO_NUMBER(REGEX_SPLIT(${beforeId}, "[a-z]+")[1])`
     } else {
-      let beforeTemplateDirection
+      let beforeTemplateDirection = aql`>`
       if (orderBy.direction === 'ASC') {
         beforeTemplateDirection = aql`<`
-      } else {
-        beforeTemplateDirection = aql`>`
       }
 
       let tagField, documentField
@@ -138,14 +134,11 @@ export const loadDmarcGuidanceTagConnectionsByTagId = ({
   let hasNextPageFilter = aql`FILTER TO_NUMBER(REGEX_SPLIT(tag._key, "[a-z]+")[1]) > TO_NUMBER(REGEX_SPLIT(LAST(retrievedDmarcGuidanceTags)._key, "[a-z]+")[1])`
   let hasPreviousPageFilter = aql`FILTER TO_NUMBER(REGEX_SPLIT(tag._key, "[a-z]+")[1]) < TO_NUMBER(REGEX_SPLIT(FIRST(retrievedDmarcGuidanceTags)._key, "[a-z]+")[1])`
   if (typeof orderBy !== 'undefined') {
-    let hasNextPageDirection
-    let hasPreviousPageDirection
+    let hasNextPageDirection = aql`<`
+    let hasPreviousPageDirection = aql`>`
     if (orderBy.direction === 'ASC') {
       hasNextPageDirection = aql`>`
       hasPreviousPageDirection = aql`<`
-    } else {
-      hasNextPageDirection = aql`<`
-      hasPreviousPageDirection = aql`>`
     }
 
     let tagField, hasNextPageDocument, hasPreviousPageDocument
@@ -189,11 +182,9 @@ export const loadDmarcGuidanceTagConnectionsByTagId = ({
     }
   }
 
-  let sortString
+  let sortString = aql`ASC`
   if (typeof last !== 'undefined') {
     sortString = aql`DESC`
-  } else {
-    sortString = aql`ASC`
   }
 
   let dmarcGuidanceTagInfoCursor
