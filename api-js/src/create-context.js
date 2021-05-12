@@ -25,7 +25,6 @@ import {
   sendTfaTextMsg,
   sendVerificationEmail,
 } from './notify'
-
 import {
   loadAffiliationByKey,
   loadAffiliationConnectionsByUserId,
@@ -274,6 +273,7 @@ export const createContext = ({ context, req: request, res: response }) => {
         query,
         userKey,
         i18n,
+        language: request.language,
       }),
       loadDkimGuidanceTagConnectionsByTagId: loadDkimGuidanceTagConnectionsByTagId(
         {
@@ -281,12 +281,14 @@ export const createContext = ({ context, req: request, res: response }) => {
           userKey,
           cleanseInput,
           i18n,
+          language: request.language,
         },
       ),
       loadDmarcGuidanceTagByTagId: loadDmarcGuidanceTagByTagId({
         query,
         userKey,
         i18n,
+        language: request.language,
       }),
       loadDmarcGuidanceTagConnectionsByTagId: loadDmarcGuidanceTagConnectionsByTagId(
         {
@@ -294,12 +296,14 @@ export const createContext = ({ context, req: request, res: response }) => {
           userKey,
           cleanseInput,
           i18n,
+          language: request.language,
         },
       ),
       loadHttpsGuidanceTagByTagId: loadHttpsGuidanceTagByTagId({
         query,
         userKey,
         i18n,
+        language: request.language,
       }),
       loadHttpsGuidanceTagConnectionsByTagId: loadHttpsGuidanceTagConnectionsByTagId(
         {
@@ -307,12 +311,14 @@ export const createContext = ({ context, req: request, res: response }) => {
           userKey,
           cleanseInput,
           i18n,
+          language: request.language,
         },
       ),
       loadSpfGuidanceTagByTagId: loadSpfGuidanceTagByTagId({
         query,
         userKey,
         i18n,
+        language: request.language,
       }),
       loadSpfGuidanceTagConnectionsByTagId: loadSpfGuidanceTagConnectionsByTagId(
         {
@@ -320,12 +326,14 @@ export const createContext = ({ context, req: request, res: response }) => {
           userKey,
           cleanseInput,
           i18n,
+          language: request.language,
         },
       ),
       loadSslGuidanceTagByTagId: loadSslGuidanceTagByTagId({
         query,
         userKey,
         i18n,
+        language: request.language,
       }),
       loadSslGuidanceTagConnectionsByTagId: loadSslGuidanceTagConnectionsByTagId(
         {
@@ -333,6 +341,7 @@ export const createContext = ({ context, req: request, res: response }) => {
           userKey,
           cleanseInput,
           i18n,
+          language: request.language,
         },
       ),
       loadOrgByKey: loadOrgByKey({
