@@ -178,20 +178,23 @@ describe('given the dkimFailureTable gql object', () => {
       beforeEach(async () => {
         aggGT = await collections.aggregateGuidanceTags.save({
           _key: 'agg1',
-          tagName: 'cool-tag-name',
-          guidance: 'cool guidance for issue',
-          refLinksGuide: [
-            {
-              description: 'Link Description',
-              ref_link: 'www.link.ca',
-            },
-          ],
-          refLinksTechnical: [
-            {
-              description: 'Tech link description',
-              tech_link: 'www.tech.link.ca',
-            },
-          ],
+          en: {
+            tagName: 'cool-tag-name',
+            guidance: 'cool guidance for issue',
+            refLinksGuide: [
+              {
+                description: 'Link Description',
+                ref_link: 'www.link.ca',
+              },
+            ],
+            refLinksTechnical: [
+              {
+                description: 'Tech link description',
+                tech_link: 'www.tech.link.ca',
+              },
+            ],
+          },
+          fr: {},
         })
       })
       afterEach(async () => {
@@ -212,6 +215,7 @@ describe('given the dkimFailureTable gql object', () => {
                 loadAggregateGuidanceTagById: loadAggregateGuidanceTagById({
                   query,
                   userKey: '1',
+                  language: 'en',
                 }),
               },
             },
