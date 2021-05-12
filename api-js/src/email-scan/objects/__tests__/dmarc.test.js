@@ -132,20 +132,23 @@ describe('given the dmarcType object', () => {
       })
       dmarcGT = await collections.dmarcGuidanceTags.save({
         _key: 'dmarc1',
-        tagName: 'DMARC-TAG',
-        guidance: 'Some Interesting Guidance',
-        refLinksGuide: [
-          {
-            description: 'refLinksGuide Description',
-            ref_link: 'www.refLinksGuide.ca',
-          },
-        ],
-        refLinksTechnical: [
-          {
-            description: 'refLinksTechnical Description',
-            ref_link: 'www.refLinksTechnical.ca',
-          },
-        ],
+        en: {
+          tagName: 'DMARC-TAG',
+          guidance: 'Some Interesting Guidance',
+          refLinksGuide: [
+            {
+              description: 'refLinksGuide Description',
+              ref_link: 'www.refLinksGuide.ca',
+            },
+          ],
+          refLinksTechnical: [
+            {
+              description: 'refLinksTechnical Description',
+              ref_link: 'www.refLinksTechnical.ca',
+            },
+          ],
+        },
+        fr: {},
       })
     })
 
@@ -250,6 +253,7 @@ describe('given the dmarcType object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
         const guidanceTags = ['dmarc1']
 
@@ -308,6 +312,7 @@ describe('given the dmarcType object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
         const negativeTags = ['dmarc1']
 
@@ -366,6 +371,7 @@ describe('given the dmarcType object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
         const neutralTags = ['dmarc1']
 
@@ -424,6 +430,7 @@ describe('given the dmarcType object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
         const positiveTags = ['dmarc1']
 

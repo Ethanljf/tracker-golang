@@ -176,20 +176,23 @@ describe('given the ssl gql object', () => {
       })
       sslGT = await collections.sslGuidanceTags.save({
         _key: 'ssl1',
-        tagName: 'SSL-TAG',
-        guidance: 'Some Interesting Guidance',
-        refLinksGuide: [
-          {
-            description: 'refLinksGuide Description',
-            ref_link: 'www.refLinksGuide.ca',
-          },
-        ],
-        refLinksTechnical: [
-          {
-            description: 'refLinksTechnical Description',
-            ref_link: 'www.refLinksTechnical.ca',
-          },
-        ],
+        en: {
+          tagName: 'SSL-TAG',
+          guidance: 'Some Interesting Guidance',
+          refLinksGuide: [
+            {
+              description: 'refLinksGuide Description',
+              ref_link: 'www.refLinksGuide.ca',
+            },
+          ],
+          refLinksTechnical: [
+            {
+              description: 'refLinksTechnical Description',
+              ref_link: 'www.refLinksTechnical.ca',
+            },
+          ],
+        },
+        fr: {},
       })
     })
 
@@ -379,6 +382,7 @@ describe('given the ssl gql object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
 
         const guidanceTags = ['ssl1']
@@ -438,6 +442,7 @@ describe('given the ssl gql object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
 
         const negativeTags = ['ssl1']
@@ -497,6 +502,7 @@ describe('given the ssl gql object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
 
         const neutralTags = ['ssl1']
@@ -556,6 +562,7 @@ describe('given the ssl gql object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
 
         const positiveTags = ['ssl1']

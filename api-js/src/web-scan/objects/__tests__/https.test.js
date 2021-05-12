@@ -145,20 +145,23 @@ describe('given the https gql object', () => {
       })
       httpsGT = await collections.httpsGuidanceTags.save({
         _key: 'https1',
-        tagName: 'HTTPS-TAG',
-        guidance: 'Some Interesting Guidance',
-        refLinksGuide: [
-          {
-            description: 'refLinksGuide Description',
-            ref_link: 'www.refLinksGuide.ca',
-          },
-        ],
-        refLinksTechnical: [
-          {
-            description: 'refLinksTechnical Description',
-            ref_link: 'www.refLinksTechnical.ca',
-          },
-        ],
+        en: {
+          tagName: 'HTTPS-TAG',
+          guidance: 'Some Interesting Guidance',
+          refLinksGuide: [
+            {
+              description: 'refLinksGuide Description',
+              ref_link: 'www.refLinksGuide.ca',
+            },
+          ],
+          refLinksTechnical: [
+            {
+              description: 'refLinksTechnical Description',
+              ref_link: 'www.refLinksTechnical.ca',
+            },
+          ],
+        },
+        fr: {},
       })
     })
 
@@ -276,6 +279,7 @@ describe('given the https gql object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
         const guidanceTags = ['https1']
 
@@ -334,6 +338,7 @@ describe('given the https gql object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
         const negativeTags = ['https1']
 
@@ -392,6 +397,7 @@ describe('given the https gql object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
         const neutralTags = ['https1']
 
@@ -450,6 +456,7 @@ describe('given the https gql object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
         const positiveTags = ['https1']
 

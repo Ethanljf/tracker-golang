@@ -117,20 +117,23 @@ describe('given the spfType object', () => {
       })
       spfGT = await collections.spfGuidanceTags.save({
         _key: 'spf1',
-        tagName: 'SPF-TAG',
-        guidance: 'Some Interesting Guidance',
-        refLinksGuide: [
-          {
-            description: 'refLinksGuide Description',
-            ref_link: 'www.refLinksGuide.ca',
-          },
-        ],
-        refLinksTechnical: [
-          {
-            description: 'refLinksTechnical Description',
-            ref_link: 'www.refLinksTechnical.ca',
-          },
-        ],
+        en: {
+          tagName: 'SPF-TAG',
+          guidance: 'Some Interesting Guidance',
+          refLinksGuide: [
+            {
+              description: 'refLinksGuide Description',
+              ref_link: 'www.refLinksGuide.ca',
+            },
+          ],
+          refLinksTechnical: [
+            {
+              description: 'refLinksTechnical Description',
+              ref_link: 'www.refLinksTechnical.ca',
+            },
+          ],
+        },
+        fr: {},
       })
     })
 
@@ -228,6 +231,7 @@ describe('given the spfType object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
 
         const guidanceTags = ['spf1']
@@ -287,6 +291,7 @@ describe('given the spfType object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
 
         const negativeTags = ['spf1']
@@ -346,6 +351,7 @@ describe('given the spfType object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
 
         const neutralTags = ['spf1']
@@ -405,6 +411,7 @@ describe('given the spfType object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
 
         const positiveTags = ['spf1']

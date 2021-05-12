@@ -262,7 +262,6 @@ describe('given the loadAggregateGuidanceTagById function', () => {
                 TRANSLATE("fr", tag)
               )
           `
-          console.log(expectedCursor)
           const expectedAggregateTag = await expectedCursor.next()
 
           const loader = loadAggregateGuidanceTagById({

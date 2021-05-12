@@ -116,20 +116,23 @@ describe('given the dkim result object', () => {
       })
       dkimGT = await collections.dkimGuidanceTags.save({
         _key: 'dkim1',
-        tagName: 'DKIM-TAG',
-        guidance: 'Some Interesting Guidance',
-        refLinksGuide: [
-          {
-            description: 'refLinksGuide Description',
-            ref_link: 'www.refLinksGuide.ca',
-          },
-        ],
-        refLinksTechnical: [
-          {
-            description: 'refLinksTechnical Description',
-            ref_link: 'www.refLinksTechnical.ca',
-          },
-        ],
+        en: {
+          tagName: 'DKIM-TAG',
+          guidance: 'Some Interesting Guidance',
+          refLinksGuide: [
+            {
+              description: 'refLinksGuide Description',
+              ref_link: 'www.refLinksGuide.ca',
+            },
+          ],
+          refLinksTechnical: [
+            {
+              description: 'refLinksTechnical Description',
+              ref_link: 'www.refLinksTechnical.ca',
+            },
+          ],
+        },
+        fr: {},
       })
     })
 
@@ -215,6 +218,7 @@ describe('given the dkim result object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
         const guidanceTags = ['dkim1']
 
@@ -273,6 +277,7 @@ describe('given the dkim result object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
         const negativeTags = ['dkim1']
 
@@ -331,6 +336,7 @@ describe('given the dkim result object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
         const neutralTags = ['dkim1']
 
@@ -389,6 +395,7 @@ describe('given the dkim result object', () => {
           userKey: '1',
           cleanseInput,
           i18n: {},
+          language: 'en',
         })
         const positiveTags = ['dkim1']
 
