@@ -12,7 +12,18 @@
                 ""
             ]
         },
-        "fr": {}
+        "fr": {
+            "tagName": "DKIM-GC",
+            "guidance": "Les domaines du gouvernement du Canada sont soumis aux directives du SCT",
+            "refLinksGuide": [
+                {
+                    "description": "AMPTI"
+                }
+            ],
+            "refLinksTechnical": [
+                ""
+            ]
+        }
     },
     "dkim2": {
         "en": {
@@ -31,12 +42,27 @@
                 }
             ]
         },
-        "fr": {}
+        "fr": {
+            "tagName": "DKIM-missing",
+            "guidance": "Suivre le guide de mise en œuvre",
+            "refLinksGuide": [
+                {
+                    "description": "A.3.4 Déployer le protocole DKIM pour tous les domaines et expéditeurs",
+                    "ref_link": "https://cyber.gc.ca/fr/orientation/directives-de-mise-en-oeuvre-protection-du-domaine-de-courrier#anna34"
+                }
+            ],
+            "refLinksTechnical": [
+                {
+                    "description": "RFC 6376 (DKIM) (EN)",
+                    "tech_link": "https://tools.ietf.org/html/rfc6376"
+                }
+            ]
+        }
     },
     "dkim3": {
         "en": {
             "tagName": "DKIM-missing-mx-O365",
-            "guidance": "DKIM record missing but MX uses O365.  Follow cloud-specific guidance.",
+            "guidance": "DKIM record missing but MX uses O365. Follow cloud-specific guidance.",
             "refLinksGuide": [
                 {
                     "description": "3.2.2 Third Parties and DKIM",
@@ -50,7 +76,22 @@
                 }
             ]
         },
-        "fr": {}
+        "fr": {
+            "tagName": "DKIM-missing-mx-O365",
+            "guidance": "L'enregistrement DKIM est manquant mais MX utilise O365. Suivez les conseils spécifiques au cloud.",
+            "refLinksGuide": [
+                {
+                    "description": "3.2.2 Expéditeurs tiers et DKIM",
+                    "ref_link": "https://cyber.gc.ca/fr/orientation/directives-de-mise-en-oeuvre-protection-du-domaine-de-courrier#a322"
+                }
+            ],
+            "refLinksTechnical": [
+                {
+                    "description": "Microsoft DKIM Guidance (EN)",
+                    "tech_link": "https://docs.microsoft.com/en-us/microsoft-365/security/office-365-security/use-dkim-to-validate-outbound-email?view=o365-worldwide"
+                }
+            ]
+        }
     },
     "dkim4": {
         "en": {
@@ -69,7 +110,22 @@
                 }
             ]
         },
-        "fr": {}
+        "fr": {
+            "tagName": "DKIM-missing-O365-misconfigured",
+            "guidance": "Les CNAME DKIM n'existent pas, mais le MX pointe vers *.onmicrosoft.com et l'enregistrement SPF inclut O365.",
+            "refLinksGuide": [
+                {
+                    "description": "3.2.2 Expéditeurs tiers et DKIM",
+                    "ref_link": "https://cyber.gc.ca/fr/orientation/directives-de-mise-en-oeuvre-protection-du-domaine-de-courrier#a322"
+                }
+            ],
+            "refLinksTechnical": [
+                {
+                    "description": "Microsoft DKIM Guidance (EN)",
+                    "tech_link": "https://docs.microsoft.com/en-us/microsoft-365/security/office-365-security/use-dkim-to-validate-outbound-email?view=o365-worldwide"
+                }
+            ]
+        }
     },
     "dkim5": {
         "en": {
@@ -88,7 +144,22 @@
                 }
             ]
         },
-        "fr": {}
+        "fr": {
+            "tagName": "P-sub1024",
+            "guidance": "Clé publique RSA et longueur de clé <1024",
+            "refLinksGuide": [
+                {
+                    "description": "B.2.2 Considérations cryptographiques",
+                    "ref_link": "https://cyber.gc.ca/fr/orientation/directives-de-mise-en-oeuvre-protection-du-domaine-de-courrier#annb22"
+                }
+            ],
+            "refLinksTechnical": [
+                {
+                    "description": "RFC 6376 (DKIM), 3.3 Signing and Verification Algorithms (EN)",
+                    "tech_link": "https://tools.ietf.org/html/rfc6376#section-3.3"
+                }
+            ]
+        }
     },
     "dkim6": {
         "en": {
@@ -107,7 +178,22 @@
                 }
             ]
         },
-        "fr": {}
+        "fr": {
+            "tagName": "P-1024",
+            "guidance": "Clé publique RSA et longueur de clé 1024",
+            "refLinksGuide": [
+                {
+                    "description": "B.2.2 Considérations cryptographiques",
+                    "ref_link": "https://cyber.gc.ca/fr/orientation/directives-de-mise-en-oeuvre-protection-du-domaine-de-courrier#annb22"
+                }
+            ],
+            "refLinksTechnical": [
+                {
+                    "description": "RFC 6376 (DKIM), 3.3 Signing and Verification Algorithms (EN)",
+                    "tech_link": "https://tools.ietf.org/html/rfc6376#section-3.3"
+                }
+            ]
+        }
     },
     "dkim7": {
         "en": {
@@ -126,7 +212,22 @@
                 }
             ]
         },
-        "fr": {}
+        "fr": {
+            "tagName": "P-2048",
+            "guidance": "Clé publique RSA et longueur de clé 2048",
+            "refLinksGuide": [
+                {
+                    "description": "B.2.2 Considérations cryptographiques",
+                    "ref_link": "https://cyber.gc.ca/fr/orientation/directives-de-mise-en-oeuvre-protection-du-domaine-de-courrier#annb22"
+                }
+            ],
+            "refLinksTechnical": [
+                {
+                    "description": "RFC 6376 (DKIM), 3.3 Signing and Verification Algorithms (EN)",
+                    "tech_link": "https://tools.ietf.org/html/rfc6376#section-3.3"
+                }
+            ]
+        }
     },
     "dkim8": {
         "en": {
@@ -145,7 +246,22 @@
                 }
             ]
         },
-        "fr": {}
+        "fr": {
+            "tagName": "P-4096",
+            "guidance": "Clé publique RSA et longueur de clé de 4096 ou plus",
+            "refLinksGuide": [
+                {
+                    "description": "B.2.2 Considérations cryptographiques",
+                    "ref_link": "https://cyber.gc.ca/fr/orientation/directives-de-mise-en-oeuvre-protection-du-domaine-de-courrier#annb22"
+                }
+            ],
+            "refLinksTechnical": [
+                {
+                    "description": "RFC 6376 (DKIM), 3.3 Signing and Verification Algorithms (EN)",
+                    "tech_link": "https://tools.ietf.org/html/rfc6376#section-3.3"
+                }
+            ]
+        }
     },
     "dkim9": {
         "en": {
@@ -164,7 +280,22 @@
                 }
             ]
         },
-        "fr": {}
+        "fr": {
+            "tagName": "P-invalid",
+            "guidance": "Clé publique non valide",
+            "refLinksGuide": [
+                {
+                    "description": "B.2.1 Enregistrements DKIM",
+                    "ref_link": "https://cyber.gc.ca/fr/orientation/directives-de-mise-en-oeuvre-protection-du-domaine-de-courrier#annb21"
+                }
+            ],
+            "refLinksTechnical": [
+                {
+                    "description": "RFC 6376 (DKIM), 3.3 Signing and Verification Algorithms (EN)",
+                    "tech_link": "https://tools.ietf.org/html/rfc6376#section-3.3"
+                }
+            ]
+        }
     },
     "dkim10": {
         "en": {
@@ -180,7 +311,19 @@
                 ""
             ]
         },
-        "fr": {}
+        "fr": {
+            "tagName": "P-update-recommended",
+            "guidance": "Clé publique utilisée depuis plus d'un an",
+            "refLinksGuide": [
+                {
+                    "description": "A.5.3 Assurer la rotation des clés DKIM",
+                    "ref_link": "https://cyber.gc.ca/fr/orientation/directives-de-mise-en-oeuvre-protection-du-domaine-de-courrier#anna53"
+                }
+            ],
+            "refLinksTechnical": [
+                ""
+            ]
+        }
     },
     "dkim11": {
         "en": {
@@ -199,7 +342,22 @@
                 }
             ]
         },
-        "fr": {}
+        "fr": {
+            "tagName": "DKIM-invalid-crypto",
+            "guidance": "La clé DKIM n'utilise pas le RSA",
+            "refLinksGuide": [
+                {
+                    "description": "B.2.2 Considérations cryptographiques",
+                    "ref_link": "https://cyber.gc.ca/fr/orientation/directives-de-mise-en-oeuvre-protection-du-domaine-de-courrier#annb22"
+                }
+            ],
+            "refLinksTechnical": [
+                {
+                    "description": "RFC 6376 (DKIM), 3.3 Signing and Verification Algorithms (EN)",
+                    "tech_link": "https://tools.ietf.org/html/rfc6376#section-3.3"
+                }
+            ]
+        }
     },
     "dkim12": {
         "en": {
@@ -218,7 +376,22 @@
                 }
             ]
         },
-        "fr": {}
+        "fr": {
+            "tagName": "DKIM-value-invalid",
+            "guidance": "Enregistrement DKIM TXT invalide",
+            "refLinksGuide": [
+                {
+                    "description": "B.2.1 Enregistrements DKIM",
+                    "ref_link": "https://cyber.gc.ca/fr/orientation/directives-de-mise-en-oeuvre-protection-du-domaine-de-courrier#annb21"
+                }
+            ],
+            "refLinksTechnical": [
+                {
+                    "description": "RFC 6376 (DKIM), 3.6 Key Management and Representation (EN)",
+                    "tech_link": "https://tools.ietf.org/html/rfc6376#section-3.6"
+                }
+            ]
+        }
     },
     "dkim13": {
         "en": {
@@ -237,7 +410,22 @@
                 }
             ]
         },
-        "fr": {}
+        "fr": {
+            "tagName": "T-enabled",
+            "guidance": "L'indicateur DKIM \"t=y\" désactive la vérification DKIM",
+            "refLinksGuide": [
+                {
+                    "description": "B.2.1 Enregistrements DKIM",
+                    "ref_link": "https://cyber.gc.ca/fr/orientation/directives-de-mise-en-oeuvre-protection-du-domaine-de-courrier#annb21"
+                }
+            ],
+            "refLinksTechnical": [
+                {
+                    "description": "RFC 6376 (DKIM), 3.6 Key Management and Representation (EN)",
+                    "tech_link": "https://tools.ietf.org/html/rfc6376#section-3.6"
+                }
+            ]
+        }
     },
     "dkim14": {
         "en": {
@@ -246,13 +434,25 @@
             "refLinksGuide": [
                 {
                     "description": "A.3.4 Deploy DKIM for ALl Domains and Senders",
-                    "ref_link": "https://cyber.gc.ca/en/guidance/implementation-guidance-email-domain-protection#anna33"
+                    "ref_link": "https://cyber.gc.ca/en/guidance/implementation-guidance-email-domain-protection#anna34"
                 }
             ],
             "refLinksTechnical": [
                 ""
             ]
         },
-        "fr": {}
+        "fr": {
+            "tagName": "P-duplicate",
+            "guidance": "Clé publique utilisée pour plusieurs domaines",
+            "refLinksGuide": [
+                {
+                    "description": "A.3.4 Déployer le protocole DKIM pour tous les domaines et expéditeurs",
+                    "ref_link": "https://cyber.gc.ca/fr/orientation/directives-de-mise-en-oeuvre-protection-du-domaine-de-courrier#anna34"
+                }
+            ],
+            "refLinksTechnical": [
+                ""
+            ]
+        }
     }
 }
