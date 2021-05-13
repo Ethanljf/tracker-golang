@@ -83,43 +83,31 @@ export const loadAffiliationConnectionsByOrgId = ({
         t`Passing both \`first\` and \`last\` to paginate the \`affiliation\` is not supported.`,
       ),
     )
-  } else if (typeof first === 'number' || typeof last === 'number') {
-    /* istanbul ignore else */
-    if (first < 0 || last < 0) {
-      const argSet = typeof first !== 'undefined' ? 'first' : 'last'
-      console.warn(
-        `User: ${userKey} attempted to have \`${argSet}\` set below zero for: loadAffiliationConnectionsByOrgId.`,
-      )
-      throw new Error(
-        i18n._(
-          t`\`${argSet}\` on the \`affiliations\` cannot be less than zero.`,
-        ),
-      )
-    } else if (first > 100 || last > 100) {
-      const argSet = typeof first !== 'undefined' ? 'first' : 'last'
-      const amount = typeof first !== 'undefined' ? first : last
-      console.warn(
-        `User: ${userKey} attempted to have \`${argSet}\` set to ${amount} for: loadAffiliationConnectionsByOrgId.`,
-      )
-      throw new Error(
-        i18n._(
-          t`Requesting \`${amount}\` records on the \`affiliations\` exceeds the \`${argSet}\` limit of 100 records.`,
-        ),
-      )
-    } else if (typeof first !== 'undefined' && typeof last === 'undefined') {
-      limitTemplate = aql`affiliation._key ASC LIMIT TO_NUMBER(${first})`
-    } else if (typeof first === 'undefined' && typeof last !== 'undefined') {
-      limitTemplate = aql`affiliation._key DESC LIMIT TO_NUMBER(${last})`
-    }
-  } else {
+  } else if (first < 0 || last < 0) {
     const argSet = typeof first !== 'undefined' ? 'first' : 'last'
-    const typeSet = typeof first !== 'undefined' ? typeof first : typeof last
     console.warn(
-      `User: ${userKey} attempted to have \`${argSet}\` set as a ${typeSet} for: loadAffiliationConnectionsByOrgId.`,
+      `User: ${userKey} attempted to have \`${argSet}\` set below zero for: loadAffiliationConnectionsByOrgId.`,
     )
     throw new Error(
-      i18n._(t`\`${argSet}\` must be of type \`number\` not \`${typeSet}\`.`),
+      i18n._(
+        t`\`${argSet}\` on the \`affiliations\` cannot be less than zero.`,
+      ),
     )
+  } else if (first > 100 || last > 100) {
+    const argSet = typeof first !== 'undefined' ? 'first' : 'last'
+    const amount = typeof first !== 'undefined' ? first : last
+    console.warn(
+      `User: ${userKey} attempted to have \`${argSet}\` set to ${amount} for: loadAffiliationConnectionsByOrgId.`,
+    )
+    throw new Error(
+      i18n._(
+        t`Requesting \`${amount}\` records on the \`affiliations\` exceeds the \`${argSet}\` limit of 100 records.`,
+      ),
+    )
+  } else if (typeof first !== 'undefined' && typeof last === 'undefined') {
+    limitTemplate = aql`affiliation._key ASC LIMIT TO_NUMBER(${first})`
+  } else if (typeof first === 'undefined' && typeof last !== 'undefined') {
+    limitTemplate = aql`affiliation._key DESC LIMIT TO_NUMBER(${last})`
   }
 
   let hasNextPageFilter = aql`FILTER TO_NUMBER(affiliation._key) > TO_NUMBER(LAST(retrievedAffiliations)._key)`
