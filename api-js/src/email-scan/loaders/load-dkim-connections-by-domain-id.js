@@ -120,51 +120,39 @@ export const loadDkimConnectionsByDomainId = ({
         t`Passing both \`first\` and \`last\` to paginate the \`DKIM\` connection is not supported.`,
       ),
     )
-  } else if (typeof first === 'number' || typeof last === 'number') {
-    /* istanbul ignore else */
-    if (first < 0 || last < 0) {
-      const argSet = typeof first !== 'undefined' ? 'first' : 'last'
-      console.warn(
-        `User: ${userKey} attempted to have \`${argSet}\` set below zero for: loadDkimConnectionsByDomainId.`,
-      )
-      throw new Error(
-        i18n._(
-          t`\`${argSet}\` on the \`DKIM\` connection cannot be less than zero.`,
-        ),
-      )
-    } else if (first > 100 || last > 100) {
-      const argSet = typeof first !== 'undefined' ? 'first' : 'last'
-      const amount = typeof first !== 'undefined' ? first : last
-      console.warn(
-        `User: ${userKey} attempted to have \`${argSet}\` set to ${amount} for: loadDkimConnectionsByDomainId.`,
-      )
-      throw new Error(
-        i18n._(
-          t`Requesting ${amount} records on the \`DKIM\` connection exceeds the \`${argSet}\` limit of 100 records.`,
-        ),
-      )
-    } else if (typeof first !== 'undefined' && typeof last === 'undefined') {
-      limitTemplate = aql`dkimScan._key ASC LIMIT TO_NUMBER(${first})`
-    } else if (typeof first === 'undefined' && typeof last !== 'undefined') {
-      limitTemplate = aql`dkimScan._key DESC LIMIT TO_NUMBER(${last})`
-    } else {
-      console.warn(
-        `User: ${userKey} tried to have \`first\` and \`last\` arguments set for: loadDkimConnectionsByDomainId.`,
-      )
-      throw new Error(
-        i18n._(
-          t`Passing both \`first\` and \`last\` to paginate the \`DKIM\` connection is not supported.`,
-        ),
-      )
-    }
-  } else {
+  } else if (first < 0 || last < 0) {
     const argSet = typeof first !== 'undefined' ? 'first' : 'last'
-    const typeSet = typeof first !== 'undefined' ? typeof first : typeof last
     console.warn(
-      `User: ${userKey} attempted to have \`${argSet}\` set as a ${typeSet} for: loadDkimConnectionsByDomainId.`,
+      `User: ${userKey} attempted to have \`${argSet}\` set below zero for: loadDkimConnectionsByDomainId.`,
     )
     throw new Error(
-      i18n._(t`\`${argSet}\` must be of type \`number\` not \`${typeSet}\`.`),
+      i18n._(
+        t`\`${argSet}\` on the \`DKIM\` connection cannot be less than zero.`,
+      ),
+    )
+  } else if (first > 100 || last > 100) {
+    const argSet = typeof first !== 'undefined' ? 'first' : 'last'
+    const amount = typeof first !== 'undefined' ? first : last
+    console.warn(
+      `User: ${userKey} attempted to have \`${argSet}\` set to ${amount} for: loadDkimConnectionsByDomainId.`,
+    )
+    throw new Error(
+      i18n._(
+        t`Requesting ${amount} records on the \`DKIM\` connection exceeds the \`${argSet}\` limit of 100 records.`,
+      ),
+    )
+  } else if (typeof first !== 'undefined' && typeof last === 'undefined') {
+    limitTemplate = aql`dkimScan._key ASC LIMIT TO_NUMBER(${first})`
+  } else if (typeof first === 'undefined' && typeof last !== 'undefined') {
+    limitTemplate = aql`dkimScan._key DESC LIMIT TO_NUMBER(${last})`
+  } else {
+    console.warn(
+      `User: ${userKey} tried to have \`first\` and \`last\` arguments set for: loadDkimConnectionsByDomainId.`,
+    )
+    throw new Error(
+      i18n._(
+        t`Passing both \`first\` and \`last\` to paginate the \`DKIM\` connection is not supported.`,
+      ),
     )
   }
 

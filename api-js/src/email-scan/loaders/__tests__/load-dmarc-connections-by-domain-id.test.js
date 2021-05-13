@@ -1,4 +1,3 @@
-import { stringify } from 'jest-matcher-utils'
 import { ensure, dbNameFromFile } from 'arango-tools'
 import { toGlobalId } from 'graphql-relay'
 import { setupI18n } from '@lingui/core'
@@ -1227,78 +1226,6 @@ describe('when given the load dmarc connection function', () => {
           })
         })
       })
-      describe('limits are not set to numbers', () => {
-        describe('first limit is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when first set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadDmarcConnectionsByDomainId({
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                first: invalidInput,
-              }
-
-              try {
-                await connectionLoader({
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(
-                  new Error(
-                    `\`first\` must be of type \`number\` not \`${typeof invalidInput}\`.`,
-                  ),
-                )
-              }
-              expect(consoleWarnOutput).toEqual([
-                `User: ${
-                  user._key
-                } attempted to have \`first\` set as a ${typeof invalidInput} for: loadDmarcConnectionsByDomainId.`,
-              ])
-            })
-          })
-        })
-        describe('last limit is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when last set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadDmarcConnectionsByDomainId({
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                last: invalidInput,
-              }
-
-              try {
-                await connectionLoader({
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(
-                  new Error(
-                    `\`last\` must be of type \`number\` not \`${typeof invalidInput}\`.`,
-                  ),
-                )
-              }
-              expect(consoleWarnOutput).toEqual([
-                `User: ${
-                  user._key
-                } attempted to have \`last\` set as a ${typeof invalidInput} for: loadDmarcConnectionsByDomainId.`,
-              ])
-            })
-          })
-        })
-      })
     })
     describe('database error occurs', () => {
       it('throws an error', async () => {
@@ -1542,70 +1469,6 @@ describe('when given the load dmarc connection function', () => {
             expect(consoleWarnOutput).toEqual([
               `User: ${user._key} attempted to have \`last\` set to 200 for: loadDmarcConnectionsByDomainId.`,
             ])
-          })
-        })
-      })
-      describe('limits are not set to numbers', () => {
-        describe('first limit is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when first set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadDmarcConnectionsByDomainId({
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                first: invalidInput,
-              }
-
-              try {
-                await connectionLoader({
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(new Error(`todo`))
-              }
-              expect(consoleWarnOutput).toEqual([
-                `User: ${
-                  user._key
-                } attempted to have \`first\` set as a ${typeof invalidInput} for: loadDmarcConnectionsByDomainId.`,
-              ])
-            })
-          })
-        })
-        describe('last limit is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when last set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadDmarcConnectionsByDomainId({
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                last: invalidInput,
-              }
-
-              try {
-                await connectionLoader({
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(new Error(`todo`))
-              }
-              expect(consoleWarnOutput).toEqual([
-                `User: ${
-                  user._key
-                } attempted to have \`last\` set as a ${typeof invalidInput} for: loadDmarcConnectionsByDomainId.`,
-              ])
-            })
           })
         })
       })
