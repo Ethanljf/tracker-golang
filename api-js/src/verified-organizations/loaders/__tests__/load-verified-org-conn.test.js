@@ -1,4 +1,3 @@
-import { stringify } from 'jest-matcher-utils'
 import { ensure, dbNameFromFile } from 'arango-tools'
 import { toGlobalId } from 'graphql-relay'
 import { setupI18n } from '@lingui/core'
@@ -2000,74 +1999,6 @@ describe('given the load organizations connection function', () => {
           })
         })
       })
-      describe('limits are not set to numbers', () => {
-        describe('first limit is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when first set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadVerifiedOrgConnections({
-                query,
-                language: 'en',
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                first: invalidInput,
-              }
-
-              try {
-                await connectionLoader({
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(
-                  new Error(
-                    `\`first\` must be of type \`number\` not \`${typeof invalidInput}\`.`,
-                  ),
-                )
-              }
-              expect(consoleOutput).toEqual([
-                `User attempted to have \`first\` set as a ${typeof invalidInput} for: loadVerifiedOrgConnections.`,
-              ])
-            })
-          })
-        })
-        describe('last limit is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when last set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadVerifiedOrgConnections({
-                query,
-                language: 'en',
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                last: invalidInput,
-              }
-
-              try {
-                await connectionLoader({
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(
-                  new Error(
-                    `\`last\` must be of type \`number\` not \`${typeof invalidInput}\`.`,
-                  ),
-                )
-              }
-              expect(consoleOutput).toEqual([
-                `User attempted to have \`last\` set as a ${typeof invalidInput} for: loadVerifiedOrgConnections.`,
-              ])
-            })
-          })
-        })
-      })
     })
     describe('given a database error', () => {
       describe('when gathering organizations', () => {
@@ -3964,66 +3895,6 @@ describe('given the load organizations connection function', () => {
             expect(consoleOutput).toEqual([
               'User attempted to have `last` to 101 for: loadVerifiedOrgConnections.',
             ])
-          })
-        })
-      })
-      describe('limits are not set to numbers', () => {
-        describe('first limit is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when first set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadVerifiedOrgConnections({
-                query,
-                language: 'fr',
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                first: invalidInput,
-              }
-
-              try {
-                await connectionLoader({
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(new Error(`todo`))
-              }
-              expect(consoleOutput).toEqual([
-                `User attempted to have \`first\` set as a ${typeof invalidInput} for: loadVerifiedOrgConnections.`,
-              ])
-            })
-          })
-        })
-        describe('last limit is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when last set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadVerifiedOrgConnections({
-                query,
-                language: 'fr',
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                last: invalidInput,
-              }
-
-              try {
-                await connectionLoader({
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(new Error(`todo`))
-              }
-              expect(consoleOutput).toEqual([
-                `User attempted to have \`last\` set as a ${typeof invalidInput} for: loadVerifiedOrgConnections.`,
-              ])
-            })
           })
         })
       })
