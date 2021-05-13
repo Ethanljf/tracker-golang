@@ -140,43 +140,31 @@ export const loadDomainConnectionsByOrgId = ({
         t`Passing both \`first\` and \`last\` to paginate the \`domain\` connection is not supported.`,
       ),
     )
-  } else if (typeof first === 'number' || typeof last === 'number') {
-    /* istanbul ignore else */
-    if (first < 0 || last < 0) {
-      const argSet = typeof first !== 'undefined' ? 'first' : 'last'
-      console.warn(
-        `User: ${userKey} attempted to have \`${argSet}\` set below zero for: loadDomainConnectionsByOrgId.`,
-      )
-      throw new Error(
-        i18n._(
-          t`\`${argSet}\` on the \`domain\` connection cannot be less than zero.`,
-        ),
-      )
-    } else if (first > 100 || last > 100) {
-      const argSet = typeof first !== 'undefined' ? 'first' : 'last'
-      const amount = typeof first !== 'undefined' ? first : last
-      console.warn(
-        `User: ${userKey} attempted to have \`${argSet}\` to ${amount} for: loadDomainConnectionsByOrgId.`,
-      )
-      throw new Error(
-        i18n._(
-          t`Requesting \`${amount}\` records on the \`domain\` connection exceeds the \`${argSet}\` limit of 100 records.`,
-        ),
-      )
-    } else if (typeof first !== 'undefined' && typeof last === 'undefined') {
-      limitTemplate = aql`domain._key ASC LIMIT TO_NUMBER(${first})`
-    } else if (typeof first === 'undefined' && typeof last !== 'undefined') {
-      limitTemplate = aql`domain._key DESC LIMIT TO_NUMBER(${last})`
-    }
-  } else {
+  } else if (first < 0 || last < 0) {
     const argSet = typeof first !== 'undefined' ? 'first' : 'last'
-    const typeSet = typeof first !== 'undefined' ? typeof first : typeof last
     console.warn(
-      `User: ${userKey} attempted to have \`${argSet}\` set as a ${typeSet} for: loadDomainConnectionsByOrgId.`,
+      `User: ${userKey} attempted to have \`${argSet}\` set below zero for: loadDomainConnectionsByOrgId.`,
     )
     throw new Error(
-      i18n._(t`\`${argSet}\` must be of type \`number\` not \`${typeSet}\`.`),
+      i18n._(
+        t`\`${argSet}\` on the \`domain\` connection cannot be less than zero.`,
+      ),
     )
+  } else if (first > 100 || last > 100) {
+    const argSet = typeof first !== 'undefined' ? 'first' : 'last'
+    const amount = typeof first !== 'undefined' ? first : last
+    console.warn(
+      `User: ${userKey} attempted to have \`${argSet}\` to ${amount} for: loadDomainConnectionsByOrgId.`,
+    )
+    throw new Error(
+      i18n._(
+        t`Requesting \`${amount}\` records on the \`domain\` connection exceeds the \`${argSet}\` limit of 100 records.`,
+      ),
+    )
+  } else if (typeof first !== 'undefined' && typeof last === 'undefined') {
+    limitTemplate = aql`domain._key ASC LIMIT TO_NUMBER(${first})`
+  } else if (typeof first === 'undefined' && typeof last !== 'undefined') {
+    limitTemplate = aql`domain._key DESC LIMIT TO_NUMBER(${last})`
   }
 
   let hasNextPageFilter = aql`FILTER TO_NUMBER(domain._key) > TO_NUMBER(LAST(retrievedDomains)._key)`
