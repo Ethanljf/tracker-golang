@@ -1,6 +1,5 @@
 import { setupI18n } from '@lingui/core'
 import { ensure, dbNameFromFile } from 'arango-tools'
-import { stringify } from 'jest-matcher-utils'
 import { toGlobalId } from 'graphql-relay'
 
 import englishMessages from '../../../locale/en/messages'
@@ -1208,74 +1207,6 @@ describe('given the loadVerifiedDomainConnectionsByOrgId function', () => {
           })
         })
       })
-      describe('limits are not set to numbers', () => {
-        describe('first limit is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when first set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadVerifiedDomainConnectionsByOrgId({
-                query,
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                first: invalidInput,
-              }
-
-              try {
-                await connectionLoader({
-                  domainId: domain._id,
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(
-                  new Error(
-                    `\`first\` must be of type \`number\` not \`${typeof invalidInput}\`.`,
-                  ),
-                )
-              }
-              expect(consoleOutput).toEqual([
-                `User attempted to have \`first\` set as a ${typeof invalidInput} for: loadVerifiedDomainConnectionsByOrgId.`,
-              ])
-            })
-          })
-        })
-        describe('last limit is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when last set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadVerifiedDomainConnectionsByOrgId({
-                query,
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                last: invalidInput,
-              }
-
-              try {
-                await connectionLoader({
-                  domainId: domain._id,
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(
-                  new Error(
-                    `\`last\` must be of type \`number\` not \`${typeof invalidInput}\`.`,
-                  ),
-                )
-              }
-              expect(consoleOutput).toEqual([
-                `User attempted to have \`last\` set as a ${typeof invalidInput} for: loadVerifiedDomainConnectionsByOrgId.`,
-              ])
-            })
-          })
-        })
-      })
     })
     describe('given a database error', () => {
       describe('when gathering domain keys that are claimed by orgs that the user has affiliations to', () => {
@@ -1513,66 +1444,6 @@ describe('given the loadVerifiedDomainConnectionsByOrgId function', () => {
             expect(consoleOutput).toEqual([
               `User attempted to have \`last\` to 1000 for: loadVerifiedDomainConnectionsByOrgId.`,
             ])
-          })
-        })
-      })
-      describe('limits are not set to numbers', () => {
-        describe('first limit is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when first set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadVerifiedDomainConnectionsByOrgId({
-                query,
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                first: invalidInput,
-              }
-
-              try {
-                await connectionLoader({
-                  domainId: domain._id,
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(new Error(`todo`))
-              }
-              expect(consoleOutput).toEqual([
-                `User attempted to have \`first\` set as a ${typeof invalidInput} for: loadVerifiedDomainConnectionsByOrgId.`,
-              ])
-            })
-          })
-        })
-        describe('last limit is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when last set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadVerifiedDomainConnectionsByOrgId({
-                query,
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                last: invalidInput,
-              }
-
-              try {
-                await connectionLoader({
-                  domainId: domain._id,
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(new Error(`todo`))
-              }
-              expect(consoleOutput).toEqual([
-                `User attempted to have \`last\` set as a ${typeof invalidInput} for: loadVerifiedDomainConnectionsByOrgId.`,
-              ])
-            })
           })
         })
       })
