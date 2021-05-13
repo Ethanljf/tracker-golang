@@ -1,4 +1,3 @@
-import { stringify } from 'jest-matcher-utils'
 import { ensure, dbNameFromFile } from 'arango-tools'
 import { toGlobalId } from 'graphql-relay'
 import { setupI18n } from '@lingui/core'
@@ -491,80 +490,6 @@ describe('given the loadSpfFailureConnectionsBySumId loader', () => {
           })
         })
       })
-      describe('first or last argument is not set to a number', () => {
-        describe('first argument is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when first set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadSpfFailureConnectionsBySumId({
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                first: invalidInput,
-                summaryId: '',
-              }
-
-              try {
-                await connectionLoader({
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(
-                  new Error(
-                    `\`first\` must be of type \`number\` not \`${typeof invalidInput}\`.`,
-                  ),
-                )
-              }
-              expect(consoleOutput).toEqual([
-                `User: ${
-                  user._key
-                } attempted to have \`first\` set as a ${typeof invalidInput} for: loadSpfFailureConnectionsBySumId.`,
-              ])
-            })
-          })
-        })
-        describe('last argument is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when first set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadSpfFailureConnectionsBySumId({
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                last: invalidInput,
-                summaryId: '',
-              }
-
-              try {
-                await connectionLoader({
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(
-                  new Error(
-                    `\`last\` must be of type \`number\` not \`${typeof invalidInput}\`.`,
-                  ),
-                )
-              }
-              expect(consoleOutput).toEqual([
-                `User: ${
-                  user._key
-                } attempted to have \`last\` set as a ${typeof invalidInput} for: loadSpfFailureConnectionsBySumId.`,
-              ])
-            })
-          })
-        })
-      })
       describe('summaryId is not set', () => {
         it('returns an error message', async () => {
           const connectionLoader = loadSpfFailureConnectionsBySumId({
@@ -834,72 +759,6 @@ describe('given the loadSpfFailureConnectionsBySumId loader', () => {
             expect(consoleOutput).toEqual([
               `User: ${user._key} attempted to have \`last\` set below zero for: loadSpfFailureConnectionsBySumId.`,
             ])
-          })
-        })
-      })
-      describe('first or last argument is not set to a number', () => {
-        describe('first argument is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when first set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadSpfFailureConnectionsBySumId({
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                first: invalidInput,
-                summaryId: '',
-              }
-
-              try {
-                await connectionLoader({
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(new Error(`todo`))
-              }
-              expect(consoleOutput).toEqual([
-                `User: ${
-                  user._key
-                } attempted to have \`first\` set as a ${typeof invalidInput} for: loadSpfFailureConnectionsBySumId.`,
-              ])
-            })
-          })
-        })
-        describe('last argument is set', () => {
-          ;['123', {}, [], null, true].forEach((invalidInput) => {
-            it(`returns an error when first set to ${stringify(
-              invalidInput,
-            )}`, async () => {
-              const connectionLoader = loadSpfFailureConnectionsBySumId({
-                query,
-                userKey: user._key,
-                cleanseInput,
-                i18n,
-              })
-
-              const connectionArgs = {
-                last: invalidInput,
-                summaryId: '',
-              }
-
-              try {
-                await connectionLoader({
-                  ...connectionArgs,
-                })
-              } catch (err) {
-                expect(err).toEqual(new Error(`todo`))
-              }
-              expect(consoleOutput).toEqual([
-                `User: ${
-                  user._key
-                } attempted to have \`last\` set as a ${typeof invalidInput} for: loadSpfFailureConnectionsBySumId.`,
-              ])
-            })
           })
         })
       })
