@@ -1,0 +1,13 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: frontend-network-policy
+  namespace: frontend
+spec:
+  podSelector:
+    matchLabels: 
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            istio: publicgateway
