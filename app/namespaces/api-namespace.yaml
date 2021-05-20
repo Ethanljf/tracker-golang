@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  creationTimestamp: null
   name: api
   labels:
+    purpose: backend
     istio-injection: enabled
 spec: {}
 status: {}

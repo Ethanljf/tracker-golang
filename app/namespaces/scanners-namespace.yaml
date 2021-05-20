@@ -5,3 +5,4 @@ metadata:
   name: scanners
   labels:
       istio-injection: disabled
+      purpose: backend
