@@ -6,8 +6,28 @@ metadata:
 spec:
   podSelector:
     matchLabels: 
+      role: frontend
+      purpose: frontend
   ingress:
+    # Allow traffic from the istio gateway
     - from:
       - namespaceSelector:
           matchLabels:
-            istio: publicgateway
+            role: gateway
+            purpose: traffic-handling
+      ports:
+        - port: 3000
+  policyTypes:
+    - Egress
+  egress:
+      # Allow DNS Resolution
+      - ports:
+        - port: 53
+      # Allow egress to the gateway
+      - to:
+        - podSelector:
+            matchLabels:
+               role: gateway
+               purpose: traffic-handling
+        ports:
+          - port: 3000

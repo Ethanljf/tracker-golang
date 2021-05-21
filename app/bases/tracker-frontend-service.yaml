@@ -9,6 +9,7 @@ spec:
   ports:
   - name: http-frontend
     port: 3000
+    targetPort: 3000
   selector:
     app: tracker-frontend
   type: ClusterIP

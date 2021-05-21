@@ -3,6 +3,9 @@ kind: CronJob
 metadata:
   name: autoscan
   namespace: scanners
+  labels:
+    role: scanning
+    purpose: autoscan
 spec:
   schedule: "0 1 * * */2"
   concurrencyPolicy: Replace

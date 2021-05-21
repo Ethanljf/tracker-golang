@@ -5,6 +5,8 @@ metadata:
   namespace: istio-system
   labels:
     istio: publicgateway
+    role: gateway
+    purpose: traffic-handling
 spec:
   selector:
     istio: ingressgateway

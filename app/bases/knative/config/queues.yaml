@@ -5,6 +5,8 @@ metadata:
   namespace: scanners
   labels:
     app: scanners
+    role: scanning
+    purpose: scan-queue
 spec:
   template:
     metadata:
@@ -31,6 +33,8 @@ metadata:
   namespace: scanners
   labels:
     app: scanners
+    role: scanning
+    purpose: result-queue
 spec:
   template:
     metadata:

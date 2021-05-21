@@ -4,6 +4,8 @@ metadata:
   creationTimestamp: null
   labels:
     app: tracker-api
+    role: backend
+    purpose: api
   name: tracker-api
   namespace: api
 spec:

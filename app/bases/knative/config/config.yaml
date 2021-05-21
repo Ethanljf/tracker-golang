@@ -5,6 +5,8 @@ metadata:
   namespace: scanners
   labels:
     app: scanners
+    role: scanning
+    purpose: https-scanner
 spec:
   template:
     metadata:
@@ -30,6 +32,8 @@ metadata:
   namespace: scanners
   labels:
     app: scanners
+    role: scanning
+    purpose: result-processor
 spec:
   template:
     metadata:
@@ -89,6 +93,8 @@ metadata:
   namespace: scanners
   labels:
     app: scanners
+    role: scanning
+    purpose: ssl-scanner
 spec:
   template:
     metadata:
@@ -114,6 +120,8 @@ metadata:
   namespace: scanners
   labels:
     app: scanners
+    role: scanning
+    purpose: dns-scanner
 spec:
   template:
     metadata:

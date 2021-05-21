@@ -4,12 +4,95 @@ metadata:
   name: db-network-policy
   namespace: db
 spec:
-  podSelector: {}
+  podSelector: 
+    matchLabels:
+      role: backend
+      purpose: db
+  # Ingress policy
   ingress:
+    # Allow communications from the API
     - from:
-      - namespaceSelector:
+      - podSelector:
           matchLabels:
-            purpose: backend
+            role: backend
+            purpose: api
       ports:
         - port: 8529
-          protocol: TCP
+    # Allow communications from the core service
+    - from:
+      - podSelector:
+          matchLabels:
+            role: scanning
+            purpose: core
+      ports:
+        - port: 8529
+    # Allow communications from the dmarc report service
+    - from:
+      - podSelector:
+          matchLabels:
+            role: scanning
+            purpose: dmarc-report
+      ports:
+        - port: 8529
+    # Allow communications from the auto scan service
+    - from:
+      - podSelector:
+          matchLabels:
+            role: scanning
+            purpose: autoscan
+      ports:
+        - port: 8529
+    # Allow communications from the result processor
+    - from:
+      - podSelector:
+          matchLabels:
+            role: scanning
+            purpose: result-processor
+      ports:
+        - port: 8529
+  policyTypes:
+    - Egress
+  egress:
+    - ports:
+      # Allow DNS resolution
+      - port: 53
+    # Allow communication to the API
+    - to:
+      - podSelector:
+          matchLabels:
+            role: backend
+            purpose: api
+      ports:
+        - port: 8529
+    # Allow communications from the core service
+    - to:
+      - podSelector:
+          matchLabels:
+            role: scanning
+            purpose: core
+      ports:
+        - port: 8529
+    # Allow communications from the dmarc report service
+    - to:
+      - podSelector:
+          matchLabels:
+            role: scanning
+            purpose: dmarc-report
+      ports:
+        - port: 8529
+    # Allow communications from the auto scan service
+    - to:
+      - podSelector:
+          matchLabels:
+            role: scanning
+            purpose: autoscan
+      ports:
+        - port: 8529
+    # Allow communications from the result processor
+    - to:
+      - podSelector:
+          matchLabels:
+            role: scanning
+            purpose: result-processor
+      ports:
+        - port: 8529

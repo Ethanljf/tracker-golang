@@ -3,6 +3,9 @@ apiVersion: database.arangodb.com/v1alpha
 metadata:
   name: arangodb
   namespace: db
+  labels:
+    role: backend
+    purpose: db
 spec:
   image: arangodb/arangodb:3.7.10
   environment: Production

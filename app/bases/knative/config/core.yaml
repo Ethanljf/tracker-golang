@@ -3,6 +3,9 @@ kind: CronJob
 metadata:
   name: core
   namespace: scanners
+  labels:
+    role: scanning
+    purpose: core
 spec:
   schedule: "59 23 * * *"
   concurrencyPolicy: Replace
