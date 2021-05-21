@@ -17,6 +17,9 @@ spec:
             purpose: traffic-handling
       ports:
         - port: 3000
+    - ports:
+      # Allow DNS
+      - port: 53
   policyTypes:
     - Egress
   egress:

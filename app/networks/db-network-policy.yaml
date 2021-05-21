@@ -50,6 +50,9 @@ spec:
             purpose: result-processor
       ports:
         - port: 8529
+    - ports:
+      # Allow DNS
+      - port: 53
   policyTypes:
     - Egress
   egress:

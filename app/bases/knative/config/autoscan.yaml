@@ -5,7 +5,7 @@ metadata:
   namespace: scanners
   labels:
     role: scanning
-    purpose: autoscan
+    purpose: auto-scan
 spec:
   schedule: "0 1 * * */2"
   concurrencyPolicy: Replace

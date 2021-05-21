@@ -26,6 +26,7 @@ spec:
         - port: 4000
     # Allow external communications (this pretty much makes the other policies obsolete)
     - ports:
+      - port: 53
       - port: 80
       - port: 443
   policyTypes:
@@ -48,3 +49,5 @@ spec:
         - podSelector:
             matchLabels:
               app: istio-ingressgateway
+        ports:
+          - port: 4000
