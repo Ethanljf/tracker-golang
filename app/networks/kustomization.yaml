@@ -2,6 +2,13 @@ apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 resources:
 - api-network-policy.yaml
+- auto-scan-network-policy.yaml
+- core-service-network-policy.yaml
 - db-network-policy.yaml
+- dmarc-report-network-policy.yaml
+- dns-network-network-policy.yaml
 - frontend-network-policy.yaml
-- scanners-network-policy.yaml
+- gateway-network-policy.yaml
+- https-scanner-network-policy.yaml
+- result-processor-network-policy.yaml
+- ssl-scanner-network-policy.yaml
