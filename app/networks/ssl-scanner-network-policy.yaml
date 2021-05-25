@@ -1,13 +1,13 @@
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: https-scanner-network-policy
+  name: ssl-scanner-network-policy
   namespace: scanners
 spec:
   podSelector:
     matchLabels:
       role: scanning
-      purpose: https-scanner
+      purpose: ssl-scanner
   ingress:
     - ports:
       # Allow DNS traffic
