@@ -10,6 +10,9 @@ spec:
       purpose: db
   # Ingress policy
   ingress:
+    - ports:
+      # Allow DNS
+      - port: 53
     # Allow communications from the API
     - from:
       - podSelector:
@@ -50,9 +53,6 @@ spec:
             purpose: result-processor
       ports:
         - port: 8529
-    - ports:
-      # Allow DNS
-      - port: 53
   policyTypes:
     - Egress
   egress:

@@ -9,6 +9,9 @@ spec:
       role: frontend
       purpose: frontend
   ingress:
+    - ports:
+      # Allow DNS
+      - port: 53
     # Allow traffic from the istio gateway
     - from:
       - namespaceSelector:
@@ -17,9 +20,6 @@ spec:
             purpose: traffic-handling
       ports:
         - port: 3000
-    - ports:
-      # Allow DNS
-      - port: 53
   policyTypes:
     - Egress
   egress:

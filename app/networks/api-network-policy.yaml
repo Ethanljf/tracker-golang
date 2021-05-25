@@ -9,6 +9,12 @@ spec:
       role: backend
       purpose: api
   ingress:
+    - ports:
+      # Allow DNS resolutions
+      - port: 53
+      # Allow HTTP traffic
+      - port: 80
+      - port: 443
     # Ingress policy for db communications
     - from:
       - podSelector:
@@ -24,20 +30,16 @@ spec:
             app: istio-ingressgateway
       ports:
         - port: 4000
-    # Allow external communications (this pretty much makes the other policies obsolete)
-    - ports:
-      - port: 53
-      - port: 80
-      - port: 443
   policyTypes:
     - Egress
   egress:
       - ports:
         # Allow DNS resolution
         - port: 53
-        # Allow external communication
+        # Allow HTTP traffic
         - port: 80
         - port: 443
+      # Allow database traffic
       - to:
         - podSelector:
             matchLabels:
@@ -45,6 +47,7 @@ spec:
               purpose: db
         ports:
           - port: 8529
+      # Allow istio traffic
       - to:
         - podSelector:
             matchLabels:

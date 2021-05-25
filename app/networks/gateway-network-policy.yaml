@@ -9,9 +9,10 @@ spec:
     role: gateway
     purpose: traffic-handling
   ingress:
-    # Allow external port connections
     - ports:
+      # Allow DNS
       - port: 53
+      # Allow HTTP traffic
       - port: 80
       - port: 443
     # Allow communications from the frontend
@@ -30,15 +31,13 @@ spec:
             purpose: api
       ports:
         - port: 4000
-    - ports:
-      # Allow DNS
-      - port: 53
   policyTypes: 
     - Egress
   egress:
-    # Allow external communications
     - ports:
+      # Allow DNS resolution
       - port: 53
+      # Allow HTTP traffic
       - port: 80
       - port: 443
     # Allow egress to the frontend

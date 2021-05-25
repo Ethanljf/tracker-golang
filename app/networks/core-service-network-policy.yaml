@@ -9,6 +9,12 @@ spec:
       role: scanning
       purpose: core
   ingress:
+    - ports:
+      # Allow DNS
+      - port: 53
+      # Allow external traffic
+      - port: 80
+      - port: 443
     # Allow from database
     - from:
       - podSelector:
@@ -17,12 +23,6 @@ spec:
             purpose: db
       ports:
         - port: 8529
-    - ports:
-      # Allow DNS
-      - port: 53
-      # Allow external traffic
-      - port: 80
-      - port: 443
   policyTypes:
     - Egress
   egress:
