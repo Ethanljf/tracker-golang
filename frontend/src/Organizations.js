@@ -83,9 +83,14 @@ export default function Organisations() {
       <ListOf
         elements={nodes}
         ifEmpty={() => (
-          <Text textAlign="center" fontSize="3xl" fontWeight="bold">
-            <Trans>No Organizations</Trans>
-          </Text>
+          <Box>
+            <Text textAlign="center" fontSize="3xl" fontWeight="bold">
+              <Trans>No Organizations</Trans>
+            </Text>
+            <Text textAlign="center" fontSize="lg">
+              <Trans>To be added to an organization, please contact an admin of that organization.</Trans>
+            </Text>
+          </Box>
         )}
         mb="4"
       >

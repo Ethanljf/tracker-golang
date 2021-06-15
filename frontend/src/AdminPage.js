@@ -153,6 +153,11 @@ export default function AdminPage() {
           <Text fontSize="3xl" fontWeight="bold" textAlign="center">
             <Trans>You do not have admin permissions in any organization</Trans>
           </Text>
+          <Text fontSize="lg" textAlign="center">
+            <Trans>
+              To be added as an admin of an organization, please contact an existing admin of that organization, or a super admin.
+            </Trans>
+          </Text>
           <Divider />
           <TrackerButton
             w={['100%', 'auto']}
