@@ -628,7 +628,8 @@ describe('authenticate user account', () => {
               authenticate: {
                 result: {
                   code: 400,
-                  description: 'todo',
+                  description:
+                    'La valeur du jeton est incorrecte, veuillez vous connecter à nouveau.',
                 },
               },
             },
@@ -699,7 +700,8 @@ describe('authenticate user account', () => {
               authenticate: {
                 result: {
                   code: 400,
-                  description: 'todo',
+                  description:
+                    'La valeur du jeton est incorrecte, veuillez vous connecter à nouveau.',
                 },
               },
             },
@@ -770,7 +772,8 @@ describe('authenticate user account', () => {
               authenticate: {
                 result: {
                   code: 400,
-                  description: 'todo',
+                  description:
+                    "Impossible de s'authentifier. Veuillez réessayer.",
                 },
               },
             },
@@ -853,7 +856,9 @@ describe('authenticate user account', () => {
             },
           )
 
-          const error = [new GraphQLError('todo')]
+          const error = [
+            new GraphQLError('Code TFA incorrect. Veuillez vous reconnecter.'),
+          ]
 
           expect(response.errors).toEqual(error)
           expect(consoleOutput).toEqual([
@@ -937,7 +942,11 @@ describe('authenticate user account', () => {
             },
           )
 
-          const error = [new GraphQLError('todo')]
+          const error = [
+            new GraphQLError(
+              "Impossible de s'authentifier. Veuillez réessayer.",
+            ),
+          ]
 
           expect(response.errors).toEqual(error)
           expect(consoleOutput).toEqual([

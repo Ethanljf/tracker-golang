@@ -577,7 +577,7 @@ describe('authenticate user account', () => {
           data: {
             updateUserPassword: {
               result: {
-                status: 'todo',
+                status: 'Le mot de passe a été mis à jour avec succès.',
               },
             },
           },
@@ -698,7 +698,8 @@ describe('authenticate user account', () => {
               updateUserPassword: {
                 result: {
                   code: 400,
-                  description: 'todo',
+                  description:
+                    'Impossible de mettre à jour le mot de passe, le mot de passe actuel ne correspond pas. Veuillez réessayer.',
                 },
               },
             },
@@ -763,7 +764,8 @@ describe('authenticate user account', () => {
               updateUserPassword: {
                 result: {
                   code: 400,
-                  description: 'todo',
+                  description:
+                    'Impossible de mettre à jour le mot de passe, les nouveaux mots de passe ne correspondent pas. Veuillez réessayer.',
                 },
               },
             },
@@ -828,7 +830,8 @@ describe('authenticate user account', () => {
               updateUserPassword: {
                 result: {
                   code: 400,
-                  description: 'todo',
+                  description:
+                    'Impossible de mettre à jour le mot de passe, les mots de passe ne correspondent pas aux exigences. Veuillez réessayer.',
                 },
               },
             },
@@ -895,7 +898,11 @@ describe('authenticate user account', () => {
             },
           )
 
-          const error = [new GraphQLError('todo')]
+          const error = [
+            new GraphQLError(
+              'Impossible de mettre à jour le mot de passe. Veuillez réessayer.',
+            ),
+          ]
 
           expect(response.errors).toEqual(error)
           expect(consoleOutput).toEqual([
