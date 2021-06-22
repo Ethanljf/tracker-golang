@@ -1,7 +1,6 @@
 package hsts
 
 import (
-  "encoding/json"
   "io/ioutil"
   "log"
   "net/http"
@@ -78,16 +77,15 @@ func scan(w http.ResponseWriter, r *http.Request) {
       HstsMaxAge: maxAge
     }
 
-    resultJson, err := json.Marshal(res)
-    if err != nil {
-  		log.Fatalf("Error occurred while attempting to convert results to json byte array: %s", err)
-  	}
-
     nc, err := nats.Connect(NatsUrl, nats.Name(NatsName))
   	if err != nil {
   		log.Fatalf("Error occurred while attempting to connect to nats: %s", err)
   	}
-    nc.Publish("scans", resultJson)
+
+    ec, _ := nats.NewEncodedConn(nc, nats.JSON_ENCODER)
+    defer ec.Close()
+
+    ec.Publish("scans", res)
 }
 
 func main() {
