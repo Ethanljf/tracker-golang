@@ -78,7 +78,7 @@ func scan(w http.ResponseWriter, r *http.Request) {
       HstsMaxAge: maxAge
     }
 
-    resultJson, err := json.Marshal(m)
+    resultJson, err := json.Marshal(res)
     if err != nil {
   		log.Fatalf("Error occurred while attempting to convert results to json byte array: %s", err)
   	}

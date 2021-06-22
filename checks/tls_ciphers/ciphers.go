@@ -1,12 +1,12 @@
-package enforcement
+package ciphers
 
 import (
-  "fmt"
   "encoding/json"
   "io/ioutil"
   "log"
   "net/http"
   "strings"
+  "crypto/tls"
   "github.com/nats-io/nats.go"
 )
 
@@ -14,7 +14,10 @@ const NatsUrl string = os.Getenv("NATS_URL")
 const NatsName string = os.Getenv("NATS_NAME")
 
 type Result struct {
-  EnforcementStatus string
+  UsedCiphers: []string
+  StrongCiphers: []string
+  AcceptableCiphers: []string
+  WeakCiphers: []string
 }
 
 func scan(w http.ResponseWriter, r *http.Request) {
@@ -29,29 +32,21 @@ func scan(w http.ResponseWriter, r *http.Request) {
     json.Unmarshal([]byte(body), &payload)
 
     domain := payload["domain"].(string)
-    resp, err := http.Get("http://"+domain)
 
-   	if err != nil {
-   		fmt.Println(err)
-   	}
+    currentTime := time.Now()
+    version := "None"
 
-    // If domain redirects from http to https, it is strictly enforced
-    if strings.HasPrefix(resp.Request.URL.String(),"https") {
-      enforcement := "Strict"
-    } else {
-      resp, err := http.Get("https://"+domain)
-      // If domain downgrades from https, or can't be resolved with https prefix
-      // then it is not enforced (unsupported)
-     	if err != nil || !strings.HasPrefix(resp.Request.URL.String(),"https") {
-     		enforcement := "Not Enforced"
-      // If domain supports https but does not redirect from http to https,
-      // its enforcement is considered to be "Moderate"
-     	} else {
-        enforcement := "Moderate"
-      }
+    conf := &tls.Config{
+        InsecureSkipVerify: true,
     }
 
-    res := Result{enforcement}
+    conn, err := tls.Dial("tcp", domain+":443", conf)
+    if err == nil {
+      conn.Close()
+      version = conn.ConnectionState().Version
+    }
+
+    res := Results{tlsVersion: version}
 
     resultJson, err := json.Marshal(res)
     if err != nil {
